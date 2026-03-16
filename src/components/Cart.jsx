@@ -72,7 +72,7 @@ export default function Cart() {
                 type="button"
                 className="h-11 px-6 rounded-xl bg-earthx-dark text-white text-sm font-semibold hover:bg-black transition"
                 onClick={() => {
-                  const phone = '917385974015' // WhatsApp expects country code without +
+                  const phone = '917378370160' // WhatsApp expects country code without +
                   const lines = cart.map(
                     (item) =>
                       `- ${item.name} x${item.qty} (₹${item.price} each, ₹${
