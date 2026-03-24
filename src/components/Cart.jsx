@@ -1,4 +1,5 @@
 import { useCart } from '../App'
+import { WHATSAPP_PHONE } from '../constants/contact'
 
 export default function Cart() {
   const { cart, updateQuantity, removeFromCart } = useCart()
@@ -72,7 +73,6 @@ export default function Cart() {
                 type="button"
                 className="h-11 px-6 rounded-xl bg-earthx-dark text-white text-sm font-semibold hover:bg-black transition"
                 onClick={() => {
-                  const phone = '917378370160' // WhatsApp expects country code without +
                   const lines = cart.map(
                     (item) =>
                       `- ${item.name} x${item.qty} (₹${item.price} each, ₹${
@@ -82,7 +82,7 @@ export default function Cart() {
                   const message = `Hi, I am interested to buy the following items:\n\n${lines.join(
                     '\n',
                   )}\n\nCart total: ₹${total}`
-                  const url = `https://wa.me/${phone}?text=${encodeURIComponent(
+                  const url = `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(
                     message,
                   )}`
                   window.open(url, '_blank')

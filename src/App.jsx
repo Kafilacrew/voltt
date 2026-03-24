@@ -10,6 +10,7 @@ import Cart from './components/Cart'
 import FAQ from './components/FAQ'
 import Newsletter from './components/Newsletter'
 import Footer from './components/Footer'
+import { WHATSAPP_PHONE } from './constants/contact'
 
 const CartContext = createContext(null)
 
@@ -532,9 +533,8 @@ function App() {
           type="button"
           className="fixed bottom-4 right-4 z-50 inline-flex items-center gap-3 rounded-xl bg-[#25D366] text-white px-5 py-3 shadow-card hover:brightness-105 md:bottom-6 md:right-6"
           onClick={() => {
-            const phone = '917385974015'
             const message = 'Hi, I would like to chat about Voltt protein bars.'
-            const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`
+            const url = `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(message)}`
             window.open(url, '_blank')
           }}
         >

@@ -3,17 +3,16 @@ export default function Hero() {
     '100% Natural',
     '20g Protein',
     'No Preservatives',
-    'Made in India',
   ]
 
   return (
     <section className="relative min-h-[1080px] flex items-center overflow-hidden">
-      {/* Background: gradient + mock image from the web */}
+      {/* Background: gradient + single athlete (Unsplash) */}
       <div className="absolute inset-0 bg-gradient-to-br from-earthx-dark/90 to-earthx-dark/70">
         <img
-          src="https://images.unsplash.com/photo-1517832207067-4db24a2ae47c?auto=format&fit=crop&w=1600&q=80"
-          alt="Athlete training with energy"
-          className="w-full h-full object-cover opacity-90"
+          src="https://images.unsplash.com/photo-1552674605-db6ffd4facb5?auto=format&fit=crop&w=2000&q=85"
+          alt="Athlete sprinting on a running track"
+          className="w-full h-full object-cover object-center opacity-90"
           onError={(e) => {
             e.target.style.display = 'none'
           }}
@@ -21,46 +20,8 @@ export default function Hero() {
       </div>
       <div className="absolute inset-0 bg-gradient-to-b from-transparent to-earthx-dark/80 pointer-events-none" />
 
-      {/* Veg + Flash sale badges */}
-      <div className="absolute top-32 right-8 md:right-12 flex flex-col gap-3 items-stretch">
-        {/* 100% Veg pill */}
-        <div className="flex items-center gap-4 bg-emerald-500 text-white rounded-2xl px-5 py-3 shadow-deal">
-          <div className="flex items-center gap-2 text-sm md:text-base font-medium">
-            <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-emerald-600">
-              <svg
-                className="w-4 h-4"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M5 13C5 9 9 5 13 5C13 9 9 13 5 13Z"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M5 13C5 13 7 15 9 15C11 15 13 13 13 11"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </span>
-            <span>100% Veg</span>
-          </div>
-          <div className="h-7 w-px bg-white/40" />
-          <div className="flex items-center gap-2 text-sm font-medium">
-            <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-white">
-              <span className="w-5 h-5 rounded-full bg-gradient-to-b from-orange-500 to-green-600 border border-amber-500" />
-            </span>
-            <span>India</span>
-          </div>
-        </div>
-
-        {/* Flash sale pill */}
+      {/* Flash sale badge */}
+      <div className="absolute top-32 right-8 md:right-12">
         <div className="bg-brand-yellow text-earthx-dark rounded-2xl px-5 py-3 shadow-deal">
           <div className="flex items-center gap-2 text-sm md:text-base font-semibold">
             <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-white/20 text-red-600">
@@ -102,12 +63,6 @@ export default function Hero() {
               className="inline-flex items-center justify-center bg-brand-red text-white font-semibold h-14 px-6 rounded-xl hover:opacity-90 transition"
             >
               Shop Now
-            </a>
-            <a
-              href="#why"
-              className="inline-flex items-center justify-center bg-transparent border-2 border-white text-white font-semibold h-14 px-6 rounded-xl hover:bg-white/10 transition"
-            >
-              Why Voltt
             </a>
           </div>
           <div className="flex flex-wrap gap-6 mt-12 text-white/80">

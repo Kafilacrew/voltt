@@ -14,11 +14,6 @@ const items = [
     subtitle: '20–25g protein per bar',
     icon: 'bolt',
   },
-  {
-    title: 'Sustainable',
-    subtitle: 'Earth-friendly packaging',
-    icon: 'globe',
-  },
 ]
 
 function Icon({ type }) {
@@ -70,19 +65,6 @@ function Icon({ type }) {
       </svg>
     )
   }
-  if (type === 'globe') {
-    return (
-      <svg className={base} viewBox="0 0 24 24" fill="none">
-        <circle cx="12" cy="12" r="8" stroke="currentColor" strokeWidth="1.8" />
-        <path
-          d="M4 12h16M12 4c2 2.5 2 9.5 0 12  -2-2.5-2-9.5 0-12z"
-          stroke="currentColor"
-          strokeWidth="1.8"
-          strokeLinecap="round"
-        />
-      </svg>
-    )
-  }
   return null
 }
 
@@ -97,7 +79,7 @@ export default function PremiumNutrition() {
         <p className="text-earthx-muted text-center mt-4">
           We believe great nutrition shouldn&apos;t cost a fortune
         </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-12 max-w-5xl mx-auto">
           {items.map((item) => (
             <div
               key={item.title}

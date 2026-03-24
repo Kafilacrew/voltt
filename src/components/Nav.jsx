@@ -12,8 +12,14 @@ export default function Nav() {
 
   return (
     <nav className="sticky top-0 z-50 bg-white border-b border-earthx-border h-20 flex items-center justify-between px-6 lg:px-12 max-w-[1920px] mx-auto">
-      <a href="#" className="font-display font-black text-2xl text-earthx-dark">
-        Voltt
+      <a href="#" className="inline-flex items-center shrink-0">
+        <img
+          src="/16.png"
+          alt="Voltt"
+          width={111.6}
+          height={36}
+          className="block h-[36px] w-[111.6px] object-contain"
+        />
       </a>
       <div className="hidden md:flex items-center gap-8">
         {links.map(({ label, href }) => (
