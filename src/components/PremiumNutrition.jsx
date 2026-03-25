@@ -11,7 +11,7 @@ const items = [
   },
   {
     title: 'High Protein',
-    subtitle: '20–25g protein per bar',
+    subtitle: '10g protein per bar',
     icon: 'bolt',
   },
 ]
@@ -74,10 +74,10 @@ export default function PremiumNutrition() {
     <section id="nutrition" className="bg-earthx-bg py-16 md:py-24">
       <div className="max-w-7xl mx-auto px-6">
         <h2 className="font-display font-bold text-4xl md:text-5xl text-earthx-dark text-center max-w-4xl mx-auto">
-          Premium Nutrition. Zero Compromise.
+          Complete Nutrition. Instant Rehydration.
         </h2>
         <p className="text-earthx-muted text-center mt-4">
-          We believe great nutrition shouldn&apos;t cost a fortune
+          Crafted to balance taste, nutrition, and clean ingredients — no compromises.
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-12 max-w-5xl mx-auto">
           {items.map((item) => (

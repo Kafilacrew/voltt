@@ -5,7 +5,6 @@ import ChooseYourPower from './components/ChooseYourPower'
 import PremiumNutrition from './components/PremiumNutrition'
 import TrustedBy from './components/TrustedBy'
 import StockUp from './components/StockUp'
-import YourGoalOurFuel from './components/YourGoalOurFuel'
 import Cart from './components/Cart'
 import FAQ from './components/FAQ'
 import Newsletter from './components/Newsletter'
@@ -98,7 +97,6 @@ function App() {
           <PremiumNutrition />
           <TrustedBy />
           <StockUp />
-          <YourGoalOurFuel />
           <Cart />
           <FAQ />
           <Newsletter />

@@ -1,8 +1,9 @@
 export default function Hero() {
   const features = [
     '100% Natural',
-    '20g Protein',
+    '10g Protein',
     'No Preservatives',
+    'With added electrolytes',
   ]
 
   return (
@@ -55,7 +56,7 @@ export default function Hero() {
             Future
           </h1>
           <p className="text-white/90 text-xl md:text-2xl mt-6">
-            Premium Protein Bars by Voltt
+            Protein Bars with added electrolytes
           </p>
           <div className="flex flex-wrap gap-4 mt-8">
             <a

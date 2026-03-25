@@ -6,6 +6,11 @@ export default function ChooseYourPower() {
   const [openPacks, setOpenPacks] = useState({})
   const cards = [
     {
+      id: 3,
+      title: 'Choco Cranz',
+      image: '/assets/choco-cranz.jpg',
+    },
+    {
       id: 1,
       title: 'Almond Crunch',
       image: '/assets/almond-crunch.jpg',
@@ -14,11 +19,6 @@ export default function ChooseYourPower() {
       id: 2,
       title: 'Berry Rush',
       image: '/assets/berry-rush.jpg',
-    },
-    {
-      id: 3,
-      title: 'Choco Cranz',
-      image: '/assets/choco-cranz.jpg',
     },
   ]
 

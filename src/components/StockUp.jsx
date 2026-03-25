@@ -1,6 +1,6 @@
 export default function StockUp() {
   return (
-    <section className="bg-white py-16 md:py-24">
+    <section id="stock-up" className="bg-white py-16 md:py-24">
       <div className="max-w-7xl mx-auto px-6">
         <h2 className="font-display font-bold text-4xl md:text-5xl text-earthx-dark text-center">
           Stock Up. Save Big.
@@ -51,13 +51,13 @@ export default function StockUp() {
             </div>
             <div className="flex-1">
               <h3 className="font-display font-bold text-xl text-earthx-dark">Value Pack</h3>
-              <p className="text-earthx-muted mt-1">12 protein bars</p>
+              <p className="text-earthx-muted mt-1">9 protein bars</p>
               <span className="inline-flex mt-4 px-3 py-1 rounded-full bg-brand-red/10 text-brand-red text-xs font-semibold">
                 Save 25%
               </span>
               <div className="mt-5">
                 <p className="font-display font-extrabold text-3xl text-earthx-dark">₹999</p>
-                <p className="text-earthx-muted text-sm mt-1">Only ₹83 per bar</p>
+                <p className="text-earthx-muted text-sm mt-1">Only ₹111 per bar</p>
               </div>
               <p className="mt-3 text-xs text-red-500 font-medium flex items-center gap-1">
                 <span>⚠</span> Only 5 left at this price
@@ -86,13 +86,13 @@ export default function StockUp() {
           <div className="bg-white rounded-3xl border border-earthx-border shadow-card px-6 py-8 flex flex-col">
             <div className="flex-1">
               <h3 className="font-display font-bold text-xl text-earthx-dark">Ultimate Pack</h3>
-              <p className="text-earthx-muted mt-1">24 protein bars</p>
+              <p className="text-earthx-muted mt-1">12 protein bars</p>
               <span className="inline-flex mt-4 px-3 py-1 rounded-full bg-brand-red/10 text-brand-red text-xs font-semibold">
                 Save 35%
               </span>
               <div className="mt-5">
                 <p className="font-display font-extrabold text-3xl text-earthx-dark">₹1799</p>
-                <p className="text-earthx-muted text-sm mt-1">Only ₹75 per bar</p>
+                <p className="text-earthx-muted text-sm mt-1">Only ₹150 per bar</p>
               </div>
               <ul className="mt-5 space-y-2 text-sm text-earthx-dark">
                 <li className="flex items-center gap-2">
