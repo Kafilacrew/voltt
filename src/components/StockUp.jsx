@@ -1,4 +1,14 @@
+import { useCart } from '../App'
+
+const packs = [
+  { id: 'stockup-6', label: 'Pack of 6', qty: 6, price: 388, oldPrice: 408, discount: 'Save 5%', perBar: '₹64.7 per bar' },
+  { id: 'stockup-9', label: 'Pack of 9', qty: 9, price: 566, oldPrice: 612, discount: 'Save 7.5%', perBar: '₹62.9 per bar', featured: true },
+  { id: 'stockup-12', label: 'Pack of 12', qty: 12, price: 735, oldPrice: 816, discount: 'Save 10%', perBar: '₹61.3 per bar' },
+]
+
 export default function StockUp() {
+  const { addToCart, showToast } = useCart()
+
   return (
     <section id="stock-up" className="bg-white py-16 md:py-24">
       <div className="max-w-7xl mx-auto px-6">
@@ -10,115 +20,62 @@ export default function StockUp() {
         </p>
 
         <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-          {/* Pack of 6 */}
-          <div className="bg-white rounded-3xl border border-earthx-border shadow-card px-6 py-8 flex flex-col">
-            <div className="flex-1">
-              <h3 className="font-display font-bold text-xl text-earthx-dark">Pack of 6</h3>
-              <p className="text-earthx-muted mt-1">6 protein bars</p>
-              <span className="inline-flex mt-4 px-3 py-1 rounded-full bg-brand-red/10 text-brand-red text-xs font-semibold">
-                Save 5%
-              </span>
-              <div className="mt-5 flex items-baseline gap-2">
-                <p className="font-display font-extrabold text-3xl text-earthx-dark">₹388</p>
-                <p className="text-earthx-muted text-sm line-through">₹408</p>
-              </div>
-              <p className="text-earthx-muted text-sm mt-1">₹64.7 per bar</p>
-              <ul className="mt-5 space-y-2 text-sm text-earthx-dark">
-                <li className="flex items-center gap-2">
-                  <span className="text-brand-teal">✓</span> Free shipping
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="text-brand-teal">✓</span> Mix &amp; match flavors
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="text-brand-teal">✓</span> 30-day money back
-                </li>
-              </ul>
-            </div>
-            <button
-              type="button"
-              className="mt-8 h-12 rounded-xl bg-earthx-dark text-white font-semibold hover:bg-black transition"
+          {packs.map((pack) => (
+            <div
+              key={pack.id}
+              className={`relative bg-white rounded-3xl px-6 py-8 flex flex-col ${pack.featured
+                  ? 'border-2 border-brand-yellow shadow-card hover:shadow-card-hover md:py-10 scale-105'
+                  : 'border border-earthx-border shadow-card'
+                }`}
             >
-              Get Pack of 6
-            </button>
-          </div>
+              {pack.featured && (
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+                  <div className="inline-flex px-4 py-1 rounded-full bg-brand-yellow text-earthx-dark text-xs font-semibold shadow-deal">
+                    Most Popular
+                  </div>
+                </div>
+              )}
 
-          {/* Pack of 9 (featured) */}
-          <div className="relative bg-white rounded-3xl border-2 border-brand-yellow shadow-card hover:shadow-card-hover px-6 py-8 md:py-10 flex flex-col scale-105">
-            <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-              <div className="inline-flex px-4 py-1 rounded-full bg-brand-yellow text-earthx-dark text-xs font-semibold shadow-deal">
-                Most Popular
+              <div className="flex-1">
+                <h3 className="font-display font-bold text-xl text-earthx-dark">{pack.label}</h3>
+                <p className="text-earthx-muted mt-1">{pack.qty} protein bars</p>
+                <span className="inline-flex mt-4 px-3 py-1 rounded-full bg-brand-red/10 text-brand-red text-xs font-semibold">
+                  {pack.discount}
+                </span>
+                <div className="mt-5 flex items-baseline gap-2">
+                  <p className="font-display font-extrabold text-3xl text-earthx-dark">₹{pack.price}</p>
+                  <p className="text-earthx-muted text-sm line-through">₹{pack.oldPrice}</p>
+                </div>
+                <p className="text-earthx-muted text-sm mt-1">{pack.perBar}</p>
+                {pack.featured && (
+                  <p className="mt-3 text-xs text-red-500 font-medium flex items-center gap-1">
+                    <span>⚠</span> Only 5 left at this price
+                  </p>
+                )}
+                <ul className="mt-5 space-y-2 text-sm text-earthx-dark">
+                  <li className="flex items-center gap-2"><span className="text-brand-teal">✓</span> Free shipping</li>
+                  <li className="flex items-center gap-2"><span className="text-brand-teal">✓</span> Mix &amp; match flavors</li>
+                  <li className="flex items-center gap-2"><span className="text-brand-teal">✓</span> 30-day money back</li>
+                </ul>
               </div>
-            </div>
-            <div className="flex-1">
-              <h3 className="font-display font-bold text-xl text-earthx-dark">Pack of 9</h3>
-              <p className="text-earthx-muted mt-1">9 protein bars</p>
-              <span className="inline-flex mt-4 px-3 py-1 rounded-full bg-brand-red/10 text-brand-red text-xs font-semibold">
-                Save 7.5%
-              </span>
-              <div className="mt-5 flex items-baseline gap-2">
-                <p className="font-display font-extrabold text-3xl text-earthx-dark">₹566</p>
-                <p className="text-earthx-muted text-sm line-through">₹612</p>
-              </div>
-              <p className="text-earthx-muted text-sm mt-1">₹62.9 per bar</p>
-              <p className="mt-3 text-xs text-red-500 font-medium flex items-center gap-1">
-                <span>⚠</span> Only 5 left at this price
-              </p>
-              <ul className="mt-4 space-y-2 text-sm text-earthx-dark">
-                <li className="flex items-center gap-2">
-                  <span className="text-brand-teal">✓</span> Free shipping
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="text-brand-teal">✓</span> Mix &amp; match flavors
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="text-brand-teal">✓</span> 30-day money back
-                </li>
-              </ul>
-            </div>
-            <button
-              type="button"
-              className="mt-8 h-12 rounded-xl bg-brand-red text-white font-semibold hover:opacity-90 transition"
-            >
-              Get Pack of 9
-            </button>
-          </div>
 
-          {/* Pack of 12 */}
-          <div className="bg-white rounded-3xl border border-earthx-border shadow-card px-6 py-8 flex flex-col">
-            <div className="flex-1">
-              <h3 className="font-display font-bold text-xl text-earthx-dark">Pack of 12</h3>
-              <p className="text-earthx-muted mt-1">12 protein bars</p>
-              <span className="inline-flex mt-4 px-3 py-1 rounded-full bg-brand-red/10 text-brand-red text-xs font-semibold">
-                Save 10%
-              </span>
-              <div className="mt-5 flex items-baseline gap-2">
-                <p className="font-display font-extrabold text-3xl text-earthx-dark">₹735</p>
-                <p className="text-earthx-muted text-sm line-through">₹816</p>
-              </div>
-              <p className="text-earthx-muted text-sm mt-1">₹61.3 per bar</p>
-              <ul className="mt-5 space-y-2 text-sm text-earthx-dark">
-                <li className="flex items-center gap-2">
-                  <span className="text-brand-teal">✓</span> Free shipping
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="text-brand-teal">✓</span> Mix &amp; match flavors
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="text-brand-teal">✓</span> 30-day money back
-                </li>
-              </ul>
+              <button
+                type="button"
+                className={`mt-8 h-12 rounded-xl font-semibold transition ${pack.featured
+                    ? 'bg-brand-red text-white hover:opacity-90'
+                    : 'bg-earthx-dark text-white hover:bg-black'
+                  }`}
+                onClick={() => {
+                  addToCart({ id: pack.id, name: pack.label, price: pack.price, qty: 1 })
+                  showToast(`${pack.label} added to cart!`)
+                }}
+              >
+                Get {pack.label}
+              </button>
             </div>
-            <button
-              type="button"
-              className="mt-8 h-12 rounded-xl bg-earthx-dark text-white font-semibold hover:bg-black transition"
-            >
-              Get Pack of 12
-            </button>
-          </div>
+          ))}
         </div>
       </div>
     </section>
   )
 }
-
