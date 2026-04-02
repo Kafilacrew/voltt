@@ -436,26 +436,22 @@ function App() {
           </div>
         )}
 
-        {/* Floating Chat with Us button (WhatsApp-themed green card) */}
+        {/* Floating WhatsApp button */}
         <button
           type="button"
-          className="fixed bottom-4 right-4 z-50 inline-flex items-center gap-3 rounded-xl bg-[#25D366] text-white px-5 py-3 shadow-card hover:brightness-105 md:bottom-6 md:right-6"
+          className="fixed bottom-4 right-4 z-50 inline-flex items-center gap-3 rounded-full bg-[#25D366] px-5 py-3 text-white shadow-card hover:brightness-105 md:bottom-6 md:right-6"
           onClick={() => {
             const message = 'Hi, I would like to chat about Voltt protein bars.'
             const url = `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(message)}`
             window.open(url, '_blank')
           }}
         >
-          <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-white/15">
-            <svg
-              className="w-4.5 h-4.5"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              aria-hidden="true"
-            >
-              <path d="M20.52 3.48A11.77 11.77 0 0 0 12 .75C6.57.75 2.25 5.07 2.25 10.5c0 1.83.48 3.6 1.39 5.17L2 22l6.49-1.6a10.2 10.2 0 0 0 4.01.8h0c5.43 0 9.75-4.32 9.75-9.75 0-2.61-1.02-5.07-2.73-6.97zM12.5 19.5h0c-1.27 0-2.52-.32-3.63-.93l-.26-.14-3.85.95 1.02-3.75-.17-.29A7.74 7.74 0 0 1 4 10.5C4 6.67 7.17 3.5 11 3.5c2.13 0 4.13.83 5.64 2.36A7.93 7.93 0 0 1 19.5 10.5c0 4.33-3.17 7.5-7 7.5zm4.01-5.59c-.22-.11-1.3-.64-1.5-.71-.2-.08-.34-.11-.48.1-.14.2-.55.71-.67.86-.12.14-.25.16-.47.05-.22-.11-.92-.34-1.76-1.09-.65-.58-1.09-1.29-1.22-1.51-.13-.22-.01-.33.1-.44.11-.11.22-.25.33-.38.11-.13.14-.22.22-.36.07-.14.04-.27-.02-.38-.06-.11-.48-1.16-.66-1.59-.17-.42-.35-.36-.48-.37h-.41c-.14 0-.38.05-.58.27-.2.22-.76.74-.76 1.8 0 1.06.78 2.09.89 2.24.11.14 1.54 2.35 3.73 3.29.52.23.92.37 1.23.47.52.17.99.15 1.36.09.41-.06 1.3-.53 1.48-1.05.18-.52.18-.96.13-1.05-.05-.09-.2-.15-.42-.26z" />
-            </svg>
-          </span>
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/4/4c/WhatsApp_Logo_green.svg"
+            alt=""
+            className="h-6 w-6 rounded-full bg-white"
+            aria-hidden="true"
+          />
           <span className="text-sm font-semibold hidden sm:inline">Chat with us</span>
           <span className="text-sm font-semibold sm:hidden">Chat</span>
         </button>

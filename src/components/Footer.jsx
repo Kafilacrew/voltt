@@ -4,11 +4,10 @@ export default function Footer() {
   const year = new Date().getFullYear()
   const shop = [
     { label: 'Choose Your Power', href: '#shop' },
-    { label: 'Premium Nutrition', href: '#stock-up' },
+    { label: 'Premium Nutrition', href: '#nutrition' },
   ]
   const support = [
-    { label: 'About', href: '#about' },
-    { label: 'FAQ', href: '#about' },
+    { label: 'FAQ', href: '#faq' },
     { label: 'Cart', href: '#cart' },
   ]
   const contact = [
@@ -23,7 +22,7 @@ export default function Footer() {
   const [policyModal, setPolicyModal] = useState(null) // 'shipping' | 'returns' | null
 
   return (
-    <footer className="bg-white border-t border-earthx-border">
+    <footer id="contact" className="bg-white border-t border-earthx-border">
       <div className="max-w-7xl mx-auto px-6 py-12 md:py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-14">
           <div className="lg:col-span-5 max-w-md">

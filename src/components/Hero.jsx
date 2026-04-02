@@ -41,7 +41,7 @@ export default function Hero() {
                 />
               </svg>
             </span>
-            <span>Flash Sale: 30% OFF</span>
+            <span>Flash Sale</span>
           </div>
           <p className="font-mono text-xs font-bold mt-1">Ends in 02:47:26</p>
         </div>
