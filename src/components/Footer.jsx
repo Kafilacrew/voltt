@@ -56,6 +56,22 @@ export default function Footer() {
                   <path d="M7 2C4.243 2 2 4.243 2 7v10c0 2.757 2.243 5 5 5h10c2.757 0 5-2.243 5-5V7c0-2.757-2.243-5-5-5H7zm0 2h10c1.654 0 3 1.346 3 3v10c0 1.654-1.346 3-3 3H7c-1.654 0-3-1.346-3-3V7c0-1.654 1.346-3 3-3zm10 1a1 1 0 0 0-1 1v1a1 1 0 1 0 2 0V6a1 1 0 0 0-1-1zM12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 2a3 3 0 1 1 0 6 3 3 0 0 1 0-6z" />
                 </svg>
               </a>
+              <a
+                href="https://linkedin.com/company/eatvoltt/"
+                target="_blank"
+                rel="noreferrer"
+                className="w-10 h-10 rounded-full bg-earthx-bg flex items-center justify-center hover:bg-earthx-border transition"
+                aria-label="LinkedIn"
+              >
+                <svg
+                  className="w-5 h-5 text-earthx-muted"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S.02 4.88.02 3.5 1.13 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8.5h4V24h-4V8.5zM8.5 8.5h3.84v2.13h.05c.53-1 1.84-2.13 3.79-2.13 4.05 0 4.8 2.67 4.8 6.14V24h-4v-8.5c0-2.03-.04-4.64-2.83-4.64-2.83 0-3.26 2.21-3.26 4.5V24h-4V8.5z" />
+                </svg>
+              </a>
             </div>
           </div>
 

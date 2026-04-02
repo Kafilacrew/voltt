@@ -63,31 +63,31 @@ export default function ChooseYourPower() {
               </div>
               <div className="p-4 flex-1 flex flex-col">
                 <h3 className="font-display font-semibold text-earthx-dark">{card.title}</h3>
-                <p className="mt-1 text-sm text-earthx-muted">₹55 per bar</p>
+                <p className="mt-1 text-sm text-earthx-muted">₹68 per bar</p>
 
                 <div className="mt-4 space-y-2">
                   {[
                     {
                       key: '6',
                       label: 'Pack of 6',
-                      price: 329,
-                      oldPrice: 354,
+                      price: 388,
+                      oldPrice: 408,
                       discount: '5% OFF',
                       qty: 6,
                     },
                     {
                       key: '9',
                       label: 'Pack of 9',
-                      price: 489,
-                      oldPrice: 531,
+                      price: 566,
+                      oldPrice: 612,
                       discount: '7.5% OFF',
                       qty: 9,
                     },
                     {
                       key: '12',
                       label: 'Pack of 12',
-                      price: 639,
-                      oldPrice: 708,
+                      price: 735,
+                      oldPrice: 816,
                       discount: '10% OFF',
                       qty: 12,
                     },

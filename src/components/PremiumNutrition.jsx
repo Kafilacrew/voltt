@@ -14,6 +14,11 @@ const items = [
     subtitle: '10g protein per bar',
     icon: 'bolt',
   },
+  {
+    title: 'Added Electrolytes',
+    subtitle: 'Replenish & rehydrate faster',
+    icon: 'electrolyte',
+  },
 ]
 
 function Icon({ type }) {
@@ -61,6 +66,25 @@ function Icon({ type }) {
           strokeWidth="1.8"
           strokeLinecap="round"
           strokeLinejoin="round"
+        />
+      </svg>
+    )
+  }
+  if (type === 'electrolyte') {
+    return (
+      <svg className={base} viewBox="0 0 24 24" fill="none">
+        <path
+          d="M12 2C8 8 6 11 6 14a6 6 0 0 0 12 0c0-3-2-6-6-12z"
+          stroke="currentColor"
+          strokeWidth="1.8"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M9 14h6M12 11v6"
+          stroke="currentColor"
+          strokeWidth="1.8"
+          strokeLinecap="round"
         />
       </svg>
     )

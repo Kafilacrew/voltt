@@ -11,8 +11,8 @@ export default function Hero() {
       {/* Background: gradient + single athlete (Unsplash) */}
       <div className="absolute inset-0 bg-gradient-to-br from-earthx-dark/90 to-earthx-dark/70">
         <img
-          src="https://images.unsplash.com/photo-1552674605-db6ffd4facb5?auto=format&fit=crop&w=2000&q=85"
-          alt="Athlete sprinting on a running track"
+          src="/assets/hero.png"
+          alt="Voltt protein bars hero"
           className="w-full h-full object-cover object-center opacity-90"
           onError={(e) => {
             e.target.style.display = 'none'
@@ -51,9 +51,9 @@ export default function Hero() {
       <div className="relative max-w-[1920px] mx-auto px-6 lg:px-12 w-full">
         <div className="max-w-xl">
           <h1 className="font-display font-black text-5xl md:text-7xl lg:text-8xl text-white leading-none drop-shadow-lg">
-            Fuel Your
+            Complete Nutrition,
             <br />
-            Future
+            Instant Rehydration
           </h1>
           <p className="text-white/90 text-xl md:text-2xl mt-6">
             Protein Bars with added electrolytes

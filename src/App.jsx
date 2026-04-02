@@ -160,13 +160,7 @@ function App() {
                         Nutrient
                       </th>
                       <th className="border-b border-earthx-border/60 px-2 py-1 font-semibold">
-                        Per 100g
-                      </th>
-                      <th className="border-b border-earthx-border/60 px-2 py-1 font-semibold">
                         Per 40g
-                      </th>
-                      <th className="border-b border-earthx-border/60 px-2 py-1 font-semibold">
-                        As per RDA
                       </th>
                     </tr>
                   </thead>
@@ -177,113 +171,85 @@ function App() {
                           <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
                             Energy (kcal)
                           </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">400.2</td>
                           <td className="border-t border-earthx-border/40 px-2 py-1">160.1</td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">8.00%</td>
                         </tr>
                         <tr>
                           <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
                             Protein (g)
                           </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">25.4</td>
                           <td className="border-t border-earthx-border/40 px-2 py-1">10.1</td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">20.30%</td>
                         </tr>
                         <tr>
                           <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
                             Carbs (g)
                           </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">46.5</td>
                           <td className="border-t border-earthx-border/40 px-2 py-1">18.6</td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">6.20%</td>
                         </tr>
                         <tr>
                           <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
                             Sugar (g)
                           </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">22</td>
                           <td className="border-t border-earthx-border/40 px-2 py-1">8.8</td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">-</td>
                         </tr>
                         <tr>
                           <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
                             Added Sugar (g)
                           </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">10.5</td>
                           <td className="border-t border-earthx-border/40 px-2 py-1">4.2</td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">8.40%</td>
                         </tr>
                         <tr>
                           <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
                             Fibre (g)
                           </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">12.8</td>
                           <td className="border-t border-earthx-border/40 px-2 py-1">5.1</td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">12.30%</td>
                         </tr>
                         <tr>
                           <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
                             Fat (g)
                           </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">16</td>
                           <td className="border-t border-earthx-border/40 px-2 py-1">6.4</td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">9.50%</td>
                         </tr>
                         <tr>
                           <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
                             Saturated Fat (g)
                           </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">8.6</td>
                           <td className="border-t border-earthx-border/40 px-2 py-1">3.4</td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">15.50%</td>
                         </tr>
                         <tr>
                           <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
                             PUFA (g)
                           </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">2.9</td>
                           <td className="border-t border-earthx-border/40 px-2 py-1">1.2</td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">-</td>
                         </tr>
                         <tr>
                           <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
                             MUFA (g)
                           </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">4.2</td>
                           <td className="border-t border-earthx-border/40 px-2 py-1">1.7</td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">-</td>
                         </tr>
                         <tr>
                           <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
                             Trans fat (g)
                           </td>
                           <td className="border-t border-earthx-border/40 px-2 py-1">0</td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">0</td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">0.00%</td>
                         </tr>
                         <tr>
                           <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
                             Sodium (mg)
                           </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">257</td>
                           <td className="border-t border-earthx-border/40 px-2 py-1">102.8</td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">5.10%</td>
                         </tr>
                         <tr>
                           <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
                             Magnesium (mg)
                           </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">129</td>
                           <td className="border-t border-earthx-border/40 px-2 py-1">51.6</td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">-</td>
                         </tr>
                         <tr>
                           <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
                             Cholesterol (mg)
                           </td>
                           <td className="border-t border-earthx-border/40 px-2 py-1">0</td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">0</td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">-</td>
                         </tr>
                       </>
                     )}
@@ -293,113 +259,85 @@ function App() {
                           <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
                             Energy (kcal)
                           </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">388.1</td>
                           <td className="border-t border-earthx-border/40 px-2 py-1">155.2</td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">7.80%</td>
                         </tr>
                         <tr>
                           <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
                             Protein (g)
                           </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">25.3</td>
                           <td className="border-t border-earthx-border/40 px-2 py-1">10.1</td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">20.30%</td>
                         </tr>
                         <tr>
                           <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
                             Carbs (g)
                           </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">48.6</td>
                           <td className="border-t border-earthx-border/40 px-2 py-1">19.4</td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">6.50%</td>
                         </tr>
                         <tr>
                           <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
                             Sugar (g)
                           </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">24</td>
                           <td className="border-t border-earthx-border/40 px-2 py-1">9.6</td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">-</td>
                         </tr>
                         <tr>
                           <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
                             Added Sugar (g)
                           </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">10.5</td>
                           <td className="border-t border-earthx-border/40 px-2 py-1">4.2</td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">8.40%</td>
                         </tr>
                         <tr>
                           <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
                             Fibre (g)
                           </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">12.6</td>
                           <td className="border-t border-earthx-border/40 px-2 py-1">5</td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">12.10%</td>
                         </tr>
                         <tr>
                           <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
                             Fat (g)
                           </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">13.7</td>
                           <td className="border-t border-earthx-border/40 px-2 py-1">5.5</td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">8.20%</td>
                         </tr>
                         <tr>
                           <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
                             Saturated Fat (g)
                           </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">7.7</td>
                           <td className="border-t border-earthx-border/40 px-2 py-1">3.1</td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">13.90%</td>
                         </tr>
                         <tr>
                           <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
                             PUFA (g)
                           </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">2.3</td>
                           <td className="border-t border-earthx-border/40 px-2 py-1">0.9</td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">-</td>
                         </tr>
                         <tr>
                           <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
                             MUFA (g)
                           </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">3.1</td>
                           <td className="border-t border-earthx-border/40 px-2 py-1">1.2</td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">-</td>
                         </tr>
                         <tr>
                           <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
                             Trans fat (g)
                           </td>
                           <td className="border-t border-earthx-border/40 px-2 py-1">0</td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">0</td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">0.00%</td>
                         </tr>
                         <tr>
                           <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
                             Sodium (mg)
                           </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">259</td>
                           <td className="border-t border-earthx-border/40 px-2 py-1">103.6</td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">5.20%</td>
                         </tr>
                         <tr>
                           <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
                             Magnesium (mg)
                           </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">129</td>
                           <td className="border-t border-earthx-border/40 px-2 py-1">51.6</td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">-</td>
                         </tr>
                         <tr>
                           <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
                             Cholesterol (mg)
                           </td>
                           <td className="border-t border-earthx-border/40 px-2 py-1">0</td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">0</td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">-</td>
                         </tr>
                       </>
                     )}
@@ -409,113 +347,85 @@ function App() {
                           <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
                             Energy (kcal)
                           </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">388.2</td>
                           <td className="border-t border-earthx-border/40 px-2 py-1">155.3</td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">7.80%</td>
                         </tr>
                         <tr>
                           <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
                             Protein (g)
                           </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">25.3</td>
                           <td className="border-t border-earthx-border/40 px-2 py-1">10.1</td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">20.30%</td>
                         </tr>
                         <tr>
                           <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
                             Carbs (g)
                           </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">48.6</td>
                           <td className="border-t border-earthx-border/40 px-2 py-1">19.4</td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">6.50%</td>
                         </tr>
                         <tr>
                           <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
                             Sugar (g)
                           </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">24</td>
                           <td className="border-t border-earthx-border/40 px-2 py-1">9.6</td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">-</td>
                         </tr>
                         <tr>
                           <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
                             Added Sugar (g)
                           </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">10.5</td>
                           <td className="border-t border-earthx-border/40 px-2 py-1">4.2</td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">8.40%</td>
                         </tr>
                         <tr>
                           <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
                             Fibre (g)
                           </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">12.6</td>
                           <td className="border-t border-earthx-border/40 px-2 py-1">5</td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">12.00%</td>
                         </tr>
                         <tr>
                           <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
                             Fat (g)
                           </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">13.7</td>
                           <td className="border-t border-earthx-border/40 px-2 py-1">5.5</td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">8.20%</td>
                         </tr>
                         <tr>
                           <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
                             Saturated Fat (g)
                           </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">7.7</td>
                           <td className="border-t border-earthx-border/40 px-2 py-1">3.1</td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">13.90%</td>
                         </tr>
                         <tr>
                           <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
                             PUFA (g)
                           </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">2.3</td>
                           <td className="border-t border-earthx-border/40 px-2 py-1">0.9</td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">-</td>
                         </tr>
                         <tr>
                           <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
                             MUFA (g)
                           </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">3.1</td>
                           <td className="border-t border-earthx-border/40 px-2 py-1">1.2</td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">-</td>
                         </tr>
                         <tr>
                           <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
                             Trans fat (g)
                           </td>
                           <td className="border-t border-earthx-border/40 px-2 py-1">0</td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">0</td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">0.00%</td>
                         </tr>
                         <tr>
                           <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
                             Sodium (mg)
                           </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">256</td>
                           <td className="border-t border-earthx-border/40 px-2 py-1">102.4</td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">5.10%</td>
                         </tr>
                         <tr>
                           <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
                             Magnesium (mg)
                           </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">129</td>
                           <td className="border-t border-earthx-border/40 px-2 py-1">51.6</td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">-</td>
                         </tr>
                         <tr>
                           <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
                             Cholesterol (mg)
                           </td>
                           <td className="border-t border-earthx-border/40 px-2 py-1">0</td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">0</td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">-</td>
                         </tr>
                       </>
                     )}
