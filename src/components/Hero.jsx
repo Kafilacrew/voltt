@@ -10,14 +10,17 @@ export default function Hero() {
     <section className="relative min-h-[1080px] flex items-center overflow-hidden">
       {/* Background: gradient + single athlete (Unsplash) */}
       <div className="absolute inset-0 bg-gradient-to-br from-earthx-dark/90 to-earthx-dark/70">
-        <img
-          src="/assets/hero.png"
-          alt="Voltt protein bars hero"
-          className="w-full h-full object-cover object-center opacity-90"
-          onError={(e) => {
-            e.target.style.display = 'none'
-          }}
-        />
+        <picture className="block w-full h-full">
+          <source media="(max-width: 767px)" srcSet="/assets/mobile.png" />
+          <img
+            src="/assets/hero.png"
+            alt="Voltt protein bars hero"
+            className="w-full h-full object-cover object-center opacity-90"
+            onError={(e) => {
+              e.target.style.display = 'none'
+            }}
+          />
+        </picture>
       </div>
       <div className="absolute inset-0 bg-gradient-to-b from-transparent to-earthx-dark/80 pointer-events-none" />
 

@@ -19,6 +19,16 @@ const items = [
     subtitle: 'Replenish & rehydrate faster',
     icon: 'electrolyte',
   },
+  {
+    title: 'Natural Energy Booster',
+    subtitle: 'Sustained fuel without the crash',
+    icon: 'sun',
+  },
+  {
+    title: 'Active Performance Fuel',
+    subtitle: 'Built for training & recovery',
+    icon: 'activity',
+  },
 ]
 
 function Icon({ type }) {
@@ -85,6 +95,32 @@ function Icon({ type }) {
           stroke="currentColor"
           strokeWidth="1.8"
           strokeLinecap="round"
+        />
+      </svg>
+    )
+  }
+  if (type === 'sun') {
+    return (
+      <svg className={base} viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="1.8" />
+        <path
+          d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"
+          stroke="currentColor"
+          strokeWidth="1.8"
+          strokeLinecap="round"
+        />
+      </svg>
+    )
+  }
+  if (type === 'activity') {
+    return (
+      <svg className={base} viewBox="0 0 24 24" fill="none">
+        <path
+          d="M22 12h-4l-3 9L9 3l-3 9H2"
+          stroke="currentColor"
+          strokeWidth="1.8"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         />
       </svg>
     )
