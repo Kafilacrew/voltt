@@ -24,7 +24,7 @@ export default function Hero() {
       </div>
       <div className="absolute inset-0 bg-gradient-to-b from-transparent to-earthx-dark/80 pointer-events-none" />
 
-      {/* Flash sale badge */}
+      Flash sale badge
       <div className="absolute top-32 right-8 md:right-12">
         <div className="bg-brand-yellow text-earthx-dark rounded-2xl px-5 py-3 shadow-deal">
           <div className="flex items-center gap-2 text-sm md:text-base font-semibold">

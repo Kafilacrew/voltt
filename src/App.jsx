@@ -141,6 +141,7 @@ function App() {
                   {nutritionModal.product === 'almond' && 'Almond Crunch – Nutrition'}
                   {nutritionModal.product === 'cranberry' && 'Choco Cranz (Cranberry) – Nutrition'}
                   {nutritionModal.product === 'blueberry' && 'Berry Rush (Blueberry) – Nutrition'}
+                  {nutritionModal.product === 'mix' && 'Nutrition'}
                 </h3>
                 <button
                   type="button"
@@ -245,7 +246,8 @@ function App() {
                         </tr>
                       </>
                     )}
-                    {nutritionModal.product === 'cranberry' && (
+                    {(nutritionModal.product === 'cranberry' ||
+                      nutritionModal.product === 'mix') && (
                       <>
                         <tr>
                           <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">

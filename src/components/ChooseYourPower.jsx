@@ -4,21 +4,31 @@ import { useCart } from '../App'
 export default function ChooseYourPower() {
   const { addToCart, showToast, openNutrition } = useCart()
   const [openPacks, setOpenPacks] = useState({})
+
   const cards = [
     {
       id: 3,
       title: 'Choco Cranz',
       image: '/assets/choco-cranz.jpg',
+      outOfStock: true,
     },
     {
       id: 1,
       title: 'Almond Crunch',
       image: '/assets/almond-crunch.jpg',
+      outOfStock: true,
     },
     {
       id: 2,
       title: 'Berry Rush',
       image: '/assets/berry-rush.jpg',
+      outOfStock: true,
+    },
+    {
+      id: 4,
+      title: 'All in One',
+      image: '/assets/mobile.png',
+      outOfStock: true,
     },
   ]
 
@@ -31,7 +41,7 @@ export default function ChooseYourPower() {
         <p className="text-earthx-muted text-center mt-4 max-w-lg mx-auto">
           Handcrafted protein bars designed to fuel your ambitions
         </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-12 max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-12 max-w-7xl mx-auto">
           {cards.map((card) => (
             <article
               key={card.id}
@@ -41,18 +51,31 @@ export default function ChooseYourPower() {
                 <img
                   src={card.image}
                   alt={card.title}
-                  className="w-full h-full object-cover"
+                  className={`w-full h-full object-cover ${card.outOfStock ? 'opacity-60' : ''}`}
                   onError={(e) => {
                     e.target.style.display = 'none'
                   }}
                 />
+                {card.outOfStock && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/25">
+                    <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-earthx-dark">
+                      Sold Out
+                    </span>
+                  </div>
+                )}
                 <button
                   type="button"
                   aria-label="View nutritional info"
                   className="absolute top-3 left-3 w-8 h-8 rounded-full bg-brand-red/20 flex items-center justify-center shadow-card hover:bg-brand-red/30 transition"
                   onClick={() =>
                     openNutrition(
-                      card.id === 1 ? 'almond' : card.id === 2 ? 'blueberry' : 'cranberry',
+                      card.id === 1
+                        ? 'almond'
+                        : card.id === 2
+                          ? 'blueberry'
+                          : card.id === 4
+                            ? 'mix'
+                            : 'cranberry',
                     )
                   }
                 >
@@ -61,9 +84,17 @@ export default function ChooseYourPower() {
                   </span>
                 </button>
               </div>
+
               <div className="p-4 flex-1 flex flex-col">
-                <h3 className="font-display font-semibold text-earthx-dark">{card.title}</h3>
-                <p className="mt-1 text-sm text-earthx-muted">₹68 per bar</p>
+                <div className="flex items-start justify-between gap-3">
+                  <h3 className="font-display font-semibold text-earthx-dark">{card.title}</h3>
+                  {card.outOfStock && (
+                    <span className="shrink-0 rounded-full bg-brand-red/10 px-2 py-1 text-[11px] font-semibold text-brand-red">
+                      Sold Out
+                    </span>
+                  )}
+                </div>
+                <p className="mt-1 text-sm text-earthx-muted">Rs. 68 per bar</p>
 
                 <div className="mt-4 space-y-2">
                   {[
@@ -94,11 +125,17 @@ export default function ChooseYourPower() {
                   ].map((pack) => {
                     const packId = `${card.id}-${pack.key}`
                     const state = openPacks[packId] ?? { open: false, qty: 1 }
+
                     return (
                       <div key={packId} className="space-y-2">
                         <button
                           type="button"
-                          className="w-full flex items-center justify-between rounded-xl border border-earthx-border px-3 py-2 text-left hover:border-brand-red/60 hover:bg-earthx-bg transition"
+                          disabled={card.outOfStock}
+                          className={`w-full flex items-center justify-between rounded-xl border border-earthx-border px-3 py-2 text-left transition ${
+                            card.outOfStock
+                              ? 'cursor-not-allowed opacity-60'
+                              : 'hover:border-brand-red/60 hover:bg-earthx-bg'
+                          }`}
                           onClick={() =>
                             setOpenPacks((prev) => ({
                               ...prev,
@@ -109,10 +146,10 @@ export default function ChooseYourPower() {
                           <div>
                             <p className="text-sm font-medium text-earthx-dark">{pack.label}</p>
                             <div className="flex items-baseline gap-2 text-sm">
-                              <span className="font-semibold text-earthx-dark">₹{pack.price}</span>
+                              <span className="font-semibold text-earthx-dark">Rs. {pack.price}</span>
                               {pack.oldPrice && (
                                 <span className="text-xs text-earthx-muted line-through">
-                                  ₹{pack.oldPrice}
+                                  Rs. {pack.oldPrice}
                                 </span>
                               )}
                             </div>
@@ -124,7 +161,6 @@ export default function ChooseYourPower() {
                           )}
                         </button>
 
-                        {/* Smooth accordion using CSS grid-template-rows trick */}
                         <div
                           className="ml-2 mr-1"
                           style={{
@@ -136,7 +172,6 @@ export default function ChooseYourPower() {
                               'grid-template-rows 320ms cubic-bezier(0.4, 0, 0.2, 1), opacity 280ms cubic-bezier(0.4, 0, 0.2, 1), margin-top 320ms cubic-bezier(0.4, 0, 0.2, 1)',
                           }}
                         >
-                          {/* This inner div must have overflow:hidden and no min-height */}
                           <div style={{ overflow: 'hidden' }}>
                             <div className="flex items-center justify-between gap-3 text-sm pb-1">
                               <div className="flex items-center gap-2">
@@ -174,20 +209,28 @@ export default function ChooseYourPower() {
                                   +
                                 </button>
                               </div>
+
                               <button
                                 type="button"
-                                className="h-8 px-3 rounded-xl bg-brand-red text-white text-xs font-semibold hover:opacity-90 transition"
-                                onClick={() =>
-                                (addToCart({
-                                  id: packId,
-                                  name: `${card.title} – ${pack.label}`,
-                                  price: pack.price,
-                                  qty: state.qty || 1,
-                                }),
-                                  showToast('Item added to cart successfully.'))
-                                }
+                                disabled={card.outOfStock}
+                                className={`h-8 px-3 rounded-xl text-xs font-semibold transition ${
+                                  card.outOfStock
+                                    ? 'bg-earthx-border text-earthx-muted cursor-not-allowed'
+                                    : 'bg-brand-red text-white hover:opacity-90'
+                                }`}
+                                onClick={() => {
+                                  addToCart({
+                                    id: packId,
+                                    name: `${card.title} - ${pack.label}`,
+                                    price: pack.price,
+                                    qty: state.qty || 1,
+                                  })
+                                  showToast('Item added to cart successfully.')
+                                }}
                               >
-                                Add {state.qty || 1} pack{(state.qty || 1) > 1 ? 's' : ''}
+                                {card.outOfStock
+                                  ? 'Sold Out'
+                                  : `Add ${state.qty || 1} pack${(state.qty || 1) > 1 ? 's' : ''}`}
                               </button>
                             </div>
                           </div>

@@ -1,9 +1,37 @@
 import { useCart } from '../App'
 
 const packs = [
-  { id: 'stockup-6', label: 'Pack of 6', qty: 6, price: 388, oldPrice: 408, discount: 'Save 5%', perBar: '₹64.7 per bar' },
-  { id: 'stockup-9', label: 'Pack of 9', qty: 9, price: 566, oldPrice: 612, discount: 'Save 7.5%', perBar: '₹62.9 per bar', featured: true },
-  { id: 'stockup-12', label: 'Pack of 12', qty: 12, price: 735, oldPrice: 816, discount: 'Save 10%', perBar: '₹61.3 per bar' },
+  {
+    id: 'stockup-6',
+    label: 'Pack of 6',
+    qty: 6,
+    price: 388,
+    oldPrice: 408,
+    discount: 'Save 5%',
+    perBar: 'Rs. 64.7 per bar',
+    outOfStock: true,
+  },
+  {
+    id: 'stockup-9',
+    label: 'Pack of 9',
+    qty: 9,
+    price: 566,
+    oldPrice: 612,
+    discount: 'Save 7.5%',
+    perBar: 'Rs. 62.9 per bar',
+    featured: true,
+    outOfStock: true,
+  },
+  {
+    id: 'stockup-12',
+    label: 'Pack of 12',
+    qty: 12,
+    price: 735,
+    oldPrice: 816,
+    discount: 'Save 10%',
+    perBar: 'Rs. 61.3 per bar',
+    outOfStock: true,
+  },
 ]
 
 export default function StockUp() {
@@ -23,11 +51,20 @@ export default function StockUp() {
           {packs.map((pack) => (
             <div
               key={pack.id}
-              className={`relative bg-white rounded-3xl px-6 py-8 flex flex-col ${pack.featured
+              className={`relative bg-white rounded-3xl px-6 py-8 flex flex-col ${
+                pack.featured
                   ? 'border-2 border-brand-yellow shadow-card hover:shadow-card-hover md:py-10 scale-105'
                   : 'border border-earthx-border shadow-card'
-                }`}
+              }`}
             >
+              {pack.outOfStock && (
+                <div className="absolute right-4 top-4 z-10">
+                  <span className="rounded-full bg-brand-red/10 px-3 py-1 text-xs font-semibold text-brand-red">
+                    Sold Out
+                  </span>
+                </div>
+              )}
+
               {pack.featured && (
                 <div className="absolute -top-4 left-1/2 -translate-x-1/2">
                   <div className="inline-flex px-4 py-1 rounded-full bg-brand-yellow text-earthx-dark text-xs font-semibold shadow-deal">
@@ -36,41 +73,50 @@ export default function StockUp() {
                 </div>
               )}
 
-              <div className="flex-1">
+              <div className={`flex-1 ${pack.outOfStock ? 'opacity-60' : ''}`}>
                 <h3 className="font-display font-bold text-xl text-earthx-dark">{pack.label}</h3>
                 <p className="text-earthx-muted mt-1">{pack.qty} protein bars</p>
                 <span className="inline-flex mt-4 px-3 py-1 rounded-full bg-brand-red/10 text-brand-red text-xs font-semibold">
                   {pack.discount}
                 </span>
                 <div className="mt-5 flex items-baseline gap-2">
-                  <p className="font-display font-extrabold text-3xl text-earthx-dark">₹{pack.price}</p>
-                  <p className="text-earthx-muted text-sm line-through">₹{pack.oldPrice}</p>
+                  <p className="font-display font-extrabold text-3xl text-earthx-dark">
+                    Rs. {pack.price}
+                  </p>
+                  <p className="text-earthx-muted text-sm line-through">Rs. {pack.oldPrice}</p>
                 </div>
                 <p className="text-earthx-muted text-sm mt-1">{pack.perBar}</p>
-                {pack.featured && (
+                {pack.featured && !pack.outOfStock && (
                   <p className="mt-3 text-xs text-red-500 font-medium flex items-center gap-1">
-                    <span>⚠</span> Only 5 left at this price
+                    <span>!</span> Only 5 left at this price
                   </p>
                 )}
                 <ul className="mt-5 space-y-2 text-sm text-earthx-dark">
-                  <li className="flex items-center gap-2"><span className="text-brand-teal">✓</span> Free shipping</li>
-                  <li className="flex items-center gap-2"><span className="text-brand-teal">✓</span> Mix &amp; match flavors</li>
-                  <li className="flex items-center gap-2"><span className="text-brand-teal">✓</span> 30-day money back</li>
+                  <li className="flex items-center gap-2">
+                    <span className="text-brand-teal">+</span> Free shipping
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="text-brand-teal">+</span> Mix &amp; match flavors
+                  </li>
                 </ul>
               </div>
 
               <button
                 type="button"
-                className={`mt-8 h-12 rounded-xl font-semibold transition ${pack.featured
-                    ? 'bg-brand-red text-white hover:opacity-90'
-                    : 'bg-earthx-dark text-white hover:bg-black'
-                  }`}
+                disabled={pack.outOfStock}
+                className={`mt-8 h-12 rounded-xl font-semibold transition ${
+                  pack.outOfStock
+                    ? 'bg-earthx-border text-earthx-muted cursor-not-allowed'
+                    : pack.featured
+                      ? 'bg-brand-red text-white hover:opacity-90'
+                      : 'bg-earthx-dark text-white hover:bg-black'
+                }`}
                 onClick={() => {
                   addToCart({ id: pack.id, name: pack.label, price: pack.price, qty: 1 })
                   showToast(`${pack.label} added to cart!`)
                 }}
               >
-                Get {pack.label}
+                {pack.outOfStock ? 'Sold Out' : `Get ${pack.label}`}
               </button>
             </div>
           ))}
