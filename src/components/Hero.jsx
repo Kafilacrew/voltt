@@ -27,10 +27,11 @@ export default function Hero() {
       {/* Content */}
       <div className="relative max-w-[1920px] mx-auto pl-3 pr-4 sm:pl-4 sm:pr-6 lg:pl-12 lg:pr-16 w-full">
         <div className="max-w-[320px] sm:max-w-xl">
-          <h1 className="font-display font-black text-5xl md:text-7xl lg:text-8xl text-white leading-[0.95] drop-shadow-lg">
-            Complete Nutrition,
-            <br />
-            Instant Rehydration
+          <h1 className="font-display font-black text-4xl md:text-6xl lg:text-7xl text-white drop-shadow-lg">
+            <span className="block">Complete</span>
+            <span className="block mt-1 md:mt-2">Nutrition,</span>
+            <span className="block mt-1 md:mt-2">Instant</span>
+            <span className="block mt-1 md:mt-2">Rehydration</span>
           </h1>
           <p className="text-white/90 text-xl md:text-2xl mt-4 sm:mt-6">
             Protein Bars with added electrolytes
