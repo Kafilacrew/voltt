@@ -9,7 +9,8 @@ const packs = [
     oldPrice: 408,
     discount: 'Save 5%',
     perBar: 'Rs. 64.7 per bar',
-    outOfStock: true,
+    soldOut: true,
+    preOrder: true,
   },
   {
     id: 'stockup-9',
@@ -20,7 +21,8 @@ const packs = [
     discount: 'Save 7.5%',
     perBar: 'Rs. 62.9 per bar',
     featured: true,
-    outOfStock: true,
+    soldOut: true,
+    preOrder: true,
   },
   {
     id: 'stockup-12',
@@ -30,7 +32,8 @@ const packs = [
     oldPrice: 816,
     discount: 'Save 10%',
     perBar: 'Rs. 61.3 per bar',
-    outOfStock: true,
+    soldOut: true,
+    preOrder: true,
   },
 ]
 
@@ -48,18 +51,29 @@ export default function StockUp() {
         </p>
 
         <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-          {packs.map((pack) => (
-            <div
-              key={pack.id}
-              className={`relative bg-white rounded-3xl px-6 py-8 flex flex-col ${
-                pack.featured
-                  ? 'border-2 border-brand-yellow shadow-card hover:shadow-card-hover md:py-10 scale-105'
-                  : 'border border-earthx-border shadow-card'
-              }`}
-            >
-              {pack.outOfStock && (
+          {packs.map((pack) => {
+            const isPreOrder = pack.preOrder
+            const isSoldOut = pack.soldOut && !pack.preOrder
+
+            return (
+              <div
+                key={pack.id}
+                className={`relative bg-white rounded-3xl px-6 py-8 flex flex-col ${
+                  pack.featured
+                    ? 'border-2 border-brand-yellow shadow-card hover:shadow-card-hover md:py-10 scale-105'
+                    : 'border border-earthx-border shadow-card'
+                }`}
+              >
+              {isPreOrder && (
                 <div className="absolute right-4 top-4 z-10">
                   <span className="rounded-full bg-brand-red/10 px-3 py-1 text-xs font-semibold text-brand-red">
+                    Pre-Order Only
+                  </span>
+                </div>
+              )}
+              {isSoldOut && (
+                <div className="absolute right-4 top-4 z-10">
+                  <span className="rounded-full bg-earthx-border px-3 py-1 text-xs font-semibold text-earthx-muted">
                     Sold Out
                   </span>
                 </div>
@@ -73,7 +87,7 @@ export default function StockUp() {
                 </div>
               )}
 
-              <div className={`flex-1 ${pack.outOfStock ? 'opacity-60' : ''}`}>
+              <div className="flex-1">
                 <h3 className="font-display font-bold text-xl text-earthx-dark">{pack.label}</h3>
                 <p className="text-earthx-muted mt-1">{pack.qty} protein bars</p>
                 <span className="inline-flex mt-4 px-3 py-1 rounded-full bg-brand-red/10 text-brand-red text-xs font-semibold">
@@ -86,7 +100,7 @@ export default function StockUp() {
                   <p className="text-earthx-muted text-sm line-through">Rs. {pack.oldPrice}</p>
                 </div>
                 <p className="text-earthx-muted text-sm mt-1">{pack.perBar}</p>
-                {pack.featured && !pack.outOfStock && (
+                {pack.featured && (
                   <p className="mt-3 text-xs text-red-500 font-medium flex items-center gap-1">
                     <span>!</span> Only 5 left at this price
                   </p>
@@ -103,23 +117,24 @@ export default function StockUp() {
 
               <button
                 type="button"
-                disabled={pack.outOfStock}
+                disabled={isSoldOut}
                 className={`mt-8 h-12 rounded-xl font-semibold transition ${
-                  pack.outOfStock
+                  isSoldOut
                     ? 'bg-earthx-border text-earthx-muted cursor-not-allowed'
                     : pack.featured
-                      ? 'bg-brand-red text-white hover:opacity-90'
-                      : 'bg-earthx-dark text-white hover:bg-black'
+                    ? 'bg-brand-red text-white hover:opacity-90'
+                    : 'bg-earthx-dark text-white hover:bg-black'
                 }`}
                 onClick={() => {
                   addToCart({ id: pack.id, name: pack.label, price: pack.price, qty: 1 })
                   showToast(`${pack.label} added to cart!`)
                 }}
               >
-                {pack.outOfStock ? 'Sold Out' : `Get ${pack.label}`}
+                {isSoldOut ? 'Sold Out' : isPreOrder ? `Pre-Order ${pack.label}` : `Get ${pack.label}`}
               </button>
             </div>
-          ))}
+            )
+          })}
         </div>
       </div>
     </section>

@@ -15,7 +15,7 @@ export default function Cart() {
         </h2>
         {!hasItems && (
           <p className="mt-6 text-center text-earthx-muted">
-            Your cart is empty. Add a Voltt bar from &quot;Choose Your Power&quot; to get started.
+            Your cart is empty. Add a Voltt bar from &quot;Choose Your Power&quot; to start your pre-order.
           </p>
         )}
         {hasItems && (
@@ -81,7 +81,7 @@ export default function Cart() {
                   )
                   const message = `Hi, I am interested to buy the following items:\n\n${lines.join(
                     '\n',
-                  )}\n\nCart total: ₹${total}`
+                  )}\n\nPre-order total: ₹${total}`
                   const url = `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(
                     message,
                   )}`

@@ -10,25 +10,29 @@ export default function ChooseYourPower() {
       id: 3,
       title: 'Choco Cranz',
       image: '/assets/choco-cranz.jpg',
-      outOfStock: true,
+      soldOut: false,
+      preOrder: false,
     },
     {
       id: 1,
       title: 'Almond Crunch',
       image: '/assets/almond-crunch.jpg',
-      outOfStock: true,
+      soldOut: true,
+      preOrder: true,
     },
     {
       id: 2,
       title: 'Berry Rush',
       image: '/assets/berry-rush.jpg',
-      outOfStock: true,
+      soldOut: true,
+      preOrder: true,
     },
     {
       id: 4,
       title: 'All in One',
       image: '/assets/mobile.png',
-      outOfStock: true,
+      soldOut: true,
+      preOrder: true,
     },
   ]
 
@@ -42,21 +46,32 @@ export default function ChooseYourPower() {
           Handcrafted protein bars designed to fuel your ambitions
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-12 max-w-7xl mx-auto">
-          {cards.map((card) => (
-            <article
-              key={card.id}
-              className="bg-white border border-earthx-border rounded-2xl overflow-hidden shadow-card hover:shadow-card-hover transition flex flex-col"
-            >
+          {cards.map((card) => {
+            const isPreOrder = card.preOrder
+            const isSoldOut = card.soldOut && !card.preOrder
+
+            return (
+              <article
+                key={card.id}
+                className="bg-white border border-earthx-border rounded-2xl overflow-hidden shadow-card hover:shadow-card-hover transition flex flex-col"
+              >
               <div className="relative aspect-[4/5] bg-earthx-bg">
                 <img
                   src={card.image}
                   alt={card.title}
-                  className={`w-full h-full object-cover ${card.outOfStock ? 'opacity-60' : ''}`}
+                  className={`w-full h-full object-cover ${isSoldOut ? 'opacity-60' : ''}`}
                   onError={(e) => {
                     e.target.style.display = 'none'
                   }}
                 />
-                {card.outOfStock && (
+                {isPreOrder && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/25">
+                    <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-earthx-dark">
+                      Pre-Order Only
+                    </span>
+                  </div>
+                )}
+                {isSoldOut && (
                   <div className="absolute inset-0 flex items-center justify-center bg-black/25">
                     <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-earthx-dark">
                       Sold Out
@@ -88,8 +103,13 @@ export default function ChooseYourPower() {
               <div className="p-4 flex-1 flex flex-col">
                 <div className="flex items-start justify-between gap-3">
                   <h3 className="font-display font-semibold text-earthx-dark">{card.title}</h3>
-                  {card.outOfStock && (
+                  {isPreOrder && (
                     <span className="shrink-0 rounded-full bg-brand-red/10 px-2 py-1 text-[11px] font-semibold text-brand-red">
+                      Pre-Order
+                    </span>
+                  )}
+                  {isSoldOut && (
+                    <span className="shrink-0 rounded-full bg-earthx-border px-2 py-1 text-[11px] font-semibold text-earthx-muted">
                       Sold Out
                     </span>
                   )}
@@ -130,9 +150,9 @@ export default function ChooseYourPower() {
                       <div key={packId} className="space-y-2">
                         <button
                           type="button"
-                          disabled={card.outOfStock}
+                          disabled={isSoldOut}
                           className={`w-full flex items-center justify-between rounded-xl border border-earthx-border px-3 py-2 text-left transition ${
-                            card.outOfStock
+                            isSoldOut
                               ? 'cursor-not-allowed opacity-60'
                               : 'hover:border-brand-red/60 hover:bg-earthx-bg'
                           }`}
@@ -212,9 +232,9 @@ export default function ChooseYourPower() {
 
                               <button
                                 type="button"
-                                disabled={card.outOfStock}
+                                disabled={isSoldOut}
                                 className={`h-8 px-3 rounded-xl text-xs font-semibold transition ${
-                                  card.outOfStock
+                                  isSoldOut
                                     ? 'bg-earthx-border text-earthx-muted cursor-not-allowed'
                                     : 'bg-brand-red text-white hover:opacity-90'
                                 }`}
@@ -228,8 +248,10 @@ export default function ChooseYourPower() {
                                   showToast('Item added to cart successfully.')
                                 }}
                               >
-                                {card.outOfStock
+                                {isSoldOut
                                   ? 'Sold Out'
+                                  : isPreOrder
+                                  ? `Pre-Order ${state.qty || 1} pack${(state.qty || 1) > 1 ? 's' : ''}`
                                   : `Add ${state.qty || 1} pack${(state.qty || 1) > 1 ? 's' : ''}`}
                               </button>
                             </div>
@@ -241,7 +263,8 @@ export default function ChooseYourPower() {
                 </div>
               </div>
             </article>
-          ))}
+            )
+          })}
         </div>
       </div>
     </section>
