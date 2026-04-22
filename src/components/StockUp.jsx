@@ -1,140 +1,57 @@
-import { useCart } from '../App'
+import BookingWidgetButton from './BookingWidgetButton'
 
 const packs = [
-  {
-    id: 'stockup-6',
-    label: 'Pack of 6',
-    qty: 6,
-    price: 388,
-    oldPrice: 408,
-    discount: 'Save 5%',
-    perBar: 'Rs. 64.7 per bar',
-    soldOut: true,
-    preOrder: true,
-  },
-  {
-    id: 'stockup-9',
-    label: 'Pack of 9',
-    qty: 9,
-    price: 566,
-    oldPrice: 612,
-    discount: 'Save 7.5%',
-    perBar: 'Rs. 62.9 per bar',
-    featured: true,
-    soldOut: true,
-    preOrder: true,
-  },
-  {
-    id: 'stockup-12',
-    label: 'Pack of 12',
-    qty: 12,
-    price: 735,
-    oldPrice: 816,
-    discount: 'Save 10%',
-    perBar: 'Rs. 61.3 per bar',
-    soldOut: true,
-    preOrder: true,
-  },
+  { id: 'stockup-6', label: 'Pack of 6', price: 388, soldOut: false },
+  { id: 'stockup-9', label: 'Pack of 9', price: 566, soldOut: false },
+  { id: 'stockup-12', label: 'Pack of 12', price: 735, soldOut: false },
 ]
 
 export default function StockUp() {
-  const { addToCart, showToast } = useCart()
-
   return (
     <section id="stock-up" className="bg-white py-16 md:py-24">
       <div className="max-w-7xl mx-auto px-6">
         <h2 className="font-display font-bold text-4xl md:text-5xl text-earthx-dark text-center">
-          Stock Up. Save Big.
+          Stock Up
         </h2>
         <p className="text-earthx-muted text-center mt-4 max-w-xl mx-auto">
-          The more you buy, the more you save. Simple math, maximum gains.
+          Simple pack pricing with direct booking.
         </p>
 
         <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-          {packs.map((pack) => {
-            const isPreOrder = pack.preOrder
-            const isSoldOut = pack.soldOut && !pack.preOrder
-
-            return (
-              <div
-                key={pack.id}
-                className={`relative bg-white rounded-3xl px-6 py-8 flex flex-col ${
-                  pack.featured
-                    ? 'border-2 border-brand-yellow shadow-card hover:shadow-card-hover md:py-10 scale-105'
-                    : 'border border-earthx-border shadow-card'
-                }`}
-              >
-              {isPreOrder && (
-                <div className="absolute right-4 top-4 z-10">
-                  <span className="rounded-full bg-brand-red/10 px-3 py-1 text-xs font-semibold text-brand-red">
-                    Pre-Order Only
-                  </span>
-                </div>
-              )}
-              {isSoldOut && (
-                <div className="absolute right-4 top-4 z-10">
-                  <span className="rounded-full bg-earthx-border px-3 py-1 text-xs font-semibold text-earthx-muted">
-                    Sold Out
-                  </span>
-                </div>
-              )}
-
-              {pack.featured && (
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                  <div className="inline-flex px-4 py-1 rounded-full bg-brand-yellow text-earthx-dark text-xs font-semibold shadow-deal">
-                    Most Popular
-                  </div>
-                </div>
-              )}
-
+          {packs.map((pack) => (
+            <div
+              key={pack.id}
+              className="bg-white rounded-3xl px-6 py-8 flex flex-col border border-earthx-border shadow-card text-center"
+            >
               <div className="flex-1">
                 <h3 className="font-display font-bold text-xl text-earthx-dark">{pack.label}</h3>
-                <p className="text-earthx-muted mt-1">{pack.qty} protein bars</p>
-                <span className="inline-flex mt-4 px-3 py-1 rounded-full bg-brand-red/10 text-brand-red text-xs font-semibold">
-                  {pack.discount}
-                </span>
-                <div className="mt-5 flex items-baseline gap-2">
+                <div className="mt-5">
                   <p className="font-display font-extrabold text-3xl text-earthx-dark">
                     Rs. {pack.price}
                   </p>
-                  <p className="text-earthx-muted text-sm line-through">Rs. {pack.oldPrice}</p>
                 </div>
-                <p className="text-earthx-muted text-sm mt-1">{pack.perBar}</p>
-                {pack.featured && (
-                  <p className="mt-3 text-xs text-red-500 font-medium flex items-center gap-1">
-                    <span>!</span> Only 5 left at this price
-                  </p>
-                )}
-                <ul className="mt-5 space-y-2 text-sm text-earthx-dark">
-                  <li className="flex items-center gap-2">
-                    <span className="text-brand-teal">+</span> Free shipping
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <span className="text-brand-teal">+</span> Mix &amp; match flavors
-                  </li>
-                </ul>
               </div>
 
-              <button
-                type="button"
-                disabled={isSoldOut}
-                className={`mt-8 h-12 rounded-xl font-semibold transition ${
-                  isSoldOut
-                    ? 'bg-earthx-border text-earthx-muted cursor-not-allowed'
-                    : pack.featured
-                    ? 'bg-brand-red text-white hover:opacity-90'
-                    : 'bg-earthx-dark text-white hover:bg-black'
-                }`}
-                onClick={() => {
-                  addToCart({ id: pack.id, name: pack.label, price: pack.price, qty: 1 })
-                  showToast(`${pack.label} added to cart!`)
-                }}
-              >
-                {isSoldOut ? 'Sold Out' : isPreOrder ? `Pre-Order ${pack.label}` : `Get ${pack.label}`}
-              </button>
+              <div className="mt-8">
+                {pack.soldOut ? (
+                  <button
+                    type="button"
+                    disabled
+                    className="w-full h-12 rounded-xl bg-earthx-border text-earthx-muted font-semibold cursor-not-allowed"
+                  >
+                    Out of Stock
+                  </button>
+                ) : (
+                  <div className="flex justify-center">
+                    <BookingWidgetButton
+                      containerId={`book-container-${pack.id}`}
+                      buttonLabel="Buy Now"
+                    />
+                  </div>
+                )}
+              </div>
             </div>
-            )
-          })}
+          ))}
         </div>
       </div>
     </section>

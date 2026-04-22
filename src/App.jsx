@@ -1,137 +1,61 @@
 import { useEffect, useState, createContext, useContext } from 'react'
+import AnnouncementBar from './components/AnnouncementBar'
 import Nav from './components/Nav'
 import Hero from './components/Hero'
 import ChooseYourPower from './components/ChooseYourPower'
 import PremiumNutrition from './components/PremiumNutrition'
 import TrustedBy from './components/TrustedBy'
-import StockUp from './components/StockUp'
-import Cart from './components/Cart'
+// import StockUp from './components/StockUp'
 import FAQ from './components/FAQ'
 import Newsletter from './components/Newsletter'
 import Footer from './components/Footer'
 import { WHATSAPP_PHONE } from './constants/contact'
 
-const CartContext = createContext(null)
+const AppContext = createContext(null)
+const BOOKING_SCRIPT_SRC = 'https://logout.world/static/widget/logout-booking.js'
 
-export function useCart() {
-  const ctx = useContext(CartContext)
-  if (!ctx) throw new Error('useCart must be used inside CartProvider')
+export function useAppContext() {
+  const ctx = useContext(AppContext)
+  if (!ctx) throw new Error('useAppContext must be used inside AppContext.Provider')
   return ctx
 }
 
 function App() {
-  const [cart, setCart] = useState(() => {
-    if (typeof window === 'undefined') return []
-    try {
-      const stored = window.sessionStorage.getItem('voltt-cart')
-      return stored ? JSON.parse(stored) : []
-    } catch {
-      return []
-    }
-  })
-
-  useEffect(() => {
-    try {
-      window.sessionStorage.setItem('voltt-cart', JSON.stringify(cart))
-    } catch {
-      // ignore
-    }
-  }, [cart])
-
-  const addToCart = (item) => {
-    setCart((prev) => {
-      const existing = prev.find((p) => p.id === item.id)
-      if (existing) {
-        return prev.map((p) =>
-          p.id === item.id
-            ? { ...p, qty: p.qty + (item.qty ?? 1) }
-            : p,
-        )
-      }
-      return [...prev, { ...item, qty: item.qty ?? 1 }]
-    })
-  }
-
-  const updateQuantity = (id, delta) => {
-    setCart((prev) => {
-      return prev
-        .map((item) =>
-          item.id === id ? { ...item, qty: item.qty + delta } : item,
-        )
-        .filter((item) => item.qty > 0)
-    })
-  }
-
-  const removeFromCart = (id) => {
-    setCart((prev) => prev.filter((item) => item.id !== id))
-  }
-
-  const cartCount = cart.reduce((sum, item) => sum + item.qty, 0)
-  const [toast, setToast] = useState({ open: false, message: '' })
   const [nutritionModal, setNutritionModal] = useState({
     open: false,
     product: null,
   })
 
-  const showToast = (message) => {
-    setToast({ open: true, message })
-  }
+  useEffect(() => {
+    const existingScript = document.querySelector(`script[src="${BOOKING_SCRIPT_SRC}"]`)
+    if (existingScript) return undefined
+
+    const script = document.createElement('script')
+    script.src = BOOKING_SCRIPT_SRC
+    script.async = true
+    script.dataset.logoutWidget = 'true'
+    document.body.appendChild(script)
+  }, [])
 
   return (
-    <CartContext.Provider
+    <AppContext.Provider
       value={{
-        cart,
-        addToCart,
-        updateQuantity,
-        removeFromCart,
-        cartCount,
-        showToast,
         openNutrition: (product) => setNutritionModal({ open: true, product }),
       }}
     >
       <div className="min-h-screen bg-white">
         <Nav />
+        <AnnouncementBar />
         <main>
           <Hero />
           <ChooseYourPower />
           <PremiumNutrition />
           <TrustedBy />
-          <StockUp />
-          <Cart />
+          {/* <StockUp /> */}
           <FAQ />
           <Newsletter />
           <Footer />
         </main>
-
-        {toast.open && (
-          <div className="fixed inset-0 z-[60] flex items-end justify-center sm:items-center bg-black/20">
-            <div className="mb-6 sm:mb-0 max-w-sm w-full rounded-2xl bg-white shadow-card border border-earthx-border px-4 py-3">
-              <p className="text-sm font-medium text-earthx-dark">
-                {toast.message || 'Item added to cart successfully.'}
-              </p>
-              <div className="mt-3 flex justify-end gap-2 text-sm">
-                <button
-                  type="button"
-                  className="px-3 py-1.5 rounded-lg border border-earthx-border text-earthx-dark hover:bg-earthx-bg"
-                  onClick={() => setToast({ open: false, message: '' })}
-                >
-                  Continue Shopping
-                </button>
-                <button
-                  type="button"
-                  className="px-3 py-1.5 rounded-lg bg-brand-red text-white font-semibold hover:opacity-90"
-                  onClick={() => {
-                    setToast({ open: false, message: '' })
-                    const el = document.getElementById('cart')
-                    if (el) el.scrollIntoView({ behavior: 'smooth' })
-                  }}
-                >
-                  Go to Cart
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
 
         {nutritionModal.open && (
           <div className="fixed inset-0 z-[55] flex items-center justify-center bg-black/50 px-4">
@@ -449,7 +373,7 @@ function App() {
           <span className="text-sm font-semibold sm:hidden">Chat</span>
         </button>
       </div>
-    </CartContext.Provider>
+    </AppContext.Provider>
   )
 }
 

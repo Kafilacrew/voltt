@@ -8,14 +8,14 @@ export default function Footer() {
   ]
   const support = [
     { label: 'FAQ', href: '#faq' },
-    { label: 'Cart', href: '#cart' },
+    { label: 'Shop', href: '#shop' },
   ]
   const contact = [
-    { label: '+91 73859 74015', href: 'tel:+917385974015' },
+    { label: '+91 73783 70160', href: 'tel:+917378370160' },
     { label: 'eatvoltt@gmail.com', href: 'mailto:eatvoltt@gmail.com' },
   ]
   const marketer =
-    'Marketed by: Pradeep Food Ventures LLP, Flat No: A-201, 2nd Floor, The Spires, Aundh Police Station Road, Aundh, Pune, Maharashtra 411007'
+    'Marketed by: Pradeep Food Ventures LLP, Plot No-BG 71/2/A, PRADEEP SWEET ICON, Floor no. 3, Telco, Pimpri Industrial Area, Pune, Maharashtra, 411026, PUNE PCMC ward No-8, Pimpri Chinchwad Municipal Corporation, Maharashtra-411026'
   const manufacturer =
     'Manufactured by : Arjava Nutrition Private Limited E-001, Prateek Laurel, Sector-120 Noida, Gautam Buddha Nagar, Uttar Pradesh-201301'
 
