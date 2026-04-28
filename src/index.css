@@ -10,3 +10,13 @@
     @apply font-sans text-earthx-dark antialiased;
   }
 }
+
+@layer components {
+  .voltt-embedded-widget {
+    @apply w-full;
+  }
+
+  .voltt-embedded-widget > * {
+    @apply w-full;
+  }
+}

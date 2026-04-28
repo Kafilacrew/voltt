@@ -4,15 +4,27 @@ import Nav from './components/Nav'
 import Hero from './components/Hero'
 import ChooseYourPower from './components/ChooseYourPower'
 import PremiumNutrition from './components/PremiumNutrition'
+import ProductBookingPage from './components/ProductBookingPage'
 import TrustedBy from './components/TrustedBy'
 // import StockUp from './components/StockUp'
 import FAQ from './components/FAQ'
 import Newsletter from './components/Newsletter'
 import Footer from './components/Footer'
 import { WHATSAPP_PHONE } from './constants/contact'
+import { getProductBySlug } from './data/products'
 
 const AppContext = createContext(null)
-const BOOKING_SCRIPT_SRC = 'https://logout.world/static/widget/logout-booking.js'
+const PRODUCT_ROUTE_PREFIX = '#/product/'
+const PRODUCT_REFRESH_KEY = 'voltt:last-refreshed-product-hash'
+
+function getProductRouteSlug(hash) {
+  if (!hash.startsWith(PRODUCT_ROUTE_PREFIX)) {
+    return null
+  }
+
+  const slug = decodeURIComponent(hash.slice(PRODUCT_ROUTE_PREFIX.length))
+  return slug || null
+}
 
 export function useAppContext() {
   const ctx = useContext(AppContext)
@@ -25,17 +37,59 @@ function App() {
     open: false,
     product: null,
   })
+  const [currentHash, setCurrentHash] = useState(() => window.location.hash)
+  const activeProduct = getProductBySlug(getProductRouteSlug(currentHash))
 
   useEffect(() => {
-    const existingScript = document.querySelector(`script[src="${BOOKING_SCRIPT_SRC}"]`)
-    if (existingScript) return undefined
+    const handleHashChange = () => {
+      setCurrentHash(window.location.hash)
+      setNutritionModal({ open: false, product: null })
+    }
 
-    const script = document.createElement('script')
-    script.src = BOOKING_SCRIPT_SRC
-    script.async = true
-    script.dataset.logoutWidget = 'true'
-    document.body.appendChild(script)
+    window.addEventListener('hashchange', handleHashChange)
+    handleHashChange()
+
+    return () => {
+      window.removeEventListener('hashchange', handleHashChange)
+    }
   }, [])
+
+  useEffect(() => {
+    if (activeProduct) {
+      window.scrollTo({ top: 0, behavior: 'auto' })
+      return undefined
+    }
+
+    const sectionId = currentHash && !currentHash.startsWith('#/') ? currentHash.slice(1) : ''
+    if (!sectionId) {
+      return undefined
+    }
+
+    const scrollTimeout = window.setTimeout(() => {
+      document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }, 0)
+
+    return () => {
+      window.clearTimeout(scrollTimeout)
+    }
+  }, [activeProduct, currentHash])
+
+  useEffect(() => {
+    const productHash = currentHash.startsWith(PRODUCT_ROUTE_PREFIX) ? currentHash : null
+
+    if (!productHash) {
+      window.sessionStorage.removeItem(PRODUCT_REFRESH_KEY)
+      return
+    }
+
+    const lastRefreshedHash = window.sessionStorage.getItem(PRODUCT_REFRESH_KEY)
+    if (lastRefreshedHash === productHash) {
+      return
+    }
+
+    window.sessionStorage.setItem(PRODUCT_REFRESH_KEY, productHash)
+    window.location.reload()
+  }, [currentHash])
 
   return (
     <AppContext.Provider
@@ -47,15 +101,21 @@ function App() {
         <Nav />
         <AnnouncementBar />
         <main>
-          <Hero />
-          <ChooseYourPower />
-          <PremiumNutrition />
-          <TrustedBy />
-          {/* <StockUp /> */}
-          <FAQ />
-          <Newsletter />
-          <Footer />
+          {activeProduct ? (
+            <ProductBookingPage product={activeProduct} />
+          ) : (
+            <>
+              <Hero />
+              <ChooseYourPower />
+              <PremiumNutrition />
+              <TrustedBy />
+              {/* <StockUp /> */}
+              <FAQ />
+              <Newsletter />
+            </>
+          )}
         </main>
+        <Footer />
 
         {nutritionModal.open && (
           <div className="fixed inset-0 z-[55] flex items-center justify-center bg-black/50 px-4">

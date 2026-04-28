@@ -1,43 +1,9 @@
 import { useAppContext } from '../App'
+import { PRODUCTS } from '../data/products'
 import BookingWidgetButton from './BookingWidgetButton'
 
 export default function ChooseYourPower() {
   const { openNutrition } = useAppContext()
-
-  const cards = [
-    {
-      id: 3,
-      title: 'Choco Cranz',
-      image: '/assets/choco-cranz.jpg',
-      price: 68,
-      soldOut: false,
-      nutritionKey: 'cranberry',
-    },
-    {
-      id: 1,
-      title: 'Almond Crunch',
-      image: '/assets/almond-crunch.jpg',
-      price: 68,
-      soldOut: false,
-      nutritionKey: 'almond',
-    },
-    {
-      id: 2,
-      title: 'Berry Rush',
-      image: '/assets/berry-rush.jpg',
-      price: 68,
-      soldOut: false,
-      nutritionKey: 'blueberry',
-    },
-    {
-      id: 4,
-      title: 'All in One',
-      image: '/assets/mobile.png',
-      price: 68,
-      soldOut: false,
-      nutritionKey: 'mix',
-    },
-  ]
 
   return (
     <section id="shop" className="bg-white py-16 md:py-24">
@@ -49,7 +15,7 @@ export default function ChooseYourPower() {
           Handcrafted protein bars designed to fuel your ambitions
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-12 max-w-7xl mx-auto">
-          {cards.map((card) => (
+          {PRODUCTS.map((card) => (
             <article
               key={card.id}
               className="bg-white border border-earthx-border rounded-2xl overflow-hidden shadow-card hover:shadow-card-hover transition flex flex-col"
@@ -106,6 +72,7 @@ export default function ChooseYourPower() {
                     <div className="flex justify-center">
                       <BookingWidgetButton
                         containerId={`book-container-product-${card.id}`}
+                        eventSlug={card.eventSlug}
                         buttonLabel="Buy Now"
                       />
                     </div>
