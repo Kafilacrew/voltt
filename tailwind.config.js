@@ -7,28 +7,35 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
-        display: ['Montserrat', 'system-ui', 'sans-serif'],
+        sans: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
+        display: ['Outfit', '"Plus Jakarta Sans"', 'sans-serif'],
+        mono: ['SFMono-Regular', 'Consolas', 'Liberation Mono', 'Menlo', 'monospace'],
       },
       colors: {
-        brand: {
-          red: '#e73642',
-          yellow: '#ffbb29',
-          brown: '#d5875d',
-          teal: '#2ec2b1',
+        voltt: {
+          navy: '#2A1646',
+          navydark: '#1F0F36',
+          coral: '#F95738',
+          coralhover: '#E04729',
+          cream: '#F5F2EB',
+          creamcard: '#FAF8F3',
+          creamborder: '#E6DFD3',
+          gold: '#D9A441',
+          green: '#5D8C4A',
+          charcoal: '#2A1646',
+          muted: '#71717A',
         },
-        earthx: {
-          dark: '#1f1f1f',
-          muted: '#6b6b6b',
-          border: '#e6e6e6',
-          bg: '#f5f5f5',
+        brand: {
+          navy: '#2A1646',
+          coral: '#F95738',
+          gold: '#D9A441',
+          green: '#5D8C4A',
         },
       },
       boxShadow: {
-        'card': '0 4px 14px rgba(0,0,0,0.08)',
-        'card-hover': '0 8px 28px rgba(0,0,0,0.12)',
-        'deal': '0 4px 17.5px rgba(255,187,41,0.3)',
-        'nav': '0 8px 22px rgba(0,0,0,0.1)',
+        'subtle': '0 2px 12px rgba(42, 22, 70, 0.04)',
+        'elevated': '0 20px 40px -15px rgba(42, 22, 70, 0.1)',
+        'card': '0 10px 30px -10px rgba(0, 0, 0, 0.05)',
       },
     },
   },

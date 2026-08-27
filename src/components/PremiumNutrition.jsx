@@ -1,162 +1,147 @@
-const items = [
+import React from 'react'
+import { Tag, Leaf, Zap, Droplets, Sun, Activity, Check } from 'lucide-react'
+
+const specs = [
   {
     title: 'Affordable Premium',
-    subtitle: 'Same quality, 40% less price',
-    icon: 'tag',
+    detail: 'Same international grade, 40% lower price point than competitors.',
+    icon: Tag,
+    code: 'SPEC-01',
   },
   {
-    title: 'Clean Ingredients',
-    subtitle: 'No artificial sweeteners',
-    icon: 'leaf',
+    title: 'Clean Formulation',
+    detail: 'Zero artificial sweeteners, no hidden preservatives or chemical fillers.',
+    icon: Leaf,
+    code: 'SPEC-02',
   },
   {
-    title: 'High Protein',
-    subtitle: '10g protein per bar',
-    icon: 'bolt',
+    title: '10g Clean Protein',
+    detail: 'High bioavailability whey protein concentrate in every 40g bar.',
+    icon: Zap,
+    code: 'SPEC-03',
   },
   {
     title: 'Added Electrolytes',
-    subtitle: 'Replenish & rehydrate faster',
-    icon: 'electrolyte',
+    detail: 'Formulated with Sodium & Magnesium for rapid cellular rehydration.',
+    icon: Droplets,
+    code: 'SPEC-04',
   },
   {
-    title: 'Natural Energy Booster',
-    subtitle: 'Sustained fuel without the crash',
-    icon: 'sun',
+    title: 'Sustained Fuel',
+    detail: 'Complex carbs and natural fiber providing energy without the crash.',
+    icon: Sun,
+    code: 'SPEC-05',
   },
   {
-    title: 'Active Performance Fuel',
-    subtitle: 'Built for training & recovery',
-    icon: 'activity',
+    title: 'Active Recovery',
+    detail: 'Macro ratios engineered for pre-workout stamina and post-workout recovery.',
+    icon: Activity,
+    code: 'SPEC-06',
   },
 ]
 
-function Icon({ type }) {
-  const base = 'w-5 h-5'
-  if (type === 'tag') {
-    return (
-      <svg className={base} viewBox="0 0 24 24" fill="none">
-        <path
-          d="M4 4h6l8 8-6 6-8-8V4z"
-          stroke="currentColor"
-          strokeWidth="1.8"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-        <circle cx="9" cy="9" r="1.2" fill="currentColor" />
-      </svg>
-    )
-  }
-  if (type === 'leaf') {
-    return (
-      <svg className={base} viewBox="0 0 24 24" fill="none">
-        <path
-          d="M5 19c7 0 12-5 12-12-7 0-12 5-12 12z"
-          stroke="currentColor"
-          strokeWidth="1.8"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-        <path
-          d="M5 19c3-1 5-3 6-6"
-          stroke="currentColor"
-          strokeWidth="1.8"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
-    )
-  }
-  if (type === 'bolt') {
-    return (
-      <svg className={base} viewBox="0 0 24 24" fill="none">
-        <path
-          d="M13 2L6 13h5l-1 9 7-11h-5l1-9z"
-          stroke="currentColor"
-          strokeWidth="1.8"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
-    )
-  }
-  if (type === 'electrolyte') {
-    return (
-      <svg className={base} viewBox="0 0 24 24" fill="none">
-        <path
-          d="M12 2C8 8 6 11 6 14a6 6 0 0 0 12 0c0-3-2-6-6-12z"
-          stroke="currentColor"
-          strokeWidth="1.8"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-        <path
-          d="M9 14h6M12 11v6"
-          stroke="currentColor"
-          strokeWidth="1.8"
-          strokeLinecap="round"
-        />
-      </svg>
-    )
-  }
-  if (type === 'sun') {
-    return (
-      <svg className={base} viewBox="0 0 24 24" fill="none">
-        <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="1.8" />
-        <path
-          d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"
-          stroke="currentColor"
-          strokeWidth="1.8"
-          strokeLinecap="round"
-        />
-      </svg>
-    )
-  }
-  if (type === 'activity') {
-    return (
-      <svg className={base} viewBox="0 0 24 24" fill="none">
-        <path
-          d="M22 12h-4l-3 9L9 3l-3 9H2"
-          stroke="currentColor"
-          strokeWidth="1.8"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
-    )
-  }
-  return null
-}
-
 export default function PremiumNutrition() {
-
   return (
-    <section id="nutrition" className="bg-earthx-bg py-16 md:py-24">
-      <div className="max-w-7xl mx-auto px-6">
-        <h2 className="font-display font-bold text-4xl md:text-5xl text-earthx-dark text-center max-w-4xl mx-auto">
-          Complete Nutrition. Instant Rehydration.
-        </h2>
-        <p className="text-earthx-muted text-center mt-4">
-          Crafted to balance taste, nutrition, and clean ingredients — no compromises.
-        </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-12 max-w-5xl mx-auto">
-          {items.map((item) => (
-            <div
-              key={item.title}
-              className="bg-white rounded-3xl shadow-card border border-earthx-border/60 px-6 py-7 flex flex-col items-center text-center"
-            >
-              <div className="mb-4 inline-flex items-center justify-center w-11 h-11 rounded-full bg-brand-red/10 text-brand-red">
-                <Icon type={item.icon} />
-              </div>
-              <h3 className="font-display font-semibold text-earthx-dark text-base md:text-lg">
-                {item.title}
-              </h3>
-              <p className="mt-1 text-sm text-earthx-muted">{item.subtitle}</p>
-            </div>
-          ))}
+    <section id="nutrition" className="bg-[#153B75] py-20 lg:py-28 text-white border-b border-[#0F2C59]">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        {/* Section Header */}
+        <div className="max-w-3xl mb-16">
+          <span className="font-mono text-[11px] font-bold text-[#D8A24A] tracking-widest uppercase">
+            // FORMULA & NUTRITION SPECS
+          </span>
+          <h2 className="font-display font-black text-4xl sm:text-5xl lg:text-6xl tracking-tight text-white uppercase mt-2">
+            COMPLETE NUTRITION. <br />
+            <span className="text-[#D8A24A]">INSTANT REHYDRATION.</span>
+          </h2>
+          <p className="mt-4 text-[#F7F4EC]/90 text-base sm:text-lg">
+            Voltt bars fuse clean whey protein with essential electrolyte minerals for rapid absorption, digestive ease, and authentic taste.
+          </p>
         </div>
+
+        {/* Technical Features Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+          {specs.map((item) => {
+            const IconComp = item.icon
+            return (
+              <div
+                key={item.title}
+                className="bg-[#0F2C59] border border-white/10 rounded-xl p-6 flex flex-col justify-between hover:border-[#D8A24A]/50 transition-colors shadow-sm"
+              >
+                <div>
+                  <div className="flex items-center justify-between mb-6">
+                    <div className="w-10 h-10 rounded-lg bg-white/10 border border-white/15 flex items-center justify-center text-[#D8A24A]">
+                      <IconComp className="w-5 h-5" />
+                    </div>
+                    <span className="font-mono text-[10px] text-[#D8A24A] font-bold tracking-wider">
+                      {item.code}
+                    </span>
+                  </div>
+
+                  <h3 className="font-display font-bold text-lg text-white">
+                    {item.title}
+                  </h3>
+                  <p className="mt-2 text-xs text-[#F7F4EC]/80 leading-relaxed font-normal">
+                    {item.detail}
+                  </p>
+                </div>
+
+                <div className="mt-6 pt-4 border-t border-white/10 flex items-center gap-1.5 text-[11px] font-mono text-[#00E5A3] font-bold">
+                  <Check className="w-3.5 h-3.5 text-[#5D8C4A]" />
+                  <span>VERIFIED SPEC</span>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+
+        {/* Studio Comparison Matrix */}
+        <div className="bg-white text-[#1F2937] border border-[#E8E3D5] rounded-2xl p-6 sm:p-8 shadow-xl">
+          <div className="mb-6">
+            <span className="font-mono text-[10px] text-[#153B75] font-bold tracking-wider uppercase">
+              SPECIFICATION COMPARISON
+            </span>
+            <h3 className="font-display font-bold text-xl text-[#153B75] mt-1">
+              Voltt vs. Traditional Commercial Snack Bars
+            </h3>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="w-full text-left font-sans text-xs border-collapse">
+              <thead>
+                <tr className="border-b border-[#E8E3D5] text-[#6B7280] font-mono text-[11px]">
+                  <th className="py-3 px-4 uppercase">Feature</th>
+                  <th className="py-3 px-4 uppercase text-[#153B75] font-bold">Voltt Bars</th>
+                  <th className="py-3 px-4 uppercase">Generic Candy/Snack Bars</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-[#E8E3D5] text-[#1F2937]">
+                <tr>
+                  <td className="py-3.5 px-4 font-semibold text-[#153B75]">Protein Content</td>
+                  <td className="py-3.5 px-4 text-[#5D8C4A] font-bold">10g Clean Whey</td>
+                  <td className="py-3.5 px-4 text-[#6B7280]">1-3g Low Quality</td>
+                </tr>
+                <tr>
+                  <td className="py-3.5 px-4 font-semibold text-[#153B75]">Electrolytes (Na + Mg)</td>
+                  <td className="py-3.5 px-4 text-[#5D8C4A] font-bold">Yes (Instant Rehydration)</td>
+                  <td className="py-3.5 px-4 text-[#6B7280]">None</td>
+                </tr>
+                <tr>
+                  <td className="py-3.5 px-4 font-semibold text-[#153B75]">Artificial Sweeteners</td>
+                  <td className="py-3.5 px-4 text-[#5D8C4A] font-bold">Zero</td>
+                  <td className="py-3.5 px-4 text-[#6B7280]">High Additives</td>
+                </tr>
+                <tr>
+                  <td className="py-3.5 px-4 font-semibold text-[#153B75]">Price per Bar</td>
+                  <td className="py-3.5 px-4 text-[#D8A24A] font-bold">₹68 (Affordable)</td>
+                  <td className="py-3.5 px-4 text-[#6B7280]">₹120+ (Import Markup)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
       </div>
     </section>
   )
 }
-

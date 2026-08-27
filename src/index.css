@@ -5,9 +5,36 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
   }
+  
   body {
-    @apply font-sans text-earthx-dark antialiased;
+    @apply font-sans antialiased text-[#2A1646] bg-[#F5F2EB] selection:bg-[#F95738] selection:text-white;
+  }
+
+  /* Sleek minimalist scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #F5F2EB;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #2A1646;
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #F95738;
+  }
+}
+
+@layer utilities {
+  .border-cream {
+    @apply border border-[#E6DFD3];
+  }
+
+  .card-hover-voltt {
+    @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-card;
   }
 }
 

@@ -1,152 +1,202 @@
+import React from 'react'
+import { motion } from 'framer-motion'
+import { ArrowLeft, CheckCircle2, Info, Sparkles, Zap } from 'lucide-react'
 import { useAppContext } from '../App'
 import { PRODUCTS } from '../data/products'
 import EmbeddedBookingWidget from './EmbeddedBookingWidget'
 
 export default function ProductBookingPage({ product }) {
-  const { openNutrition } = useAppContext()
+  const { openNutrition, openCheckout } = useAppContext()
   const relatedProducts = PRODUCTS.filter((item) => item.eventSlug !== product.eventSlug)
 
   return (
-    <section className="bg-earthx-bg/60 py-10 md:py-14">
-      <div className="mx-auto max-w-7xl px-6">
+    <section className="min-h-screen bg-[#F7F4EC] text-[#1F2937] py-10 md:py-16">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        
+        {/* Navigation Back */}
         <a
           href="#shop"
-          className="inline-flex items-center text-sm font-semibold text-earthx-muted transition hover:text-earthx-dark"
+          className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#153B75] hover:text-[#0F2C59] transition-colors py-2 px-4 rounded-full bg-white border border-[#E8E3D5] shadow-sm mb-8"
         >
-          Back to shop
+          <ArrowLeft className="w-4 h-4 text-[#D8A24A]" />
+          <span>Back to all flavours</span>
         </a>
 
-        <div className="mt-6 grid gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(360px,0.9fr)]">
-          <div className="overflow-hidden rounded-[28px] border border-earthx-border bg-white shadow-card">
-            <div className="grid gap-0 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]">
-              <div className="relative min-h-[360px] bg-earthx-bg">
+        {/* Product Details & Booking Widget Grid */}
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(380px,0.9fr)] items-start">
+          
+          {/* Left Column: Product Showcase */}
+          <div className="rounded-2xl border border-[#E8E3D5] bg-white p-6 sm:p-8 shadow-md overflow-hidden">
+            <div className="grid gap-8 md:grid-cols-2 items-center">
+              
+              {/* Image Frame */}
+              <div className="relative aspect-square rounded-xl bg-[#F7F4EC] overflow-hidden border border-[#E8E3D5] group">
                 <img
                   src={product.image}
                   alt={product.title}
-                  className="h-full w-full object-cover"
+                  className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
                   onError={(event) => {
                     event.target.style.display = 'none'
                   }}
                 />
+
                 <button
                   type="button"
                   onClick={() => openNutrition(product.nutritionKey)}
-                  className="absolute left-4 top-4 rounded-full bg-white/90 px-4 py-2 text-xs font-semibold text-brand-red shadow-card transition hover:bg-white"
+                  className="absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-md bg-[#153B75] px-3.5 py-1.5 text-xs font-bold text-white shadow transition-colors hover:bg-[#0F2C59]"
                 >
-                  View Nutrition
+                  <Info className="w-3.5 h-3.5 text-[#D8A24A]" />
+                  <span>View Specs</span>
                 </button>
               </div>
 
-              <div className="p-6 md:p-8">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-brand-red/80">
+              {/* Product Copy */}
+              <div>
+                <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-widest text-[#153B75] bg-[#153B75]/10 px-3 py-1 rounded border border-[#153B75]/20">
+                  <Zap className="w-3 h-3 text-[#D8A24A]" />
                   {product.eyebrow}
-                </p>
-                <h1 className="mt-3 font-display text-4xl font-bold text-earthx-dark md:text-5xl">
+                </span>
+
+                <h1 className="mt-4 font-display text-4xl sm:text-5xl font-black text-[#153B75] tracking-tight">
                   {product.title}
                 </h1>
-                <p className="mt-4 max-w-xl text-base leading-7 text-earthx-muted">
+
+                <div className="mt-4 inline-flex items-baseline gap-2 px-4 py-2 rounded-xl bg-[#F7F4EC] border border-[#E8E3D5]">
+                  <span className="text-xs font-bold uppercase text-[#6B7280]">Price</span>
+                  <span className="font-display text-3xl font-black text-[#153B75]">₹{product.price}</span>
+                  <span className="text-xs text-[#6B7280]">/ bar</span>
+                </div>
+
+                <p className="mt-5 text-sm leading-relaxed text-[#6B7280]">
                   {product.summary}
                 </p>
 
-                <div className="mt-6 flex flex-wrap items-end gap-6 rounded-2xl bg-earthx-bg/80 px-5 py-4">
-                  <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-earthx-muted">
-                      Price
-                    </p>
-                    <p className="mt-1 font-display text-3xl font-bold text-earthx-dark">
-                      Rs. {product.price}
-                    </p>
+                <div className="mt-6">
+                  <button
+                    type="button"
+                    onClick={() => openCheckout(product)}
+                    className="w-full py-4 rounded-xl bg-[#153B75] hover:bg-[#0F2C59] text-white font-display font-extrabold text-sm uppercase tracking-wider shadow-lg flex items-center justify-center gap-2 transition-all hover:scale-[1.01]"
+                  >
+                    <Zap className="w-4 h-4 text-[#D8A24A]" />
+                    <span>Buy Now – Express Checkout</span>
+                  </button>
+                  <p className="mt-2 text-center text-[11px] text-[#6B7280]">
+                    ⚡ Express Shipping Available Across India
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-8 pt-8 border-t border-[#E8E3D5]">
+              <h3 className="font-display font-bold text-lg text-[#153B75]">Product Highlights</h3>
+              <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                {product.highlights.map((highlight) => (
+                  <div
+                    key={highlight}
+                    className="flex items-center gap-3 rounded-xl border border-[#E8E3D5] bg-[#F7F4EC] px-4 py-3"
+                  >
+                    <CheckCircle2 className="w-4 h-4 text-[#5D8C4A] shrink-0" />
+                    <span className="text-xs font-semibold text-[#1F2937]">{highlight}</span>
                   </div>
-                </div>
-
-                <p className="mt-6 text-sm leading-7 text-earthx-muted">{product.description}</p>
-
-                <div className="mt-8 grid gap-3">
-                  {product.highlights.map((highlight) => (
-                    <div
-                      key={highlight}
-                      className="flex items-start gap-3 rounded-2xl border border-earthx-border/80 px-4 py-3"
-                    >
-                      <span className="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand-red/10 text-brand-red">
-                        +
-                      </span>
-                      <p className="text-sm text-earthx-dark">{highlight}</p>
-                    </div>
-                  ))}
-                </div>
+                ))}
               </div>
             </div>
           </div>
 
-          <div className="self-start rounded-[28px] border border-earthx-border bg-white p-5 shadow-card md:p-6 lg:sticky lg:top-28">
-            <div className="rounded-2xl bg-earthx-bg/70 p-4">
-              <div className="flex items-start justify-between gap-4">
+          {/* Right Column: Nutrition Cards & Embedded Order Widget */}
+          <div className="space-y-6 lg:sticky lg:top-24">
+            
+            {/* Quick Nutrition Summary */}
+            <div className="rounded-2xl border border-[#E8E3D5] bg-white p-6 shadow-md">
+              <div className="flex items-center justify-between pb-4 border-b border-[#E8E3D5]">
                 <div>
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-brand-red/80">
-                    Nutrition
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-[#153B75]">
+                    Nutritional Specs
                   </p>
-                  <h2 className="mt-2 font-display text-2xl font-bold text-earthx-dark">
-                    Per 40g bar
+                  <h2 className="font-display text-xl font-bold text-[#153B75] mt-0.5">
+                    Per 40g Serving
                   </h2>
                 </div>
                 <button
                   type="button"
                   onClick={() => openNutrition(product.nutritionKey)}
-                  className="shrink-0 rounded-full bg-white px-4 py-2 text-xs font-semibold text-brand-red shadow-card transition hover:bg-brand-red hover:text-white"
+                  className="rounded-lg bg-[#153B75] px-3.5 py-1.5 text-xs font-bold text-white hover:bg-[#0F2C59] transition-colors"
                 >
-                  View full
+                  Full Specs
                 </button>
               </div>
 
               <div className="mt-4 grid grid-cols-2 gap-3">
                 {product.nutritionSummary.map((item) => (
-                  <div key={item.label} className="rounded-2xl bg-white px-4 py-3 shadow-sm">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-earthx-muted">
+                  <div key={item.label} className="rounded-xl bg-[#F7F4EC] border border-[#E8E3D5] px-4 py-3">
+                    <p className="text-[10px] font-bold uppercase tracking-wider text-[#6B7280]">
                       {item.label}
                     </p>
-                    <p className="mt-2 font-display text-xl font-bold text-earthx-dark">
+                    <p className="mt-1 font-display text-lg font-black text-[#153B75]">
                       {item.value}
                     </p>
                   </div>
                 ))}
               </div>
             </div>
+
+            {/* Direct Express Checkout Card */}
+            <div className="rounded-2xl border border-[#153B75]/30 bg-white p-6 shadow-xl relative overflow-hidden text-center space-y-4">
+              <span className="inline-flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-widest text-[#5D8C4A] bg-[#5D8C4A]/10 px-3 py-1 rounded-full border border-[#5D8C4A]/20">
+                <Sparkles className="w-3 h-3 text-[#5D8C4A]" />
+                Official Voltt Store
+              </span>
+              <h3 className="font-display font-black text-2xl text-[#153B75]">
+                Order {product.title}
+              </h3>
+              <p className="text-xs text-[#6B7280]">
+                Real-time pincode serviceability and express shipping via Shiprocket.
+              </p>
+              <button
+                type="button"
+                onClick={() => openCheckout(product)}
+                className="w-full py-4 rounded-xl bg-[#153B75] hover:bg-[#0F2C59] text-white font-display font-bold text-sm uppercase tracking-wider shadow-lg transition-all"
+              >
+                Proceed to Checkout
+              </button>
+            </div>
+
           </div>
         </div>
 
-        <div className="mt-8 rounded-[28px] border border-earthx-border bg-white p-5 shadow-card md:p-6">
-          <EmbeddedBookingWidget eventSlug={product.eventSlug} productTitle={product.title} />
-        </div>
-
-        <div className="mt-10 rounded-[28px] border border-earthx-border bg-white p-6 shadow-card md:p-8">
-          <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+        {/* Explore Related Products */}
+        <div className="mt-16 rounded-2xl border border-[#E8E3D5] bg-white p-8 shadow-md">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-brand-red/80">
-                Explore More
-              </p>
-              <h2 className="mt-2 font-display text-2xl font-bold text-earthx-dark">
-                Other Voltt product pages
+              <span className="text-[10px] font-bold uppercase tracking-widest text-[#153B75]">
+                Explore More Flavours
+              </span>
+              <h2 className="font-display text-2xl font-black text-[#153B75] mt-1">
+                OTHER VOLTT VARIATION PAGES
               </h2>
             </div>
-            <p className="text-sm text-earthx-muted">
-              Each one opens its own page with the full embedded widget.
-            </p>
           </div>
 
-          <div className="mt-6 grid gap-4 md:grid-cols-3">
+          <div className="grid gap-6 md:grid-cols-3">
             {relatedProducts.map((item) => (
               <a
                 key={item.eventSlug}
                 href={`#/product/${item.eventSlug}`}
-                className="rounded-2xl border border-earthx-border p-4 transition hover:border-brand-red/50 hover:shadow-card"
+                className="group rounded-xl border border-[#E8E3D5] bg-[#F7F4EC] p-5 transition-all duration-200 hover:border-[#153B75] hover:bg-white hover:shadow-md"
               >
-                <p className="font-display text-xl font-semibold text-earthx-dark">{item.title}</p>
-                <p className="mt-2 text-sm text-earthx-muted">{item.summary}</p>
-                <p className="mt-4 text-sm font-semibold text-brand-red">Open product page</p>
+                <h3 className="font-display text-xl font-bold text-[#153B75] group-hover:text-[#D8A24A] transition-colors">
+                  {item.title}
+                </h3>
+                <p className="mt-2 text-xs text-[#6B7280] line-clamp-2">{item.summary}</p>
+                <p className="mt-4 text-xs font-bold text-[#153B75] flex items-center gap-1">
+                  <span>View Product Page</span>
+                  <span>→</span>
+                </p>
               </a>
             ))}
           </div>
         </div>
+
       </div>
     </section>
   )

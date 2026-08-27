@@ -1,87 +1,121 @@
+import React from 'react'
+import { motion } from 'framer-motion'
 import { useAppContext } from '../App'
-import { PRODUCTS } from '../data/products'
-import BookingWidgetButton from './BookingWidgetButton'
+import { PRODUCTS, getProductBySlug } from '../data/products'
 
 export default function ChooseYourPower() {
-  const { openNutrition } = useAppContext()
+  const { openCheckout } = useAppContext()
+
+  const products = [
+    {
+      id: 1,
+      title: 'Almond Crunch',
+      badge: 'RICH & TEXTURED',
+      price: '₹68',
+      desc: 'A roasted almond profile with a clean crunch that feels familiar, simple, and satisfying.',
+      image: '/assets/almond-crunch.png',
+      fallbackImage: '/assets/hero.png',
+      eventSlug: 'almond-crunch',
+    },
+    {
+      id: 2,
+      title: 'Choco Cranz',
+      badge: 'DECADENT & SMOOTH',
+      price: '₹68',
+      desc: 'A bright cranberry twist layered into a rich protein bar for a sharper, fruit-forward bite.',
+      image: '/assets/choco-cranz.png',
+      fallbackImage: '/assets/hero.png',
+      eventSlug: 'choco-cranz',
+    },
+    {
+      id: 3,
+      title: 'Berry Rush',
+      badge: 'FRESH & TROPICAL',
+      price: '₹68',
+      desc: 'A smooth berry-led bar with a lighter profile for people who want something fruity after activity.',
+      image: '/assets/berry-rush.png',
+      fallbackImage: '/assets/hero.png',
+      eventSlug: 'berry-rush',
+    },
+  ]
 
   return (
-    <section id="shop" className="bg-white py-16 md:py-24">
-      <div className="max-w-7xl mx-auto px-6">
-        <h2 className="font-display font-bold text-4xl md:text-5xl text-earthx-dark text-center">
-          Choose Your Power
-        </h2>
-        <p className="text-earthx-muted text-center mt-4 max-w-lg mx-auto">
-          Handcrafted protein bars designed to fuel your ambitions
-        </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-12 max-w-7xl mx-auto">
-          {PRODUCTS.map((card) => (
-            <article
-              key={card.id}
-              className="bg-white border border-earthx-border rounded-2xl overflow-hidden shadow-card hover:shadow-card-hover transition flex flex-col"
+    <section id="shop" className="bg-[#F5F2EB] py-20 lg:py-28 text-[#2A1646] border-b border-[#E6DFD3]/50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        {/* Section Header */}
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <h2 className="font-display font-black text-4xl sm:text-5xl text-[#2A1646] tracking-tight uppercase">
+            THE TASTE OF INTENTION
+          </h2>
+          <p className="mt-4 text-[#71717A] text-base leading-relaxed font-medium">
+            Every bar is crafted with distinct layers of flavor and real structural texture. No single mushy blend here.
+          </p>
+        </div>
+
+        {/* 3 Product Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {products.map((product, idx) => (
+            <motion.div
+              key={product.id}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: idx * 0.1 }}
+              className="bg-[#FAF8F3] rounded-[28px] border border-[#E6DFD3] overflow-hidden flex flex-col justify-between shadow-xs hover:shadow-card hover:-translate-y-1.5 transition-all duration-300 group"
             >
-              <div className="relative aspect-[4/5] bg-earthx-bg">
-                <img
-                  src={card.image}
-                  alt={card.title}
-                  className={`w-full h-full object-cover ${card.soldOut ? 'opacity-60' : ''}`}
-                  onError={(e) => {
-                    e.target.style.display = 'none'
-                  }}
-                />
-                {card.soldOut && (
-                  <div className="absolute inset-0 flex items-center justify-center bg-black/25">
-                    <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-earthx-dark">
-                      Out of Stock
+              <div>
+                {/* Card Image Frame */}
+                <div className="relative aspect-[4/3] bg-white overflow-hidden border-b border-[#E6DFD3]">
+                  <img
+                    src={product.image}
+                    alt={product.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    onError={(e) => {
+                      e.target.src = product.fallbackImage
+                    }}
+                  />
+                </div>
+
+                {/* Card Body */}
+                <div className="p-6">
+                  <div className="flex items-center justify-between gap-2 mb-3">
+                    <span className="font-mono text-[10px] font-bold text-[#2A1646] bg-[#2A1646]/5 px-3 py-1 rounded-full tracking-wider uppercase">
+                      {product.badge}
+                    </span>
+                    <span className="font-display font-bold text-lg text-[#2A1646]">
+                      {product.price}
                     </span>
                   </div>
-                )}
+
+                  <h3 className="font-display font-bold text-2xl text-[#2A1646] mb-2">
+                    {product.title}
+                  </h3>
+                  
+                  <p className="text-xs text-[#71717A] leading-relaxed font-normal">
+                    {product.desc}
+                  </p>
+                </div>
+              </div>
+
+              {/* Card Action Button */}
+              <div className="px-6 pb-6 pt-2">
                 <button
                   type="button"
-                  aria-label="View nutritional info"
-                  className="absolute top-3 left-3 w-8 h-8 rounded-full bg-brand-red/20 flex items-center justify-center shadow-card hover:bg-brand-red/30 transition"
-                  onClick={() => openNutrition(card.nutritionKey)}
+                  onClick={() => {
+                    const fullProduct = getProductBySlug(product.eventSlug) || PRODUCTS[0]
+                    openCheckout(fullProduct)
+                  }}
+                  className="w-full py-4 px-4 rounded-full border-2 border-[#F95738] text-[#F95738] hover:bg-[#F95738] hover:text-white font-display font-bold text-sm tracking-widest uppercase transition-all duration-200 flex items-center justify-center active:scale-95 cursor-pointer"
                 >
-                  <span className="w-5 h-5 rounded-full bg-white text-brand-red text-xs font-semibold flex items-center justify-center">
-                    i
-                  </span>
+                  ADD TO CART
                 </button>
               </div>
 
-              <div className="p-4 flex-1 flex flex-col">
-                <div className="flex items-start justify-between gap-3">
-                  <h3 className="font-display font-semibold text-earthx-dark">{card.title}</h3>
-                  {card.soldOut && (
-                    <span className="shrink-0 rounded-full bg-earthx-border px-2 py-1 text-[11px] font-semibold text-earthx-muted">
-                      Out of Stock
-                    </span>
-                  )}
-                </div>
-                <p className="mt-1 text-sm text-earthx-muted">Rs. {card.price} per bar</p>
-
-                <div className="mt-6">
-                  {card.soldOut ? (
-                    <button
-                      type="button"
-                      disabled
-                      className="w-full h-11 rounded-xl bg-earthx-border text-earthx-muted text-sm font-semibold cursor-not-allowed"
-                    >
-                      Out of Stock
-                    </button>
-                  ) : (
-                    <div className="flex justify-center">
-                      <BookingWidgetButton
-                        containerId={`book-container-product-${card.id}`}
-                        eventSlug={card.eventSlug}
-                        buttonLabel="Buy Now"
-                      />
-                    </div>
-                  )}
-                </div>
-              </div>
-            </article>
+            </motion.div>
           ))}
         </div>
+
       </div>
     </section>
   )

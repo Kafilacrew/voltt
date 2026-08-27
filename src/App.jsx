@@ -1,17 +1,20 @@
 import { useEffect, useState, createContext, useContext } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { X, MessageCircle, Zap } from 'lucide-react'
 import AnnouncementBar from './components/AnnouncementBar'
 import Nav from './components/Nav'
 import Hero from './components/Hero'
 import ChooseYourPower from './components/ChooseYourPower'
-import PremiumNutrition from './components/PremiumNutrition'
+import StockUp from './components/StockUp'
+import IngredientStory from './components/IngredientStory'
 import ProductBookingPage from './components/ProductBookingPage'
 import TrustedBy from './components/TrustedBy'
-// import StockUp from './components/StockUp'
-import FAQ from './components/FAQ'
+import SocialProof from './components/SocialProof'
 import Newsletter from './components/Newsletter'
 import Footer from './components/Footer'
+import CheckoutModal from './components/CheckoutModal'
 import { WHATSAPP_PHONE } from './constants/contact'
-import { getProductBySlug } from './data/products'
+import { PRODUCTS, getProductBySlug } from './data/products'
 
 const AppContext = createContext(null)
 const PRODUCT_ROUTE_PREFIX = '#/product/'
@@ -37,13 +40,26 @@ function App() {
     open: false,
     product: null,
   })
+  const [checkoutModal, setCheckoutModal] = useState({
+    open: false,
+    product: null,
+  })
+  const [selectedFlavorSlug, setSelectedFlavorSlug] = useState('almond-crunch')
   const [currentHash, setCurrentHash] = useState(() => window.location.hash)
-  const activeProduct = getProductBySlug(getProductRouteSlug(currentHash))
+
+  const activeRouteProduct = getProductBySlug(getProductRouteSlug(currentHash))
+  const selectedFlavorProduct = getProductBySlug(selectedFlavorSlug) || PRODUCTS[0]
 
   useEffect(() => {
     const handleHashChange = () => {
       setCurrentHash(window.location.hash)
       setNutritionModal({ open: false, product: null })
+      setCheckoutModal({ open: false, product: null })
+
+      const routeSlug = getProductRouteSlug(window.location.hash)
+      if (routeSlug) {
+        setSelectedFlavorSlug(routeSlug)
+      }
     }
 
     window.addEventListener('hashchange', handleHashChange)
@@ -55,7 +71,7 @@ function App() {
   }, [])
 
   useEffect(() => {
-    if (activeProduct) {
+    if (activeRouteProduct) {
       window.scrollTo({ top: 0, behavior: 'auto' })
       return undefined
     }
@@ -72,7 +88,7 @@ function App() {
     return () => {
       window.clearTimeout(scrollTimeout)
     }
-  }, [activeProduct, currentHash])
+  }, [activeRouteProduct, currentHash])
 
   useEffect(() => {
     const productHash = currentHash.startsWith(PRODUCT_ROUTE_PREFIX) ? currentHash : null
@@ -95,343 +111,203 @@ function App() {
     <AppContext.Provider
       value={{
         openNutrition: (product) => setNutritionModal({ open: true, product }),
+        openCheckout: (product) => setCheckoutModal({ open: true, product: product || selectedFlavorProduct }),
       }}
     >
-      <div className="min-h-screen bg-white">
+      <div className="min-h-screen bg-[#F6F3EC] text-[#1F2937] selection:bg-[#123D87] selection:text-white">
         <Nav />
         <AnnouncementBar />
         <main>
-          {activeProduct ? (
-            <ProductBookingPage product={activeProduct} />
+          {activeRouteProduct ? (
+            <ProductBookingPage product={activeRouteProduct} />
           ) : (
             <>
-              <Hero />
+              <Hero
+                selectedProduct={selectedFlavorProduct}
+                onSelectFlavor={(slug) => setSelectedFlavorSlug(slug)}
+                products={PRODUCTS}
+              />
               <ChooseYourPower />
-              <PremiumNutrition />
+              <StockUp />
+              <IngredientStory />
               <TrustedBy />
-              {/* <StockUp /> */}
-              <FAQ />
+              <SocialProof />
               <Newsletter />
             </>
           )}
         </main>
         <Footer />
 
-        {nutritionModal.open && (
-          <div className="fixed inset-0 z-[55] flex items-center justify-center bg-black/50 px-4">
-            <div className="max-w-2xl w-full rounded-2xl bg-white shadow-card overflow-hidden">
-              <div className="flex items-center justify-between px-4 py-3 border-b border-brand-red/40 bg-brand-red/5">
-                <h3 className="font-display font-semibold text-earthx-dark text-sm md:text-base">
-                  {nutritionModal.product === 'almond' && 'Almond Crunch – Nutrition'}
-                  {nutritionModal.product === 'cranberry' && 'Choco Cranz (Cranberry) – Nutrition'}
-                  {nutritionModal.product === 'blueberry' && 'Berry Rush (Blueberry) – Nutrition'}
-                  {nutritionModal.product === 'mix' && 'Nutrition'}
-                </h3>
-                <button
-                  type="button"
-                  className="w-7 h-7 rounded-full flex items-center justify-center text-earthx-muted hover:bg-earthx-bg"
-                  onClick={() => setNutritionModal({ open: false, product: null })}
-                >×</button>
-              </div>
-              <div className="max-h-[70vh] overflow-auto bg-white px-4 py-4 text-xs sm:text-sm text-earthx-dark">
-                <table className="w-full border border-earthx-border/60 text-left">
-                  <thead className="bg-brand-red/5 text-earthx-dark">
-                    <tr>
-                      <th className="border-b border-earthx-border/60 px-2 py-1 font-semibold">Nutrient</th>
-                      <th className="border-b border-earthx-border/60 px-2 py-1 font-semibold">Per 40g</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {nutritionModal.product === 'almond' && (
-                      <>
-                        <tr>
-                          <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
-                            Energy (kcal)
-                          </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">160.1</td>
-                        </tr>
-                        <tr>
-                          <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
-                            Protein (g)
-                          </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">10.1</td>
-                        </tr>
-                        <tr>
-                          <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
-                            Carbs (g)
-                          </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">18.6</td>
-                        </tr>
-                        <tr>
-                          <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
-                            Sugar (g)
-                          </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">8.8</td>
-                        </tr>
-                        <tr>
-                          <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
-                            Added Sugar (g)
-                          </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">4.2</td>
-                        </tr>
-                        <tr>
-                          <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
-                            Fibre (g)
-                          </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">5.1</td>
-                        </tr>
-                        <tr>
-                          <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
-                            Fat (g)
-                          </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">6.4</td>
-                        </tr>
-                        <tr>
-                          <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
-                            Saturated Fat (g)
-                          </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">3.4</td>
-                        </tr>
-                        <tr>
-                          <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
-                            PUFA (g)
-                          </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">1.2</td>
-                        </tr>
-                        <tr>
-                          <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
-                            MUFA (g)
-                          </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">1.7</td>
-                        </tr>
-                        <tr>
-                          <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
-                            Trans fat (g)
-                          </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">0</td>
-                        </tr>
-                        <tr>
-                          <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
-                            Sodium (mg)
-                          </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">102.8</td>
-                        </tr>
-                        <tr>
-                          <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
-                            Magnesium (mg)
-                          </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">51.6</td>
-                        </tr>
-                        <tr>
-                          <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
-                            Cholesterol (mg)
-                          </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">0</td>
-                        </tr>
-                      </>
-                    )}
-                    {(nutritionModal.product === 'cranberry' ||
-                      nutritionModal.product === 'mix') && (
-                      <>
-                        <tr>
-                          <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
-                            Energy (kcal)
-                          </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">155.2</td>
-                        </tr>
-                        <tr>
-                          <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
-                            Protein (g)
-                          </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">10.1</td>
-                        </tr>
-                        <tr>
-                          <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
-                            Carbs (g)
-                          </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">19.4</td>
-                        </tr>
-                        <tr>
-                          <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
-                            Sugar (g)
-                          </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">9.6</td>
-                        </tr>
-                        <tr>
-                          <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
-                            Added Sugar (g)
-                          </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">4.2</td>
-                        </tr>
-                        <tr>
-                          <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
-                            Fibre (g)
-                          </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">5</td>
-                        </tr>
-                        <tr>
-                          <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
-                            Fat (g)
-                          </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">5.5</td>
-                        </tr>
-                        <tr>
-                          <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
-                            Saturated Fat (g)
-                          </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">3.1</td>
-                        </tr>
-                        <tr>
-                          <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
-                            PUFA (g)
-                          </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">0.9</td>
-                        </tr>
-                        <tr>
-                          <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
-                            MUFA (g)
-                          </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">1.2</td>
-                        </tr>
-                        <tr>
-                          <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
-                            Trans fat (g)
-                          </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">0</td>
-                        </tr>
-                        <tr>
-                          <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
-                            Sodium (mg)
-                          </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">103.6</td>
-                        </tr>
-                        <tr>
-                          <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
-                            Magnesium (mg)
-                          </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">51.6</td>
-                        </tr>
-                        <tr>
-                          <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
-                            Cholesterol (mg)
-                          </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">0</td>
-                        </tr>
-                      </>
-                    )}
-                    {nutritionModal.product === 'blueberry' && (
-                      <>
-                        <tr>
-                          <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
-                            Energy (kcal)
-                          </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">155.3</td>
-                        </tr>
-                        <tr>
-                          <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
-                            Protein (g)
-                          </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">10.1</td>
-                        </tr>
-                        <tr>
-                          <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
-                            Carbs (g)
-                          </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">19.4</td>
-                        </tr>
-                        <tr>
-                          <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
-                            Sugar (g)
-                          </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">9.6</td>
-                        </tr>
-                        <tr>
-                          <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
-                            Added Sugar (g)
-                          </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">4.2</td>
-                        </tr>
-                        <tr>
-                          <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
-                            Fibre (g)
-                          </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">5</td>
-                        </tr>
-                        <tr>
-                          <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
-                            Fat (g)
-                          </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">5.5</td>
-                        </tr>
-                        <tr>
-                          <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
-                            Saturated Fat (g)
-                          </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">3.1</td>
-                        </tr>
-                        <tr>
-                          <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
-                            PUFA (g)
-                          </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">0.9</td>
-                        </tr>
-                        <tr>
-                          <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
-                            MUFA (g)
-                          </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">1.2</td>
-                        </tr>
-                        <tr>
-                          <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
-                            Trans fat (g)
-                          </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">0</td>
-                        </tr>
-                        <tr>
-                          <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
-                            Sodium (mg)
-                          </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">102.4</td>
-                        </tr>
-                        <tr>
-                          <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
-                            Magnesium (mg)
-                          </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">51.6</td>
-                        </tr>
-                        <tr>
-                          <td className="border-t border-earthx-border/40 px-2 py-1 text-brand-red">
-                            Cholesterol (mg)
-                          </td>
-                          <td className="border-t border-earthx-border/40 px-2 py-1">0</td>
-                        </tr>
-                      </>
-                    )}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        )}
+        {/* Brand Aligned Nutrition Modal Dialog */}
+        <AnimatePresence>
+          {nutritionModal.open && (
+            <div
+              className="fixed inset-0 z-[60] flex items-center justify-center bg-black/75 backdrop-blur-md px-4"
+              onClick={() => setNutritionModal({ open: false, product: null })}
+            >
+              <motion.div
+                initial={{ scale: 0.95, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.95, opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="max-w-2xl w-full rounded-3xl bg-white border border-[#E5DFC9] shadow-2xl overflow-hidden"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="flex items-center justify-between px-6 py-4 border-b border-[#E5DFC9] bg-[#123D87] text-white">
+                  <div className="flex items-center gap-2">
+                    <Zap className="w-4 h-4 text-[#D9A441]" />
+                    <h3 className="font-display font-bold text-white text-base sm:text-lg">
+                      {nutritionModal.product === 'almond' && 'Almond Crunch – Nutritional Breakdown'}
+                      {nutritionModal.product === 'cranberry' && 'Choco Cranz – Nutritional Breakdown'}
+                      {nutritionModal.product === 'blueberry' && 'Berry Rush – Nutritional Breakdown'}
+                      {nutritionModal.product === 'mix' && 'Voltt Range – Nutritional Breakdown'}
+                    </h3>
+                  </div>
+                  <button
+                    type="button"
+                    className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+                    onClick={() => setNutritionModal({ open: false, product: null })}
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
 
-        {/* Floating WhatsApp button */}
+                <div className="max-h-[70vh] overflow-auto bg-[#F6F3EC] p-6 text-xs sm:text-sm text-[#1F2937]">
+                  <table className="w-full border border-[#E5DFC9] text-left rounded-xl overflow-hidden bg-white shadow-sm">
+                    <thead className="bg-[#123D87] text-white font-display">
+                      <tr>
+                        <th className="px-4 py-3 font-bold">Nutrient</th>
+                        <th className="px-4 py-3 font-bold">Per 40g Bar</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-[#E5DFC9] font-mono text-xs text-[#1F2937]">
+                      {nutritionModal.product === 'almond' && (
+                        <>
+                          <tr>
+                            <td className="px-4 py-2.5 text-[#123D87] font-bold font-sans">Energy (kcal)</td>
+                            <td className="px-4 py-2.5">160.1</td>
+                          </tr>
+                          <tr>
+                            <td className="px-4 py-2.5 text-[#123D87] font-bold font-sans">Protein (g)</td>
+                            <td className="px-4 py-2.5 font-bold text-[#5D8C4A]">10.1</td>
+                          </tr>
+                          <tr>
+                            <td className="px-4 py-2.5 text-[#123D87] font-bold font-sans">Carbs (g)</td>
+                            <td className="px-4 py-2.5">18.6</td>
+                          </tr>
+                          <tr>
+                            <td className="px-4 py-2.5 text-[#123D87] font-bold font-sans">Sugar (g)</td>
+                            <td className="px-4 py-2.5">8.8</td>
+                          </tr>
+                          <tr>
+                            <td className="px-4 py-2.5 text-[#123D87] font-bold font-sans">Fibre (g)</td>
+                            <td className="px-4 py-2.5 text-[#5D8C4A] font-bold">5.1</td>
+                          </tr>
+                          <tr>
+                            <td className="px-4 py-2.5 text-[#123D87] font-bold font-sans">Sodium (mg)</td>
+                            <td className="px-4 py-2.5 text-[#D9A441] font-bold">102.8</td>
+                          </tr>
+                          <tr>
+                            <td className="px-4 py-2.5 text-[#123D87] font-bold font-sans">Magnesium (mg)</td>
+                            <td className="px-4 py-2.5 text-[#D9A441] font-bold">51.6</td>
+                          </tr>
+                        </>
+                      )}
+                      {(nutritionModal.product === 'cranberry' ||
+                        nutritionModal.product === 'mix') && (
+                        <>
+                          <tr>
+                            <td className="px-4 py-2.5 text-[#123D87] font-bold font-sans">Energy (kcal)</td>
+                            <td className="px-4 py-2.5">155.2</td>
+                          </tr>
+                          <tr>
+                            <td className="px-4 py-2.5 text-[#123D87] font-bold font-sans">Protein (g)</td>
+                            <td className="px-4 py-2.5 font-bold text-[#5D8C4A]">10.1</td>
+                          </tr>
+                          <tr>
+                            <td className="px-4 py-2.5 text-[#123D87] font-bold font-sans">Carbs (g)</td>
+                            <td className="px-4 py-2.5">19.4</td>
+                          </tr>
+                          <tr>
+                            <td className="px-4 py-2.5 text-[#123D87] font-bold font-sans">Sugar (g)</td>
+                            <td className="px-4 py-2.5">9.6</td>
+                          </tr>
+                          <tr>
+                            <td className="px-4 py-2.5 text-[#123D87] font-bold font-sans">Fibre (g)</td>
+                            <td className="px-4 py-2.5 text-[#5D8C4A] font-bold">5.0</td>
+                          </tr>
+                          <tr>
+                            <td className="px-4 py-2.5 text-[#123D87] font-bold font-sans">Sodium (mg)</td>
+                            <td className="px-4 py-2.5 text-[#D9A441] font-bold">103.6</td>
+                          </tr>
+                          <tr>
+                            <td className="px-4 py-2.5 text-[#123D87] font-bold font-sans">Magnesium (mg)</td>
+                            <td className="px-4 py-2.5 text-[#D9A441] font-bold">51.6</td>
+                          </tr>
+                        </>
+                      )}
+                      {nutritionModal.product === 'blueberry' && (
+                        <>
+                          <tr>
+                            <td className="px-4 py-2.5 text-[#123D87] font-bold font-sans">Energy (kcal)</td>
+                            <td className="px-4 py-2.5 font-bold">155.3</td>
+                          </tr>
+                          <tr>
+                            <td className="px-4 py-2.5 text-[#123D87] font-bold font-sans">Protein (g)</td>
+                            <td className="px-4 py-2.5 font-bold text-[#5D8C4A]">10.1</td>
+                          </tr>
+                          <tr>
+                            <td className="px-4 py-2.5 text-[#123D87] font-bold font-sans">Carbs (g)</td>
+                            <td className="px-4 py-2.5">19.4</td>
+                          </tr>
+                          <tr>
+                            <td className="px-4 py-2.5 text-[#123D87] font-bold font-sans">Sugar (g)</td>
+                            <td className="px-4 py-2.5">9.6</td>
+                          </tr>
+                          <tr>
+                            <td className="px-4 py-2.5 text-[#123D87] font-bold font-sans">Fibre (g)</td>
+                            <td className="px-4 py-2.5 text-[#5D8C4A] font-bold">5.0</td>
+                          </tr>
+                          <tr>
+                            <td className="px-4 py-2.5 text-[#123D87] font-bold font-sans">Sodium (mg)</td>
+                            <td className="px-4 py-2.5 text-[#D9A441] font-bold">102.4</td>
+                          </tr>
+                          <tr>
+                            <td className="px-4 py-2.5 text-[#123D87] font-bold font-sans">Magnesium (mg)</td>
+                            <td className="px-4 py-2.5 text-[#D9A441] font-bold">51.6</td>
+                          </tr>
+                        </>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </motion.div>
+            </div>
+          )}
+        </AnimatePresence>
+
+        {/* WhatsApp Chat Button */}
         <button
           type="button"
-          className="fixed bottom-4 right-4 z-50 inline-flex items-center gap-3 rounded-xl bg-[#25D366] text-white px-5 py-3 shadow-card hover:brightness-105 md:bottom-6 md:right-6"
+          className="fixed bottom-6 right-6 z-50 inline-flex items-center gap-3 rounded-full bg-[#123D87] text-white px-5 py-3.5 shadow-xl border border-[#D9A441]/40 hover:bg-[#0E2954] hover:scale-105 active:scale-95 transition-all duration-200"
           onClick={() => {
             const message = 'Hi, I would like to chat about Voltt protein bars.'
             const url = `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(message)}`
             window.open(url, '_blank')
           }}
         >
-          <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-white/15">
-            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path d="M20.52 3.48A11.77 11.77 0 0 0 12 .75C6.57.75 2.25 5.07 2.25 10.5c0 1.83.48 3.6 1.39 5.17L2 22l6.49-1.6a10.2 10.2 0 0 0 4.01.8h0c5.43 0 9.75-4.32 9.75-9.75 0-2.61-1.02-5.07-2.73-6.97zM12.5 19.5h0c-1.27 0-2.52-.32-3.63-.93l-.26-.14-3.85.95 1.02-3.75-.17-.29A7.74 7.74 0 0 1 4 10.5C4 6.67 7.17 3.5 11 3.5c2.13 0 4.13.83 5.64 2.36A7.93 7.93 0 0 1 19.5 10.5c0 4.33-3.17 7.5-7 7.5zm4.01-5.59c-.22-.11-1.3-.64-1.5-.71-.2-.08-.34-.11-.48.1-.14.2-.55.71-.67.86-.12.14-.25.16-.47.05-.22-.11-.92-.34-1.76-1.09-.65-.58-1.09-1.29-1.22-1.51-.13-.22-.01-.33.1-.44.11-.11.22-.25.33-.38.11-.13.14-.22.22-.36.07-.14.04-.27-.02-.38-.06-.11-.48-1.16-.66-1.59-.17-.42-.35-.36-.48-.37h-.41c-.14 0-.38.05-.58.27-.2.22-.76.74-.76 1.8 0 1.06.78 2.09.89 2.24.11.14 1.54 2.35 3.73 3.29.52.23.92.37 1.23.47.52.17.99.15 1.36.09.41-.06 1.3-.53 1.48-1.05.18-.52.18-.96.13-1.05-.05-.09-.2-.15-.42-.26z" />
-            </svg>
+          <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-[#D9A441] text-[#123D87]">
+            <MessageCircle className="w-4 h-4 fill-[#123D87]" />
           </span>
-          <span className="text-sm font-semibold hidden sm:inline">Chat with us</span>
-          <span className="text-sm font-semibold sm:hidden">Chat</span>
+          <span className="text-xs font-bold uppercase tracking-wider hidden sm:inline">Chat with us</span>
         </button>
+
+        {/* Voltt Express Checkout Modal */}
+        <CheckoutModal
+          isOpen={checkoutModal.open}
+          onClose={() => setCheckoutModal({ open: false, product: null })}
+          initialProduct={checkoutModal.product}
+        />
       </div>
     </AppContext.Provider>
   )

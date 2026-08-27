@@ -1,30 +1,58 @@
+import React from 'react'
+import { motion } from 'framer-motion'
+import { useAppContext } from '../App'
+
 export default function Newsletter() {
+  const { openCheckout } = useAppContext()
+
   return (
-    <section className="bg-earthx-dark py-16 md:py-20">
-      <div className="max-w-2xl mx-auto px-6 text-center">
-        <h2 className="font-display font-bold text-3xl md:text-4xl text-white">
-          Get 10% OFF + Fitness Tips
-        </h2>
-        <p className="text-white/70 mt-4">
-          Join 20,000+ subscribers who get exclusive deals and health tips
-        </p>
-        <form className="mt-8 flex flex-col sm:flex-row gap-3 max-w-lg mx-auto" onSubmit={(e) => e.preventDefault()}>
-          <input
-            type="email"
-            placeholder="Enter your email"
-            className="flex-1 h-14 px-6 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-brand-yellow"
-          />
-          <button
-            type="submit"
-            className="h-14 px-8 rounded-xl bg-brand-red text-white font-semibold hover:opacity-90 transition"
-          >
-            Subscribe
-          </button>
-        </form>
-        <p className="mt-4 text-brand-yellow text-sm flex items-center justify-center gap-2">
-          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>
-          Plus early access to new flavors
-        </p>
+    /*
+     * Outer wrapper: cream background with horizontal padding so the
+     * purple card has visible cream gaps on the left and right.
+     * No bottom padding — the card bottom flows into the dark footer.
+     */
+    <section className="bg-[#F5F2EB] pt-16 pb-0">
+      <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16">
+
+        {/* Fully-rounded deep-purple card matching reference screenshot */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="w-full rounded-t-[36px] rounded-b-none bg-[#3B1B6E] text-white px-8 sm:px-16 py-16 sm:py-20 text-center"
+        >
+          {/* Headline */}
+          <h2 className="font-display font-black text-4xl sm:text-5xl lg:text-[3.75rem] text-white tracking-tight uppercase leading-[1.05]">
+            READY TO RECHARGE?
+          </h2>
+
+          {/* Sub-copy */}
+          <p className="mt-5 text-white/70 text-sm sm:text-base leading-relaxed max-w-xl mx-auto font-normal">
+            Join thousands of active professionals, athletes, and creative thinkers who have ditched the synthetic junk for real plant-powered performance.
+          </p>
+
+          {/* CTA buttons — white filled + white outline */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-10">
+
+            <a
+              href="#shop"
+              className="inline-flex items-center justify-center bg-white hover:bg-[#F5F2EB] text-[#3B1B6E] font-display font-bold text-xs tracking-widest uppercase px-9 py-4 rounded-full transition-all duration-200 shadow-md active:scale-95 whitespace-nowrap"
+            >
+              SHOP THE STARTER KIT
+            </a>
+
+            <button
+              type="button"
+              onClick={() => openCheckout()}
+              className="inline-flex items-center justify-center bg-transparent hover:bg-white/10 text-white font-display font-bold text-xs tracking-widest uppercase px-9 py-4 rounded-full border border-white/50 hover:border-white transition-all duration-200 active:scale-95 whitespace-nowrap"
+            >
+              SUBSCRIBE &amp; SAVE 10%
+            </button>
+
+          </div>
+        </motion.div>
+
       </div>
     </section>
   )

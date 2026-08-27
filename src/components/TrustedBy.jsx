@@ -1,86 +1,69 @@
+import React from 'react'
+import { motion } from 'framer-motion'
+import { Star } from 'lucide-react'
+
 const testimonials = [
   {
-    name: 'Priya Sharma',
-    role: 'Verified Purchase',
-    text:
-      'Finally found a protein bar that tastes amazing AND is affordable! The chocolate brownie flavor is my favorite. Been ordering for 3 months now.',
-    avatarEmoji: '👩',
+    name: 'Marcus Vance',
+    role: 'Freelance Creative',
+    text: 'Unlike every other bar on the shelf, Volt actually keeps me full without turning my stomach inside out. The Almond Crunch is a staple of my morning commute.',
   },
   {
-    name: 'Rahul Mehta',
-    role: 'Fitness Coach',
-    text:
-      'As a fitness coach, I recommend Voltt to all my clients. Clean ingredients, great macros, and the price is unbeatable.',
-    avatarEmoji: '👨',
+    name: 'Elena Rostov',
+    role: 'Marathon Runner',
+    text: 'The texture is unmatched. You can actually see the chunks of almond and berries rather than a processed paste. A truly premium snack worth every penny.',
   },
   {
-    name: 'Ananya Patel',
-    role: 'Verified Purchase',
-    text:
-      'Perfect for my busy lifestyle. I keep a box at work and one in my gym bag. The peanut butter flavor is addictive!',
-    avatarEmoji: '👩',
+    name: 'Dr. Aris Thorne',
+    role: 'Nutritional Biologist',
+    text: 'The Choco Cranz tastes like a real dessert but has the macros to support my afternoon lifting sessions. Unbelievably clean profile.',
   },
 ]
 
 export default function TrustedBy() {
   return (
-    <section className="bg-white py-16 md:py-24">
-      <div className="max-w-7xl mx-auto px-6">
-        <h2 className="font-display font-bold text-4xl md:text-5xl text-earthx-dark text-center">
-          Trusted by Fitness Enthusiasts
-        </h2>
+    <section id="trusted" className="bg-[#F5F2EB] py-20 lg:py-28 text-[#2A1646] border-b border-[#E6DFD3]/50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        {/* Section Header matching reference screenshot #5 */}
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <h2 className="font-display font-black text-4xl sm:text-5xl text-[#2A1646] tracking-tight uppercase">
+            TRUSTED FOR THE LONG HAUL
+          </h2>
+        </div>
 
-        {/* Review cards */}
-        <div className="mt-10 relative">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {testimonials.map((t) => (
-              <article
-                key={t.name}
-                className="bg-white rounded-3xl border border-earthx-border shadow-card p-6 md:p-7 flex flex-col gap-4"
-              >
-                <div className="flex items-center gap-4">
-                  <div
-                    className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-earthx-bg border border-earthx-border/60 flex items-center justify-center text-2xl md:text-3xl leading-none shrink-0 select-none"
-                    aria-hidden="true"
-                  >
-                    {t.avatarEmoji}
-                  </div>
-                  <div>
-                    <p className="font-display font-semibold text-earthx-dark text-sm">{t.name}</p>
-                    <p className="text-xs text-earthx-muted">{t.role}</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-1 text-brand-yellow text-sm">
-                  {[1, 2, 3, 4, 5].map((i) => (
-                    <span key={i}>★</span>
+        {/* 3 Review Cards matching reference screenshot #5 */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {testimonials.map((t, idx) => (
+            <motion.div
+              key={t.name}
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: idx * 0.1 }}
+              className="bg-white rounded-[28px] border border-[#E6DFD3]/60 p-8 shadow-xs hover:shadow-card transition-all duration-300 flex flex-col justify-between"
+            >
+              <div>
+                {/* 5-Star Row matching reference screenshot #5 */}
+                <div className="flex text-[#2A1646] gap-1 mb-5">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-4 h-4 text-[#2A1646]" />
                   ))}
                 </div>
-                <p className="text-sm text-earthx-muted leading-relaxed flex-1">{t.text}</p>
-                <p className="text-xs font-semibold text-brand-teal mt-1">Verified Purchase ✓</p>
-              </article>
-            ))}
-          </div>
 
-          {/* Carousel arrows (static for now) */}
-          <button
-            type="button"
-            className="hidden md:flex absolute -left-6 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white border border-earthx-border shadow items-center justify-center hover:bg-earthx-bg transition"
-            aria-label="Previous"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
-          <button
-            type="button"
-            className="hidden md:flex absolute -right-6 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white border border-earthx-border shadow items-center justify-center hover:bg-earthx-bg transition"
-            aria-label="Next"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-          </button>
+                <p className="text-[#2A1646] text-sm leading-relaxed font-normal italic mb-6">
+                  "{t.text}"
+                </p>
+              </div>
+
+              <div className="pt-2">
+                <h4 className="font-display font-bold text-[#2A1646] text-base">{t.name}</h4>
+                <p className="text-xs text-[#71717A] font-medium mt-0.5">{t.role}</p>
+              </div>
+            </motion.div>
+          ))}
         </div>
+
       </div>
     </section>
   )
