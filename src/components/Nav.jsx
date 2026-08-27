@@ -48,12 +48,13 @@ export default function Nav() {
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
           
-          {/* Logo Left matching reference screenshot */}
-          <a href="#" className="flex items-center gap-2 group">
-            <div className="flex items-center gap-1 text-[#2A1646] font-display font-black text-2xl tracking-tighter">
-              <Zap className="w-6 h-6 fill-[#2A1646] text-[#2A1646]" />
-              <span>VOLT</span>
-            </div>
+          {/* Logo Left */}
+          <a href="#" className="flex items-center group" aria-label="Volt Homepage">
+            <img
+              src="/assets/volt-logo-dark.png"
+              alt="Volt Logo"
+              className="h-8 sm:h-9 w-auto object-contain transition-transform duration-200 group-hover:scale-105"
+            />
           </a>
 
           {/* Desktop Nav Links Center matching reference screenshot */}

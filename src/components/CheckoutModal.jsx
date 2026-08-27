@@ -151,12 +151,15 @@ export default function CheckoutModal({ isOpen, onClose, initialProduct }) {
           {/* ── Header ── */}
           <div className="flex items-center justify-between px-6 py-4 text-white" style={{ background: navy }}>
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-full flex items-center justify-center" style={{ background: `${gold}20`, border: `1px solid ${gold}40` }}>
-                <Zap className="w-4 h-4" style={{ color: gold }} />
-              </div>
+              <img
+                src="/assets/volt-logo-light.png"
+                alt="Volt Logo"
+                className="h-6 sm:h-7 w-auto object-contain"
+              />
+              <div className="h-4 w-px bg-white/20" />
               <div>
-                <h3 className="font-display font-extrabold text-lg tracking-tight text-white">
-                  Volt Express Checkout
+                <h3 className="font-display font-extrabold text-base tracking-tight text-white">
+                  Express Checkout
                 </h3>
                 <p className="text-[11px] text-white/60 font-medium">
                   Direct Shipping &amp; Order Review

@@ -68,7 +68,7 @@ function ProteinBar3D({ isHovered }) {
         letterSpacing={0.2}
         fontWeight={700}
       >
-        10G PROTEIN • ELECTROLYTES
+        10 g PROTEIN • ELECTROLYTES
       </Text>
     </group>
   )

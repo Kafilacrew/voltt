@@ -29,9 +29,13 @@ export default function OrdersStartSoonModal({ isOpen, onClose }) {
             <X className="w-5 h-5" />
           </button>
 
-          {/* Brand Badge Icon */}
-          <div className="w-16 h-16 rounded-full bg-[#F95738]/10 border border-[#F95738]/20 flex items-center justify-center mx-auto mb-5 text-[#F95738] shadow-sm">
-            <Sparkles className="w-8 h-8 text-[#F95738]" />
+          {/* Brand Logo */}
+          <div className="flex justify-center mb-5">
+            <img
+              src="/assets/volt-logo-dark.png"
+              alt="Volt Logo"
+              className="h-8 sm:h-9 w-auto object-contain"
+            />
           </div>
 
           {/* Heading */}

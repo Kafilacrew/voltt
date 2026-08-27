@@ -5,7 +5,7 @@ import { Truck, Sparkles, Zap, ShieldCheck } from 'lucide-react'
 export default function AnnouncementBar() {
   const items = [
     { text: 'FREE SHIPPING ON ORDERS ABOVE ₹500', icon: Truck },
-    { text: '10G CLEAN WHEY PROTEIN', icon: Zap },
+    { text: '10 g CLEAN PLANT PROTEIN', icon: Zap },
     { text: 'ADDED ELECTROLYTES (Na + Mg)', icon: Sparkles },
     { text: 'ZERO ARTIFICIAL SWEETENERS', icon: ShieldCheck },
   ]

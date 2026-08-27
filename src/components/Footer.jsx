@@ -56,9 +56,12 @@ export default function Footer() {
 
           {/* Brand block */}
           <div className="lg:col-span-4">
-            <a href="#" className="inline-flex items-center gap-1.5 text-white font-display font-black text-2xl tracking-tighter mb-4">
-              <Zap className="w-6 h-6 fill-white text-white" />
-              <span>VOLT</span>
+            <a href="#" className="inline-block mb-3 group" aria-label="Volt Homepage">
+              <img
+                src="/assets/volt-logo-light.png"
+                alt="Volt Logo"
+                className="h-8 sm:h-9 w-auto object-contain transition-transform duration-200 group-hover:scale-105"
+              />
             </a>
             <p className="text-white/50 text-xs leading-relaxed max-w-xs mt-3">
               Providing premium whole-food fuel designed to sustain real, modern lifestyles. Crafted without shortcuts, enjoyed without compromise.

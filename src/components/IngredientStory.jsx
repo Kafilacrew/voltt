@@ -28,7 +28,7 @@ export default function IngredientStory() {
             className="lg:col-span-6 flex flex-col justify-center"
           >
             <h2 className="font-display font-black text-4xl sm:text-5xl text-[#2A1646] tracking-tight uppercase leading-[1.08]">
-              HONEST EARTH-GROWN <br />
+              HONEST, PLANT-BASED <br />
               INGREDIENTS
             </h2>
 
@@ -61,7 +61,7 @@ export default function IngredientStory() {
             <div className="relative aspect-[4/3] rounded-[32px] bg-[#FAF8F3] border border-[#E6DFD3] p-4 shadow-lg overflow-hidden group">
               <img
                 src="/assets/almond-crunch.png"
-                alt="Volt Honest Earth-Grown Ingredients"
+                alt="Volt Honest Plant-Based Ingredients"
                 className="w-full h-full object-cover rounded-[24px] group-hover:scale-103 transition-transform duration-500"
                 onError={(e) => {
                   e.target.src = '/assets/hero.png'

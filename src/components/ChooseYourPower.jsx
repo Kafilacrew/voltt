@@ -49,7 +49,7 @@ export default function ChooseYourPower() {
             THE TASTE OF INTENTION
           </h2>
           <p className="mt-4 text-[#71717A] text-base leading-relaxed font-medium">
-            Every bar is crafted with distinct layers of flavor and real structural texture. No single mushy blend here.
+            Every bar is crafted with distinct layers of flavour and texture, delivering a satisfying bite in every mouthful.
           </p>
         </div>
 

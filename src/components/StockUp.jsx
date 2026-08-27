@@ -10,7 +10,7 @@ export default function StockUp() {
     {
       icon: Sparkles,
       title: 'Zero Junk Policy',
-      desc: 'Free from sugar alcohols, artificial sweeteners, and mysterious "natural flavors". Only ingredients your grandmother would recognize.',
+      desc: 'No artificial sweeteners or sugar alcohols. Made with recognizable ingredients.',
     },
     {
       icon: ShieldCheck,
@@ -19,8 +19,8 @@ export default function StockUp() {
     },
     {
       icon: Heart,
-      title: 'Gastro-Friendly',
-      desc: 'Crafted without gut-bloating synthetic fibers or excessive whey concentrates. We prioritize easy-to-digest plant proteins instead.',
+      title: 'EASY ON THE GUT',
+      desc: 'Crafted without gut-bloating synthetic fillers or heavy concentrates. We prioritize easy-to-digest plant proteins instead.',
     },
   ]
 
@@ -68,7 +68,7 @@ export default function StockUp() {
             </h2>
 
             <p className="mt-4 text-[#71717A] text-base leading-relaxed font-medium">
-              Can't settle on a single flavor? We understand. The Mixed Box features a balanced 12-bar selection containing all three of our signature recipes. Discover your rhythm, find your favorite, or keep them all in constant rotation.
+              Can't settle on a single flavour? We understand. The Mixed Box features a balanced 12-bar selection containing all three of our signature recipes. Discover your rhythm, find your favourite, or keep them all in constant rotation.
             </p>
 
             {/* Checkbox Bullets matching reference screenshot #3 */}
@@ -92,7 +92,7 @@ export default function StockUp() {
               <button
                 type="button"
                 onClick={() => openCheckout({ eventSlug: 'mixed-flavours', title: 'Volt Mixed Box', price: 735 })}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-[#2A1646] hover:bg-[#1F0F36] text-white font-display font-bold text-xs tracking-wider uppercase transition-all duration-200 shadow-md active:scale-95"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-[#2A1646] hover:bg-[#1F0F36] text-white font-display font-bold text-xs tracking-wider uppercase transition-all duration-200 shadow-md active:scale-95 cursor-pointer"
               >
                 <span>GET THE MIXED BOX — ₹735</span>
               </button>

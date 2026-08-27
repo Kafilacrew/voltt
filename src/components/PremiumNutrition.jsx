@@ -15,8 +15,8 @@ const specs = [
     code: 'SPEC-02',
   },
   {
-    title: '10g Clean Protein',
-    detail: 'High bioavailability whey protein concentrate in every 40g bar.',
+    title: '10 g Clean Protein',
+    detail: 'High bioavailability plant protein in every 40 g bar.',
     icon: Zap,
     code: 'SPEC-03',
   },
@@ -55,7 +55,7 @@ export default function PremiumNutrition() {
             <span className="text-[#D8A24A]">INSTANT REHYDRATION.</span>
           </h2>
           <p className="mt-4 text-[#F7F4EC]/90 text-base sm:text-lg">
-            Voltt bars fuse clean whey protein with essential electrolyte minerals for rapid absorption, digestive ease, and authentic taste.
+            Voltt bars fuse clean plant protein with essential electrolyte minerals for rapid absorption, digestive ease, and authentic taste.
           </p>
         </div>
 
@@ -118,8 +118,8 @@ export default function PremiumNutrition() {
               <tbody className="divide-y divide-[#E8E3D5] text-[#1F2937]">
                 <tr>
                   <td className="py-3.5 px-4 font-semibold text-[#153B75]">Protein Content</td>
-                  <td className="py-3.5 px-4 text-[#5D8C4A] font-bold">10g Clean Whey</td>
-                  <td className="py-3.5 px-4 text-[#6B7280]">1-3g Low Quality</td>
+                  <td className="py-3.5 px-4 text-[#5D8C4A] font-bold">10 g Clean Plant Protein</td>
+                  <td className="py-3.5 px-4 text-[#6B7280]">1-3 g Low Quality</td>
                 </tr>
                 <tr>
                   <td className="py-3.5 px-4 font-semibold text-[#153B75]">Electrolytes (Na + Mg)</td>
