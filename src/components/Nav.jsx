@@ -11,7 +11,7 @@ export default function Nav() {
 
   const links = [
     { label: 'Shop All', href: '#shop' },
-    { label: 'Why Volt', href: '#trusted' },
+    { label: 'Why Voltt', href: '#trusted' },
     { label: 'Flavours', href: '#shop' },
     { label: 'Reviews', href: '#trusted' },
     { label: 'Build A Box', href: '#stock-up' },
@@ -49,10 +49,10 @@ export default function Nav() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
           
           {/* Logo Left */}
-          <a href="#" className="flex items-center group" aria-label="Volt Homepage">
+          <a href="#" className="flex items-center group" aria-label="Voltt Homepage">
             <img
               src="/assets/volt-logo-dark.png"
-              alt="Volt Logo"
+              alt="Voltt Logo"
               className="h-8 sm:h-9 w-auto object-contain transition-transform duration-200 group-hover:scale-105"
             />
           </a>

@@ -10,7 +10,7 @@ export default function Footer() {
       heading: 'PRODUCTS',
       links: [
         { label: 'Shop All', href: '#shop' },
-        { label: 'Mixed Box', href: '#stock-up' },
+        { label: 'The Voltt Mixed Box', href: '#stock-up' },
         { label: 'Almond Crunch', href: '#/product/almond-crunch' },
         { label: 'Choco Cranz', href: '#/product/choco-cranz' },
         { label: 'Berry Rush', href: '#/product/berry-rush' },
@@ -37,11 +37,6 @@ export default function Footer() {
     },
   ]
 
-  const marketer =
-    'Marketed by: Pradeep Food Ventures LLP, Plot No-BG 71/2/A, Pimpri Industrial Area, Pune, Maharashtra 411026'
-  const manufacturer =
-    'Manufactured by: Arjava Nutrition Private Limited, E-001, Prateek Laurel, Sector-120 Noida, UP-201301'
-
   const [policyModal, setPolicyModal] = useState(null)
 
   return (
@@ -56,10 +51,10 @@ export default function Footer() {
 
           {/* Brand block */}
           <div className="lg:col-span-4">
-            <a href="#" className="inline-block mb-3 group" aria-label="Volt Homepage">
+            <a href="#" className="inline-block mb-3 group" aria-label="Voltt Homepage">
               <img
                 src="/assets/volt-logo-light.png"
-                alt="Volt Logo"
+                alt="Voltt Logo"
                 className="h-8 sm:h-9 w-auto object-contain transition-transform duration-200 group-hover:scale-105"
               />
             </a>
@@ -120,15 +115,9 @@ export default function Footer() {
 
         </div>
 
-        {/* Corporate disclosures */}
-        <div className="py-5 border-b border-white/8 text-[10px] text-white/35 font-mono space-y-0.5 leading-relaxed">
-          <p>{marketer}</p>
-          <p>{manufacturer}</p>
-        </div>
-
         {/* Bottom copyright bar */}
         <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-white/40 font-sans">
-          <p>© {year} Volt Protein Co. All rights reserved.</p>
+          <p>© {year} Voltt Protein Co. All rights reserved.</p>
           <div className="flex items-center gap-5">
             <button
               type="button"

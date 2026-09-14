@@ -15,8 +15,8 @@ export const PRODUCTS = [
     spotlightGlow: 'from-[#D8A24A]/25 via-[#C89238]/10 to-transparent',
     accentColor: '#D8A24A',
     highlights: [
-      '10 g plant protein in every bar',
-      'Roasted almond crunch texture',
+      'Added Electrolytes (Na + Mg + K)',
+      '0 Added Sugar',
       'Balanced daily snack for work or training',
     ],
     nutritionSummary: [
@@ -28,8 +28,8 @@ export const PRODUCTS = [
     ingredientsStory: [
       { name: 'California Almonds', desc: 'Slow roasted for maximum crunch & vitamin E', icon: '🌰' },
       { name: 'Rolled Oats', desc: 'Sustained energy without glycemic spikes', icon: '🌾' },
-      { name: 'Natural Honey', desc: 'Pure unrefined sweetener for clean stamina', icon: '🍯' },
-      { name: 'Plant Protein', desc: '10 g high-grade plant protein blend', icon: '⚡' },
+      { name: 'Natural Honey', desc: 'Pure unrefined honey for clean stamina', icon: '🍯' },
+      { name: 'Sprouted Pea Protein', desc: 'Clean plant-based protein base', icon: '⚡' },
     ],
   },
   {
@@ -48,8 +48,8 @@ export const PRODUCTS = [
     spotlightGlow: 'from-[#8B263E]/25 via-[#D8A24A]/10 to-transparent',
     accentColor: '#8B263E',
     highlights: [
-      '10 g plant protein in every bar',
-      'Sweet-tart cranberry finish',
+      'Added Electrolytes (Na + Mg + K)',
+      '0 Added Sugar',
       'Easy grab-and-go post-workout fuel',
     ],
     nutritionSummary: [
@@ -62,7 +62,7 @@ export const PRODUCTS = [
       { name: 'Sun-dried Cranberries', desc: 'Sweet-tart antioxidants for immune strength', icon: '🍒' },
       { name: 'Raw Cocoa Nibs', desc: 'Rich polyphenols and natural chocolate flavour', icon: '🍫' },
       { name: 'Whole Grain Oats', desc: 'Sustained endurance for active sessions', icon: '🌾' },
-      { name: 'Electrolyte Blend', desc: 'Essential Sodium & Magnesium hydration', icon: '💧' },
+      { name: 'Electrolyte Blend', desc: 'Essential Sodium, Magnesium & Potassium (Na + Mg + K)', icon: '💧' },
     ],
   },
   {
@@ -81,8 +81,8 @@ export const PRODUCTS = [
     spotlightGlow: 'from-[#3B82F6]/20 via-[#8B5CF6]/10 to-transparent',
     accentColor: '#3B82F6',
     highlights: [
-      '10 g plant protein in every bar',
-      'Smooth berry-led finish',
+      'Added Electrolytes (Na + Mg + K)',
+      '0 Added Sugar',
       'Light and portable for quick refueling',
     ],
     nutritionSummary: [
@@ -95,12 +95,12 @@ export const PRODUCTS = [
       { name: 'Wild Blueberries', desc: 'Potent antioxidants for muscle recovery', icon: '🫐' },
       { name: 'Crisp Protein Puffs', desc: 'Light crunchy texture for rapid snackability', icon: '⚡' },
       { name: 'Natural Berry Extract', desc: 'Refreshing real fruit flavour profile', icon: '🍓' },
-      { name: 'Magnesium Hydration', desc: 'Prevents cramping during intense workouts', icon: '💧' },
+      { name: 'Electrolyte Hydration', desc: 'Essential minerals (Na + Mg + K) for active recovery', icon: '💧' },
     ],
   },
   {
     id: 4,
-    title: 'All In One / Mixed Pack',
+    title: 'The Voltt Mixed Box',
     image: '/assets/mix.png',
     price: 68,
     soldOut: false,
@@ -114,8 +114,8 @@ export const PRODUCTS = [
     spotlightGlow: 'from-[#153B75]/20 via-[#D8A24A]/10 to-transparent',
     accentColor: '#153B75',
     highlights: [
-      '10 g plant protein in every bar',
-      'Great first order option',
+      'Added Electrolytes (Na + Mg + K)',
+      '0 Added Sugar',
       'Lets shoppers explore multiple flavour notes',
     ],
     nutritionSummary: [
@@ -126,9 +126,9 @@ export const PRODUCTS = [
     ],
     ingredientsStory: [
       { name: 'Variety Pack', desc: 'Includes Almond, Choco Cranz, and Berry Rush', icon: '📦' },
-      { name: '10 g Protein Base', desc: 'Consistent clean plant protein ratio', icon: '⚡' },
-      { name: 'Electrolyte Mineral Mix', desc: 'Full hydration support across all flavours', icon: '💧' },
-      { name: 'Zero Artificial Additives', desc: 'Clean natural ingredients in every bar', icon: '🌿' },
+      { name: 'Plant-Based Protein', desc: 'Consistent clean protein ratio', icon: '⚡' },
+      { name: 'Electrolyte Mineral Mix', desc: 'Essential Na + Mg + K across all flavours', icon: '💧' },
+      { name: '0 Added Sugar', desc: 'Clean natural taste without added sugar', icon: '🌿' },
     ],
   },
 ]

@@ -9,20 +9,24 @@ const specs = [
     code: 'SPEC-01',
   },
   {
-    title: 'Clean Formulation',
-    detail: 'Zero artificial sweeteners, no hidden preservatives or chemical fillers.',
+    title: '0 Added Sugar',
+    detail: 'Clean formulation made without added refined sugars, syrups, or unnecessary fillers.',
     icon: Leaf,
     code: 'SPEC-02',
   },
   {
-    title: '10 g Clean Protein',
-    detail: 'High bioavailability plant protein in every 40 g bar.',
+    title: 'Plant-Based Protein',
+    detail: 'High bioavailability clean plant protein base in every bar.',
     icon: Zap,
     code: 'SPEC-03',
   },
   {
-    title: 'Added Electrolytes',
-    detail: 'Formulated with Sodium & Magnesium for rapid cellular rehydration.',
+    title: (
+      <>
+        Added <span className="text-[#D8A24A]">ELECTROLYTES</span> (Na + Mg + K)
+      </>
+    ),
+    detail: 'Formulated with Sodium, Magnesium, and Potassium (Na + Mg + K) for rapid cellular rehydration.',
     icon: Droplets,
     code: 'SPEC-04',
   },
@@ -55,17 +59,17 @@ export default function PremiumNutrition() {
             <span className="text-[#D8A24A]">INSTANT REHYDRATION.</span>
           </h2>
           <p className="mt-4 text-[#F7F4EC]/90 text-base sm:text-lg">
-            Voltt bars fuse clean plant protein with essential electrolyte minerals for rapid absorption, digestive ease, and authentic taste.
+            Voltt bars fuse clean plant protein with essential electrolyte minerals (Na + Mg + K) for rapid absorption, digestive ease, and authentic taste.
           </p>
         </div>
 
         {/* Technical Features Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
-          {specs.map((item) => {
+          {specs.map((item, idx) => {
             const IconComp = item.icon
             return (
               <div
-                key={item.title}
+                key={idx}
                 className="bg-[#0F2C59] border border-white/10 rounded-xl p-6 flex flex-col justify-between hover:border-[#D8A24A]/50 transition-colors shadow-sm"
               >
                 <div>
@@ -117,19 +121,19 @@ export default function PremiumNutrition() {
               </thead>
               <tbody className="divide-y divide-[#E8E3D5] text-[#1F2937]">
                 <tr>
-                  <td className="py-3.5 px-4 font-semibold text-[#153B75]">Protein Content</td>
-                  <td className="py-3.5 px-4 text-[#5D8C4A] font-bold">10 g Clean Plant Protein</td>
+                  <td className="py-3.5 px-4 font-semibold text-[#153B75]">Protein Source</td>
+                  <td className="py-3.5 px-4 text-[#5D8C4A] font-bold">Clean Plant-Based Protein</td>
                   <td className="py-3.5 px-4 text-[#6B7280]">1-3 g Low Quality</td>
                 </tr>
                 <tr>
-                  <td className="py-3.5 px-4 font-semibold text-[#153B75]">Electrolytes (Na + Mg)</td>
+                  <td className="py-3.5 px-4 font-semibold text-[#153B75]">Added Electrolytes (Na + Mg + K)</td>
                   <td className="py-3.5 px-4 text-[#5D8C4A] font-bold">Yes (Instant Rehydration)</td>
                   <td className="py-3.5 px-4 text-[#6B7280]">None</td>
                 </tr>
                 <tr>
-                  <td className="py-3.5 px-4 font-semibold text-[#153B75]">Artificial Sweeteners</td>
-                  <td className="py-3.5 px-4 text-[#5D8C4A] font-bold">Zero</td>
-                  <td className="py-3.5 px-4 text-[#6B7280]">High Additives</td>
+                  <td className="py-3.5 px-4 font-semibold text-[#153B75]">Added Sugar</td>
+                  <td className="py-3.5 px-4 text-[#5D8C4A] font-bold">0 Added Sugar</td>
+                  <td className="py-3.5 px-4 text-[#6B7280]">High Refined Sugars</td>
                 </tr>
                 <tr>
                   <td className="py-3.5 px-4 font-semibold text-[#153B75]">Price per Bar</td>

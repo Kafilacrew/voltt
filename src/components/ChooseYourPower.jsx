@@ -66,11 +66,11 @@ export default function ChooseYourPower() {
             >
               <div>
                 {/* Card Image Frame */}
-                <div className="relative aspect-[4/3] bg-white overflow-hidden border-b border-[#E6DFD3]">
+                <div className="relative aspect-[3/3.8] bg-[#FAF8F3] overflow-hidden border-b border-[#E6DFD3]">
                   <img
                     src={product.image}
                     alt={product.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
                     onError={(e) => {
                       e.target.src = product.fallbackImage
                     }}

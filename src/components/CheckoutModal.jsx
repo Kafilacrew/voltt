@@ -153,7 +153,7 @@ export default function CheckoutModal({ isOpen, onClose, initialProduct }) {
             <div className="flex items-center gap-3">
               <img
                 src="/assets/volt-logo-light.png"
-                alt="Volt Logo"
+                alt="Voltt Logo"
                 className="h-6 sm:h-7 w-auto object-contain"
               />
               <div className="h-4 w-px bg-white/20" />
@@ -183,11 +183,11 @@ export default function CheckoutModal({ isOpen, onClose, initialProduct }) {
                 {/* Left Column */}
                 <div className="lg:col-span-7 space-y-6">
 
-                  {/* Step 1: Flavor & Pack Size */}
+                  {/* Step 1: Flavour & Pack Size */}
                   <div className="rounded-2xl p-5 space-y-4" style={{ background: '#fff', border: `1px solid ${border}` }}>
                     <h4 className="font-display text-sm font-bold uppercase tracking-wider flex items-center gap-2" style={{ color: navy }}>
                       <Package className="w-4 h-4" style={{ color: gold }} />
-                      1. Select Flavor &amp; Pack Size
+                      1. Select Flavour &amp; Pack Size
                     </h4>
 
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -368,7 +368,7 @@ export default function CheckoutModal({ isOpen, onClose, initialProduct }) {
                       <img
                         src={selectedProduct.image}
                         alt={selectedProduct.title}
-                        className="w-14 h-14 object-cover rounded-xl"
+                        className="w-14 h-14 object-contain p-1 rounded-xl"
                         style={{ border: `1px solid ${border}`, background: cream }}
                       />
                       <div className="flex-1 min-w-0">
@@ -488,7 +488,7 @@ export default function CheckoutModal({ isOpen, onClose, initialProduct }) {
 
                 <div className="rounded-2xl p-6 text-left space-y-3 text-xs" style={{ background: '#fff', border: `1px solid ${border}` }}>
                   <div className="flex items-center justify-between pb-3 border-b" style={{ borderColor: border }}>
-                    <span style={{ color: muted }}>Volt Order Reference:</span>
+                    <span style={{ color: muted }}>Voltt Order Reference:</span>
                     <span className="font-mono font-bold text-sm" style={{ color: navy }}>{orderResult.orderId}</span>
                   </div>
                   {orderResult.shipment?.shipmentId && (

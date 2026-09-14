@@ -19,7 +19,7 @@ const reels = [
   {
     id: 1,
     username: '@eatvoltt',
-    caption: 'Almond Crunch – Roasted almonds & slow-burning clean plant protein. ⚡ #eatvoltt',
+    caption: 'Almond Crunch – Roasted almonds & clean fuel. ⚡ #eatvoltt',
     image: '/assets/almond-crunch.png',
     url: 'https://www.instagram.com/eatvoltt/',
   },
@@ -40,7 +40,7 @@ const reels = [
   {
     id: 4,
     username: '@eatvoltt',
-    caption: 'The Volt Mixed Box – All signature recipes in one box. 📦 #eatvoltt',
+    caption: 'The Voltt Mixed Box – All signature recipes in one box. 📦 #eatvoltt',
     image: '/assets/mix.png',
     url: 'https://www.instagram.com/eatvoltt/',
   },
@@ -56,7 +56,7 @@ export default function SocialProof() {
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-14">
           <p className="font-mono font-bold text-[#F95738] text-xs tracking-widest uppercase mb-3">
-            VOLT IN ACTION
+            VOLTT IN ACTION
           </p>
           <h2 className="font-display font-black text-4xl sm:text-5xl lg:text-6xl text-[#2A1646] tracking-tight uppercase">
             AS SEEN ON SOCIALS

@@ -30,11 +30,11 @@ export default function ProductBookingPage({ product }) {
             <div className="grid gap-8 md:grid-cols-2 items-center">
               
               {/* Image Frame */}
-              <div className="relative aspect-square rounded-xl bg-[#F7F4EC] overflow-hidden border border-[#E8E3D5] group">
+              <div className="relative aspect-[3/4] rounded-2xl bg-[#F7F4EC] overflow-hidden border border-[#E8E3D5] shadow-xs group">
                 <img
                   src={product.image}
                   alt={product.title}
-                  className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  className="h-full w-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
                   onError={(event) => {
                     event.target.style.display = 'none'
                   }}

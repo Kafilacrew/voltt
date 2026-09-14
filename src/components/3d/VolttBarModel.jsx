@@ -68,7 +68,7 @@ function ProteinBar3D({ isHovered }) {
         letterSpacing={0.2}
         fontWeight={700}
       >
-        10 g PROTEIN • ELECTROLYTES
+        ELECTROLYTES • 0 ADDED SUGAR
       </Text>
     </group>
   )

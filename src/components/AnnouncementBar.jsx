@@ -4,10 +4,26 @@ import { Truck, Sparkles, Zap, ShieldCheck } from 'lucide-react'
 
 export default function AnnouncementBar() {
   const items = [
-    { text: 'FREE SHIPPING ON ORDERS ABOVE ₹500', icon: Truck },
-    { text: '10 g CLEAN PLANT PROTEIN', icon: Zap },
-    { text: 'ADDED ELECTROLYTES (Na + Mg)', icon: Sparkles },
-    { text: 'ZERO ARTIFICIAL SWEETENERS', icon: ShieldCheck },
+    {
+      content: <span>FREE SHIPPING ON ORDERS ABOVE ₹500</span>,
+      icon: Truck,
+    },
+    {
+      content: <span>COMPLETE NUTRITION</span>,
+      icon: Zap,
+    },
+    {
+      content: (
+        <span>
+          ADDED <span className="text-[#D8A24A] font-extrabold">ELECTROLYTES</span> (Na + Mg + K)
+        </span>
+      ),
+      icon: Sparkles,
+    },
+    {
+      content: <span>0 ADDED SUGAR</span>,
+      icon: ShieldCheck,
+    },
   ]
 
   return (
@@ -26,7 +42,7 @@ export default function AnnouncementBar() {
               return (
                 <div key={idx} className="flex items-center gap-2 text-xs font-bold tracking-widest text-[#F7F4EC]">
                   <IconComp className="w-3.5 h-3.5 text-[#D8A24A] shrink-0" />
-                  <span>{item.text}</span>
+                  <div>{item.content}</div>
                   <span className="text-[#D8A24A]/40 mx-2">•</span>
                 </div>
               )

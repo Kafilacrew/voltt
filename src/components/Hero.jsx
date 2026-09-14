@@ -129,7 +129,7 @@ export default function Hero({ selectedProduct, onSelectFlavor }) {
             className="lg:col-span-6 w-full"
           >
             <div
-              className="relative aspect-square sm:aspect-[4/3.8] lg:aspect-square rounded-[36px] bg-[#FAF8F3] overflow-hidden shadow-lg border border-[#E6DFD3] select-none"
+              className="relative w-full max-w-[460px] mx-auto aspect-[3/4] rounded-[32px] overflow-hidden shadow-md border border-[#E6DFD3] select-none"
               onMouseEnter={() => setPaused(true)}
               onMouseLeave={() => setPaused(false)}
             >
@@ -145,7 +145,7 @@ export default function Hero({ selectedProduct, onSelectFlavor }) {
                   animate="center"
                   exit="exit"
                   transition={{ duration: 0.55, ease: [0.32, 0.72, 0, 1] }}
-                  className="absolute inset-0 w-full h-full object-cover"
+                  className="absolute inset-0 w-full h-full object-cover object-center"
                   onError={(e) => {
                     e.target.src = '/assets/hero.png'
                   }}
@@ -158,18 +158,18 @@ export default function Hero({ selectedProduct, onSelectFlavor }) {
                 type="button"
                 onClick={prev}
                 aria-label="Previous product"
-                className="absolute left-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-white/80 hover:bg-white backdrop-blur-sm border border-[#E6DFD3] flex items-center justify-center text-[#2A1646] shadow-sm transition-all duration-150 hover:scale-110 active:scale-95 cursor-pointer"
+                className="absolute left-3.5 top-1/2 -translate-y-1/2 z-10 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/85 hover:bg-white backdrop-blur-md border border-white/60 flex items-center justify-center text-[#2A1646] shadow-sm transition-all duration-150 hover:scale-110 active:scale-95 cursor-pointer"
               >
-                <ChevronLeft className="w-4 h-4" />
+                <ChevronLeft className="w-5 h-5" />
               </button>
 
               <button
                 type="button"
                 onClick={next}
                 aria-label="Next product"
-                className="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-white/80 hover:bg-white backdrop-blur-sm border border-[#E6DFD3] flex items-center justify-center text-[#2A1646] shadow-sm transition-all duration-150 hover:scale-110 active:scale-95 cursor-pointer"
+                className="absolute right-3.5 top-1/2 -translate-y-1/2 z-10 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/85 hover:bg-white backdrop-blur-md border border-white/60 flex items-center justify-center text-[#2A1646] shadow-sm transition-all duration-150 hover:scale-110 active:scale-95 cursor-pointer"
               >
-                <ChevronRight className="w-4 h-4" />
+                <ChevronRight className="w-5 h-5" />
               </button>
 
               {/* Dot indicators (3 dots for 3 products) */}
@@ -206,13 +206,13 @@ export default function Hero({ selectedProduct, onSelectFlavor }) {
             </div>
 
             {/* Thumbnail strip below the card - Exactly 3 products */}
-            <div className="flex items-center gap-2.5 mt-3 px-1">
+            <div className="flex items-center gap-2.5 sm:gap-3 mt-3.5 max-w-[460px] mx-auto px-1">
               {HERO_PRODUCTS.map((prod, idx) => (
                 <button
                   key={prod.id}
                   type="button"
                   onClick={() => goTo(idx, idx > current ? 1 : -1)}
-                  className="flex-1 aspect-[4/3] sm:aspect-square rounded-2xl overflow-hidden border-2 transition-all duration-200 relative group cursor-pointer"
+                  className="flex-1 aspect-[3/4] rounded-2xl overflow-hidden border-2 transition-all duration-200 relative group cursor-pointer"
                   style={{
                     borderColor: idx === current ? '#F95738' : '#E6DFD3',
                     opacity: idx === current ? 1 : 0.65,
@@ -222,13 +222,13 @@ export default function Hero({ selectedProduct, onSelectFlavor }) {
                   <img
                     src={prod.image}
                     alt={prod.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
                     onError={(e) => {
                       e.target.src = '/assets/hero.png'
                     }}
                     draggable={false}
                   />
-                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent p-1.5 text-center">
+                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 via-black/35 to-transparent p-2 text-center">
                     <span className="text-[10px] sm:text-xs font-bold text-white block truncate drop-shadow-xs font-display">
                       {prod.title}
                     </span>

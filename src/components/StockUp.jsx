@@ -9,13 +9,17 @@ export default function StockUp() {
   const benefits = [
     {
       icon: Sparkles,
-      title: 'Zero Junk Policy',
-      desc: 'No artificial sweeteners or sugar alcohols. Made with recognizable ingredients.',
+      title: (
+        <>
+          Added <span className="text-[#F95738]">ELECTROLYTES</span> (Na + Mg + K)
+        </>
+      ),
+      desc: 'Formulated with essential minerals Sodium, Magnesium, and Potassium to support rapid cellular hydration and stamina.',
     },
     {
       icon: ShieldCheck,
-      title: 'Sustained Endurance',
-      desc: 'Balanced macro profiles pairing clean fats and slow-burning complex carbs for level, crash-free performance throughout your workday.',
+      title: '0 Added Sugar',
+      desc: 'Clean and intentional recipe made without added refined sugars, syrups, or unnecessary fillers.',
     },
     {
       icon: Heart,
@@ -39,11 +43,11 @@ export default function StockUp() {
             transition={{ duration: 0.5 }}
             className="lg:col-span-6 w-full"
           >
-            <div className="relative aspect-[4/3] rounded-[32px] bg-[#FAF8F3] border border-[#E6DFD3] p-4 shadow-lg overflow-hidden group">
+            <div className="relative aspect-[4/3] rounded-[32px] bg-[#FAF8F3] border border-[#E6DFD3] shadow-md overflow-hidden group">
               <img
                 src="/assets/mix.png"
-                alt="The Volt Mixed Box Packaging"
-                className="w-full h-full object-cover rounded-[24px] group-hover:scale-103 transition-transform duration-500"
+                alt="The Voltt Mixed Box Packaging"
+                className="w-full h-full object-cover object-center group-hover:scale-103 transition-transform duration-500"
                 onError={(e) => {
                   e.target.src = '/assets/hero.png'
                 }}
@@ -64,7 +68,7 @@ export default function StockUp() {
             </div>
 
             <h2 className="font-display font-black text-4xl sm:text-5xl text-[#2A1646] tracking-tight uppercase">
-              THE VOLT MIXED BOX
+              THE VOLTT MIXED BOX
             </h2>
 
             <p className="mt-4 text-[#71717A] text-base leading-relaxed font-medium">
@@ -91,7 +95,7 @@ export default function StockUp() {
             <div className="mt-8">
               <button
                 type="button"
-                onClick={() => openCheckout({ eventSlug: 'mixed-flavours', title: 'Volt Mixed Box', price: 735 })}
+                onClick={() => openCheckout({ eventSlug: 'mixed-flavours', title: 'The Voltt Mixed Box', price: 735 })}
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-[#2A1646] hover:bg-[#1F0F36] text-white font-display font-bold text-xs tracking-wider uppercase transition-all duration-200 shadow-md active:scale-95 cursor-pointer"
               >
                 <span>GET THE MIXED BOX — ₹735</span>
@@ -107,7 +111,7 @@ export default function StockUp() {
             const IconComp = b.icon
             return (
               <motion.div
-                key={b.title}
+                key={idx}
                 initial={{ opacity: 0, y: 15 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}

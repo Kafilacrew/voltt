@@ -29,7 +29,7 @@ export default function Newsletter() {
 
           {/* Sub-copy */}
           <p className="mt-5 text-white/70 text-sm sm:text-base leading-relaxed max-w-xl mx-auto font-normal">
-            Join thousands of active professionals, athletes, and creative thinkers who have ditched the synthetic junk for real plant-powered performance.
+            Join thousands of active professionals, athletes, and creative thinkers who have ditched ultra-processed bars for honest plant-powered performance.
           </p>
 
           {/* CTA buttons — white filled + white outline */}

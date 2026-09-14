@@ -4,19 +4,19 @@ import { Star } from 'lucide-react'
 
 const testimonials = [
   {
-    name: 'Marcus Vance',
-    role: 'Freelance Creative',
-    text: 'Unlike every other bar on the shelf, Volt actually keeps me full without turning my stomach inside out. The Almond Crunch is a staple of my morning commute.',
+    name: 'Rahul Mehta',
+    role: 'Software Engineer, Bengaluru',
+    text: "Been having the Almond Crunch during my morning commute. I like that it isn't overly sweet and the texture is actually quite nice. It's an easy snack to keep in my bag.",
   },
   {
-    name: 'Elena Rostov',
-    role: 'Marathon Runner',
-    text: 'The texture is unmatched. You can actually see the chunks of almond and berries rather than a processed paste. A truly premium snack worth every penny.',
+    name: 'Priya Nair',
+    role: 'Fitness Enthusiast, Mumbai',
+    text: "I usually carry a bar after my evening workout. The Berry Rush has a nice balance of sweetness and crunch, and it doesn't feel too heavy. Quite convenient when I'm heading straight home from the gym.",
   },
   {
-    name: 'Dr. Aris Thorne',
-    role: 'Nutritional Biologist',
-    text: 'The Choco Cranz tastes like a real dessert but has the macros to support my afternoon lifting sessions. Unbelievably clean profile.',
+    name: 'Arjun Shah',
+    role: 'Product Designer, Pune',
+    text: "Picked up the Choco Cranz for my afternoon snack at work. The chocolate flavour is quite good and it doesn't feel like I'm eating a typical protein bar.",
   },
 ]
 
@@ -25,10 +25,10 @@ export default function TrustedBy() {
     <section id="trusted" className="bg-[#F5F2EB] py-20 lg:py-28 text-[#2A1646] border-b border-[#E6DFD3]/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Section Header matching reference screenshot #5 */}
+        {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
           <h2 className="font-display font-black text-4xl sm:text-5xl text-[#2A1646] tracking-tight uppercase">
-            TRUSTED FOR THE LONG HAUL
+            WHAT PEOPLE ARE SAYING
           </h2>
         </div>
 

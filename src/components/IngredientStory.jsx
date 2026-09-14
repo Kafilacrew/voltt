@@ -58,11 +58,11 @@ export default function IngredientStory() {
             transition={{ duration: 0.5 }}
             className="lg:col-span-6 w-full"
           >
-            <div className="relative aspect-[4/3] rounded-[32px] bg-[#FAF8F3] border border-[#E6DFD3] p-4 shadow-lg overflow-hidden group">
+            <div className="relative w-full max-w-[460px] mx-auto lg:ml-auto aspect-[3/4] rounded-[32px] overflow-hidden shadow-md border border-[#E6DFD3] group">
               <img
                 src="/assets/almond-crunch.png"
-                alt="Volt Honest Plant-Based Ingredients"
-                className="w-full h-full object-cover rounded-[24px] group-hover:scale-103 transition-transform duration-500"
+                alt="Voltt Honest Plant-Based Ingredients"
+                className="w-full h-full object-cover object-center group-hover:scale-103 transition-transform duration-500"
                 onError={(e) => {
                   e.target.src = '/assets/hero.png'
                 }}

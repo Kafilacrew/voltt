@@ -33,7 +33,7 @@ export default function OrdersStartSoonModal({ isOpen, onClose }) {
           <div className="flex justify-center mb-5">
             <img
               src="/assets/volt-logo-dark.png"
-              alt="Volt Logo"
+              alt="Voltt Logo"
               className="h-8 sm:h-9 w-auto object-contain"
             />
           </div>
@@ -62,7 +62,7 @@ export default function OrdersStartSoonModal({ isOpen, onClose }) {
 
           {/* Brand Tag */}
           <p className="mt-4 text-[11px] font-mono text-[#71717A]/70 uppercase tracking-wider">
-            VOLT PROTEIN CO.
+            VOLTT PROTEIN CO.
           </p>
         </motion.div>
       </div>

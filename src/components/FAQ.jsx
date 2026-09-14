@@ -6,11 +6,11 @@ export default function FAQ() {
   const faqs = [
     {
       q: 'What makes Voltt protein bars different from typical snack bars?',
-      a: 'Voltt bars combine 10 g of clean plant protein with essential electrolytes (Sodium & Magnesium) for instant rehydration, 0 artificial sweeteners, and authentic taste.',
+      a: 'Voltt bars combine clean plant protein with added electrolytes (Na + Mg + K) for instant rehydration, 0 added sugar, and authentic taste.',
     },
     {
       q: 'What ingredients are used in Voltt bars?',
-      a: 'We use high-grade clean plant protein, roasted almonds, cocoa, fruit extracts, and mineral salts carefully formulated without synthetic fillers or sugar alcohols.',
+      a: 'We use high-grade clean plant protein, roasted almonds, cocoa, fruit extracts, and mineral salts carefully formulated without synthetic fillers.',
     },
     {
       q: 'Who are Voltt protein bars designed for?',
@@ -18,7 +18,7 @@ export default function FAQ() {
     },
     {
       q: 'How much protein does each bar contain?',
-      a: 'Each 40 g Voltt bar delivers 10 g of clean plant protein along with 5 g of dietary fibre and essential electrolytes.',
+      a: 'Each 40 g Voltt bar delivers clean plant-based protein along with 5 g of dietary fibre and added electrolytes (Na + Mg + K).',
     },
     {
       q: 'Are Voltt protein bars vegetarian?',
