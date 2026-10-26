@@ -57,7 +57,48 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     checkAdminSession()
+
+    if (!supabase) return
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, currentSession) => {
+      if (event === 'SIGNED_OUT' || !currentSession) {
+        setSession(null)
+        setIsAdmin(false)
+        setOrders([])
+      } else if (currentSession) {
+        setSession(currentSession)
+        if (event === 'TOKEN_REFRESHED') {
+          await verifyAdminAndFetch(currentSession.access_token, true)
+        }
+      }
+    })
+
+    return () => subscription?.unsubscribe()
   }, [])
+
+  const getValidAdminToken = async () => {
+    if (!supabase) return null
+    try {
+      const { data: { session: currentSession } } = await supabase.auth.getSession()
+      if (!currentSession) return null
+
+      // Check if access token is expired or expiring within 60 seconds
+      const isExpiringSoon = !currentSession.expires_at || (currentSession.expires_at * 1000 - Date.now() < 60000)
+      if (isExpiringSoon) {
+        const { data: { session: refreshedSession }, error: refreshErr } = await supabase.auth.refreshSession()
+        if (!refreshErr && refreshedSession) {
+          setSession(refreshedSession)
+          return refreshedSession.access_token
+        }
+      }
+
+      setSession(currentSession)
+      return currentSession.access_token
+    } catch (err) {
+      console.error('[Admin Token Refresh Error]:', err)
+      return session?.access_token || null
+    }
+  }
 
   const checkAdminSession = async () => {
     if (!supabase) {
@@ -66,20 +107,19 @@ export default function AdminDashboard() {
     }
 
     setCheckingAuth(true)
-    const { data: { session: currentSession } } = await supabase.auth.getSession()
+    const token = await getValidAdminToken()
 
-    if (!currentSession) {
+    if (!token) {
       setSession(null)
       setIsAdmin(false)
       setCheckingAuth(false)
       return
     }
 
-    setSession(currentSession)
-    await verifyAdminAndFetch(currentSession.access_token)
+    await verifyAdminAndFetch(token)
   }
 
-  const verifyAdminAndFetch = async (token) => {
+  const verifyAdminAndFetch = async (token, isRetry = false) => {
     setLoadingOrders(true)
     try {
       const res = await fetch('/api/admin/orders', {
@@ -87,6 +127,19 @@ export default function AdminDashboard() {
           Authorization: `Bearer ${token}`,
         },
       })
+
+      // If token expired (401) and not already retrying, refresh session proactively
+      if (res.status === 401 && !isRetry && supabase) {
+        try {
+          const { data: { session: refreshedSession }, error: refreshErr } = await supabase.auth.refreshSession()
+          if (!refreshErr && refreshedSession?.access_token) {
+            setSession(refreshedSession)
+            return await verifyAdminAndFetch(refreshedSession.access_token, true)
+          }
+        } catch (_) {
+          // Fall through
+        }
+      }
 
       const data = await res.json()
 
@@ -141,7 +194,8 @@ export default function AdminDashboard() {
   }
 
   const fetchFilteredOrders = async () => {
-    if (!session?.access_token) return
+    const token = await getValidAdminToken()
+    if (!token) return
     setLoadingOrders(true)
     setActionMessage(null)
 
@@ -150,11 +204,24 @@ export default function AdminDashboard() {
       if (statusFilter !== 'ALL') params.append('status', statusFilter)
       if (searchTerm) params.append('search', searchTerm)
 
-      const res = await fetch(`/api/admin/orders?${params.toString()}`, {
+      let res = await fetch(`/api/admin/orders?${params.toString()}`, {
         headers: {
-          Authorization: `Bearer ${session.access_token}`,
+          Authorization: `Bearer ${token}`,
         },
       })
+
+      if (res.status === 401 && supabase) {
+        const { data: { session: refreshedSession }, error: refreshErr } = await supabase.auth.refreshSession()
+        if (!refreshErr && refreshedSession?.access_token) {
+          setSession(refreshedSession)
+          res = await fetch(`/api/admin/orders?${params.toString()}`, {
+            headers: {
+              Authorization: `Bearer ${refreshedSession.access_token}`,
+            },
+          })
+        }
+      }
+
       const data = await res.json()
 
       if (data.success) {
@@ -169,20 +236,36 @@ export default function AdminDashboard() {
   }
 
   const handleRetryShipment = async (orderId) => {
-    if (!session?.access_token || !orderId) return
+    const token = await getValidAdminToken()
+    if (!token || !orderId) return
 
     setRetryLoading(true)
     setActionMessage(null)
 
     try {
-      const res = await fetch('/api/admin/retry-shipment', {
+      let res = await fetch('/api/admin/retry-shipment', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${session.access_token}`,
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ orderId }),
       })
+
+      if (res.status === 401 && supabase) {
+        const { data: { session: refreshedSession }, error: refreshErr } = await supabase.auth.refreshSession()
+        if (!refreshErr && refreshedSession?.access_token) {
+          setSession(refreshedSession)
+          res = await fetch('/api/admin/retry-shipment', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${refreshedSession.access_token}`,
+            },
+            body: JSON.stringify({ orderId }),
+          })
+        }
+      }
 
       const data = await res.json()
 

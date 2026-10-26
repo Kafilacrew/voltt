@@ -1,4 +1,4 @@
-import { checkPincodeServiceability } from '../../server/services/shiprocket.js'
+import { checkPincodeServiceability } from '../_services/shiprocket.js'
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {

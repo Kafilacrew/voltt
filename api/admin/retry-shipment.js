@@ -1,5 +1,5 @@
-import { getSupabaseAdmin, verifyAdminToken } from '../../server/lib/supabaseAdmin.js'
-import { createShiprocketOrder } from '../../server/services/shiprocket.js'
+import { getSupabaseAdmin, verifyAdminToken } from '../_lib/supabaseAdmin.js'
+import { createShiprocketOrder } from '../_services/shiprocket.js'
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {

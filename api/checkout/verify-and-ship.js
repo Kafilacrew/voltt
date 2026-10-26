@@ -1,6 +1,6 @@
-import { verifyRazorpaySignature, fetchRazorpayPayment } from '../../server/services/razorpay.js'
-import { createShiprocketOrder } from '../../server/services/shiprocket.js'
-import { getSupabaseAdmin } from '../../server/lib/supabaseAdmin.js'
+import { verifyRazorpaySignature, fetchRazorpayPayment } from '../_services/razorpay.js'
+import { createShiprocketOrder } from '../_services/shiprocket.js'
+import { getSupabaseAdmin } from '../_lib/supabaseAdmin.js'
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {

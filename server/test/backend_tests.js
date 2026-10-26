@@ -1243,6 +1243,92 @@ runTest('API Guard: GET /api/admin/orders rejects unauthenticated request with 4
   assert.strictEqual(statusCode, 401, 'Unauthenticated request must return 401')
   assert.strictEqual(jsonResponse.success, false, 'Response success must be false')
 })
+// --- Phase 10: Production API Resolution & Admin Token Refresh Regression Tests ---
+console.log('\n--- Phase 10: Production API Resolution & Admin Token Refresh Regression Tests ---')
+
+runTest('Package Workspaces: root package.json defines server workspace for dependency hoisting', () => {
+  const pkgPath = path.join(__dirname, '..', '..', 'package.json')
+  const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'))
+  assert.ok(Array.isArray(pkg.workspaces), 'package.json must define workspaces array')
+  assert.ok(pkg.workspaces.includes('server'), 'package.json workspaces must include server')
+})
+
+runTest('Module Resolution: api/checkout/create-order.js imports cleanly without ERR_MODULE_NOT_FOUND', async () => {
+  const mod = await import('../../api/checkout/create-order.js')
+  assert.ok(mod.default, 'create-order.js must export default handler function')
+  assert.strictEqual(typeof mod.default, 'function', 'handler must be a function')
+})
+
+runTest('Module Resolution: api/pincode/check.js imports cleanly without ERR_MODULE_NOT_FOUND', async () => {
+  const mod = await import('../../api/pincode/check.js')
+  assert.ok(mod.default, 'check.js must export default handler function')
+  assert.strictEqual(typeof mod.default, 'function', 'handler must be a function')
+})
+
+runTest('Module Resolution: api/checkout/verify-and-ship.js imports cleanly without ERR_MODULE_NOT_FOUND', async () => {
+  const mod = await import('../../api/checkout/verify-and-ship.js')
+  assert.ok(mod.default, 'verify-and-ship.js must export default handler function')
+  assert.strictEqual(typeof mod.default, 'function', 'handler must be a function')
+})
+
+runTest('Module Resolution: api/admin/retry-shipment.js imports cleanly without ERR_MODULE_NOT_FOUND', async () => {
+  const mod = await import('../../api/admin/retry-shipment.js')
+  assert.ok(mod.default, 'retry-shipment.js must export default handler function')
+  assert.strictEqual(typeof mod.default, 'function', 'handler must be a function')
+})
+
+runTest('Module Resolution: api/webhooks/razorpay.js imports cleanly without ERR_MODULE_NOT_FOUND', async () => {
+  const mod = await import('../../api/webhooks/razorpay.js')
+  assert.ok(mod.default, 'razorpay.js must export default handler function')
+  assert.strictEqual(typeof mod.default, 'function', 'handler must be a function')
+})
+
+runTest('API Execution: POST /api/checkout/create-order validates customer details before processing', async () => {
+  const mod = await import('../../api/checkout/create-order.js')
+  const handler = mod.default
+  let statusCode = null
+  let jsonResponse = null
+  const mockReq = {
+    method: 'POST',
+    body: {
+      productId: 1,
+      packSize: 6,
+      quantity: 1,
+      customerDetails: { name: 'A' }, // invalid name
+    },
+  }
+  const mockRes = {
+    status: (code) => { statusCode = code; return mockRes },
+    json: (data) => { jsonResponse = data; return mockRes },
+  }
+  await handler(mockReq, mockRes)
+  assert.strictEqual(statusCode, 400, 'Invalid customer name must return 400')
+  assert.strictEqual(jsonResponse.success, false)
+})
+
+runTest('API Execution: POST /api/pincode/check rejects malformed pincode', async () => {
+  const mod = await import('../../api/pincode/check.js')
+  const handler = mod.default
+  let statusCode = null
+  let jsonResponse = null
+  const mockReq = { method: 'POST', body: { pincode: '123' } } // not 6 digits
+  const mockRes = {
+    status: (code) => { statusCode = code; return mockRes },
+    json: (data) => { jsonResponse = data; return mockRes },
+  }
+  await handler(mockReq, mockRes)
+  assert.strictEqual(statusCode, 400, 'Malformed pincode must return 400')
+  assert.strictEqual(jsonResponse.success, false)
+})
+
+runTest('Admin Dashboard Token Lifecycle: AdminDashboard has getValidAdminToken and auth listener', () => {
+  const adminDashboardPath = path.join(__dirname, '..', '..', 'src', 'components', 'AdminDashboard.jsx')
+  const code = fs.readFileSync(adminDashboardPath, 'utf8')
+  assert.ok(code.includes('getValidAdminToken'), 'AdminDashboard must define getValidAdminToken')
+  assert.ok(code.includes('refreshSession()'), 'AdminDashboard must call refreshSession when token expires')
+  assert.ok(code.includes('onAuthStateChange'), 'AdminDashboard must subscribe to auth state changes')
+  assert.ok(code.includes('isRetry'), 'AdminDashboard must support retry on 401')
+})
 
 console.log(`\n========================================`)
 console.log(`Test Results: ${passedTests} Passed, ${failedTests} Failed`)

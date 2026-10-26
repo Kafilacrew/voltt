@@ -1,4 +1,4 @@
-import { getSupabaseAdmin, verifyAdminToken } from '../../server/lib/supabaseAdmin.js'
+import { getSupabaseAdmin, verifyAdminToken } from '../_lib/supabaseAdmin.js'
 
 export default async function handler(req, res) {
   if (req.method !== 'GET' && req.method !== 'POST') {

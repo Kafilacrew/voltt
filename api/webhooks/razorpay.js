@@ -1,5 +1,5 @@
-import { verifyRazorpayWebhookSignature } from '../../server/services/razorpay.js'
-import { getSupabaseAdmin } from '../../server/lib/supabaseAdmin.js'
+import { verifyRazorpayWebhookSignature } from '../_services/razorpay.js'
+import { getSupabaseAdmin } from '../_lib/supabaseAdmin.js'
 
 // Disable automatic body parsing so exact raw incoming bytes are preserved for HMAC signature verification
 export const config = {

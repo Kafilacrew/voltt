@@ -1,6 +1,6 @@
-import { calculateOrderPricing, calculateCartPricing } from '../../server/services/catalog.js'
-import { createRazorpayOrder } from '../../server/services/razorpay.js'
-import { getSupabaseAdmin } from '../../server/lib/supabaseAdmin.js'
+import { calculateOrderPricing, calculateCartPricing } from '../_services/catalog.js'
+import { createRazorpayOrder } from '../_services/razorpay.js'
+import { getSupabaseAdmin } from '../_lib/supabaseAdmin.js'
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
