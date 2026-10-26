@@ -13,12 +13,33 @@ import SocialProof from './components/SocialProof'
 import Newsletter from './components/Newsletter'
 import Footer from './components/Footer'
 import CheckoutModal from './components/CheckoutModal'
+import CartDrawer from './components/CartDrawer'
+import CartToast from './components/CartToast'
+import CustomerAuthModal from './components/CustomerAuthModal'
+import AdminDashboard from './components/AdminDashboard'
 import { WHATSAPP_PHONE } from './constants/contact'
 import { PRODUCTS, getProductBySlug } from './data/products'
 
 const AppContext = createContext(null)
 const PRODUCT_ROUTE_PREFIX = '#/product/'
 const PRODUCT_REFRESH_KEY = 'voltt:last-refreshed-product-hash'
+const CART_STORAGE_KEY = 'voltt_cart_v1'
+
+function loadSavedCart() {
+  if (typeof window === 'undefined') return []
+  try {
+    const raw = window.localStorage.getItem(CART_STORAGE_KEY)
+    if (!raw) return []
+    const parsed = JSON.parse(raw)
+    if (!Array.isArray(parsed)) return []
+    return parsed.filter(
+      (item) => item && item.id && item.productId && Number(item.quantity) > 0
+    )
+  } catch (err) {
+    console.warn('[Cart Persistence Error]:', err)
+    return []
+  }
+}
 
 function getProductRouteSlug(hash) {
   if (!hash.startsWith(PRODUCT_ROUTE_PREFIX)) {
@@ -40,10 +61,15 @@ function App() {
     open: false,
     product: null,
   })
+  const [cart, setCart] = useState(loadSavedCart)
+  const [isCartOpen, setIsCartOpen] = useState(false)
+  const [toast, setToast] = useState({ show: false, message: '' })
   const [checkoutModal, setCheckoutModal] = useState({
     open: false,
     product: null,
+    isCartMode: false,
   })
+  const [authModalOpen, setAuthModalOpen] = useState(false)
   const [selectedFlavorSlug, setSelectedFlavorSlug] = useState('almond-crunch')
   const [currentHash, setCurrentHash] = useState(() => window.location.hash)
 
@@ -54,7 +80,9 @@ function App() {
     const handleHashChange = () => {
       setCurrentHash(window.location.hash)
       setNutritionModal({ open: false, product: null })
-      setCheckoutModal({ open: false, product: null })
+      setCheckoutModal({ open: false, product: null, isCartMode: false })
+      setIsCartOpen(false)
+      setAuthModalOpen(false)
 
       const routeSlug = getProductRouteSlug(window.location.hash)
       if (routeSlug) {
@@ -107,11 +135,139 @@ function App() {
     window.location.reload()
   }, [currentHash])
 
+  // Persist cart to localStorage
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart))
+    } catch (err) {
+      console.warn('[Cart Persistence Save Error]:', err)
+    }
+  }, [cart])
+
+  // Toast auto-dismiss
+  useEffect(() => {
+    if (!toast.show) return
+    const timer = setTimeout(() => {
+      setToast({ show: false, message: '' })
+    }, 3500)
+    return () => clearTimeout(timer)
+  }, [toast.show])
+
+  const showToast = (message) => {
+    setToast({ show: true, message })
+  }
+
+  const dismissToast = () => {
+    setToast({ show: false, message: '' })
+  }
+
+  const addToCart = (product, packSize = 6, quantity = 1) => {
+    if (!product) return
+    const resolvedProduct = getProductBySlug(product.eventSlug) || PRODUCTS.find((p) => p.id === product.id) || product
+    const size = resolvedProduct.id === 4 ? 12 : Number(packSize) || 6
+    const qty = Math.max(1, Number(quantity) || 1)
+    const cartItemId = `${resolvedProduct.id}-${size}`
+
+    setCart((prevCart) => {
+      const existingIndex = prevCart.findIndex((item) => item.id === cartItemId)
+      if (existingIndex > -1) {
+        const nextCart = [...prevCart]
+        nextCart[existingIndex] = {
+          ...nextCart[existingIndex],
+          quantity: Math.min(50, nextCart[existingIndex].quantity + qty),
+        }
+        return nextCart
+      }
+
+      const newItem = {
+        id: cartItemId,
+        productId: resolvedProduct.id,
+        title: resolvedProduct.title,
+        image: resolvedProduct.image,
+        price: resolvedProduct.id === 4 ? 735 : (resolvedProduct.price || 68),
+        packSize: size,
+        quantity: qty,
+      }
+      return [...prevCart, newItem]
+    })
+
+    showToast(`${resolvedProduct.title} (${size === 12 && resolvedProduct.id === 4 ? '12-Pack Mixed Box' : `Pack of ${size}`})`)
+  }
+
+  const updateCartQuantity = (itemId, newQty) => {
+    if (newQty <= 0) {
+      removeFromCart(itemId)
+      return
+    }
+    setCart((prevCart) =>
+      prevCart.map((item) =>
+        item.id === itemId ? { ...item, quantity: Math.min(50, newQty) } : item
+      )
+    )
+  }
+
+  const removeFromCart = (itemId) => {
+    setCart((prevCart) => prevCart.filter((item) => item.id !== itemId))
+  }
+
+  const clearCart = () => {
+    setCart([])
+    try {
+      window.localStorage.removeItem(CART_STORAGE_KEY)
+    } catch (_) {}
+  }
+
+  const cartTotalCount = cart.reduce((sum, item) => sum + Number(item.quantity), 0)
+
+  const cartSubtotal = cart.reduce((sum, item) => {
+    const isMixed12 = Number(item.productId) === 4 && Number(item.packSize) === 12
+    const unitPrice = isMixed12 ? 735 : (item.price || 68) * Number(item.packSize)
+    return sum + unitPrice * Number(item.quantity)
+  }, 0)
+
+  const cartShippingFee = cartSubtotal >= 499 || cartSubtotal === 0 ? 0 : 49
+  const cartGrandTotal = cartSubtotal + cartShippingFee
+
+  const openCheckout = (product) => {
+    if (product) {
+      setCheckoutModal({ open: true, product, isCartMode: false })
+    } else {
+      setCheckoutModal({ open: true, product: null, isCartMode: true })
+    }
+  }
+
+  const closeCheckout = () => {
+    setCheckoutModal({ open: false, product: null, isCartMode: false })
+  }
+
+  const handleOrderSuccess = () => {
+    if (checkoutModal.isCartMode) {
+      clearCart()
+    }
+  }
+
+  if (currentHash === '#/admin') {
+    return <AdminDashboard />
+  }
+
   return (
     <AppContext.Provider
       value={{
         openNutrition: (product) => setNutritionModal({ open: true, product }),
-        openCheckout: (product) => setCheckoutModal({ open: true, product: product || selectedFlavorProduct }),
+        openCheckout,
+        openAuth: () => setAuthModalOpen(true),
+        cart,
+        addToCart,
+        updateCartQuantity,
+        removeFromCart,
+        clearCart,
+        isCartOpen,
+        openCart: () => setIsCartOpen(true),
+        closeCart: () => setIsCartOpen(false),
+        cartTotalCount,
+        cartSubtotal,
+        cartShippingFee,
+        cartGrandTotal,
       }}
     >
       <div className="min-h-screen bg-[#F6F3EC] text-[#1F2937] selection:bg-[#123D87] selection:text-white">
@@ -302,11 +458,31 @@ function App() {
           <span className="text-xs font-bold uppercase tracking-wider hidden sm:inline">Chat with us</span>
         </button>
 
+        {/* Cart Drawer */}
+        <CartDrawer
+          isOpen={isCartOpen}
+          onClose={() => setIsCartOpen(false)}
+        />
+
+        {/* Cart Action Toast Notification */}
+        <CartToast
+          toast={toast}
+          onDismiss={dismissToast}
+        />
+
         {/* Voltt Express Checkout Modal */}
         <CheckoutModal
           isOpen={checkoutModal.open}
-          onClose={() => setCheckoutModal({ open: false, product: null })}
+          onClose={closeCheckout}
           initialProduct={checkoutModal.product}
+          cartItems={checkoutModal.isCartMode ? cart : null}
+          onOrderSuccess={handleOrderSuccess}
+        />
+
+        {/* Customer Account & Authentication Modal */}
+        <CustomerAuthModal
+          isOpen={authModalOpen}
+          onClose={() => setAuthModalOpen(false)}
         />
       </div>
     </AppContext.Provider>

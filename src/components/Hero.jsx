@@ -11,7 +11,7 @@ const HERO_PRODUCTS = HERO_SLUGS.map((slug) => getProductBySlug(slug)).filter(Bo
 const INTERVAL = 3500 // ms between auto-advances
 
 export default function Hero({ selectedProduct, onSelectFlavor }) {
-  const { openCheckout } = useAppContext()
+  const { openCheckout, addToCart } = useAppContext()
 
   const initialIndex = selectedProduct
     ? Math.max(0, HERO_PRODUCTS.findIndex((p) => p.eventSlug === selectedProduct.eventSlug))
@@ -93,7 +93,7 @@ export default function Hero({ selectedProduct, onSelectFlavor }) {
             <div className="flex flex-col sm:flex-row items-center gap-4 mt-8">
               <button
                 type="button"
-                onClick={() => openCheckout(activeProduct)}
+                onClick={() => addToCart && addToCart(activeProduct, 6, 1)}
                 className="w-full sm:w-auto inline-flex items-center justify-center bg-[#F95738] hover:bg-[#E04729] text-white font-display font-bold text-sm tracking-widest uppercase px-10 py-4 rounded-full transition-all duration-200 shadow-md active:scale-95 cursor-pointer"
               >
                 ADD TO CART — ₹{activeProduct.price}

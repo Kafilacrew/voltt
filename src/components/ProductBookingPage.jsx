@@ -6,7 +6,7 @@ import { PRODUCTS } from '../data/products'
 import EmbeddedBookingWidget from './EmbeddedBookingWidget'
 
 export default function ProductBookingPage({ product }) {
-  const { openNutrition, openCheckout } = useAppContext()
+  const { openNutrition, openCheckout, addToCart } = useAppContext()
   const relatedProducts = PRODUCTS.filter((item) => item.eventSlug !== product.eventSlug)
 
   return (
@@ -71,14 +71,21 @@ export default function ProductBookingPage({ product }) {
                   {product.summary}
                 </p>
 
-                <div className="mt-6">
+                <div className="mt-6 space-y-2.5">
                   <button
                     type="button"
                     onClick={() => openCheckout(product)}
-                    className="w-full py-4 rounded-xl bg-[#153B75] hover:bg-[#0F2C59] text-white font-display font-extrabold text-sm uppercase tracking-wider shadow-lg flex items-center justify-center gap-2 transition-all hover:scale-[1.01]"
+                    className="w-full py-4 rounded-xl bg-[#153B75] hover:bg-[#0F2C59] text-white font-display font-extrabold text-sm uppercase tracking-wider shadow-lg flex items-center justify-center gap-2 transition-all hover:scale-[1.01] cursor-pointer"
                   >
                     <Zap className="w-4 h-4 text-[#D8A24A]" />
                     <span>Buy Now – Express Checkout</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => addToCart && addToCart(product, 6, 1)}
+                    className="w-full py-3 rounded-xl border-2 border-[#153B75] text-[#153B75] hover:bg-[#153B75] hover:text-white font-display font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center cursor-pointer"
+                  >
+                    Add to Cart (Pack of 6)
                   </button>
                   <p className="mt-2 text-center text-[11px] text-[#6B7280]">
                     ⚡ Express Shipping Available Across India
@@ -152,13 +159,22 @@ export default function ProductBookingPage({ product }) {
               <p className="text-xs text-[#6B7280]">
                 Real-time pincode serviceability and express shipping via Shiprocket.
               </p>
-              <button
-                type="button"
-                onClick={() => openCheckout(product)}
-                className="w-full py-4 rounded-xl bg-[#153B75] hover:bg-[#0F2C59] text-white font-display font-bold text-sm uppercase tracking-wider shadow-lg transition-all"
-              >
-                Proceed to Checkout
-              </button>
+              <div className="space-y-2.5">
+                <button
+                  type="button"
+                  onClick={() => openCheckout(product)}
+                  className="w-full py-4 rounded-xl bg-[#153B75] hover:bg-[#0F2C59] text-white font-display font-bold text-sm uppercase tracking-wider shadow-lg transition-all cursor-pointer"
+                >
+                  Proceed to Checkout
+                </button>
+                <button
+                  type="button"
+                  onClick={() => addToCart && addToCart(product, 6, 1)}
+                  className="w-full py-3 rounded-xl border-2 border-[#153B75] text-[#153B75] hover:bg-[#153B75] hover:text-white font-display font-bold text-xs uppercase tracking-wider transition-all cursor-pointer"
+                >
+                  Add to Cart
+                </button>
+              </div>
             </div>
 
           </div>

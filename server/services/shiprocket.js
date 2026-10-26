@@ -167,19 +167,25 @@ export async function createShiprocketOrder({
     weight: 0.5,
   }
 
-  // Simulation mode if credentials not configured
+  const isProduction = process.env.NODE_ENV === 'production'
+  const allowSimulation = process.env.ALLOW_SHIPROCKET_SIMULATION === 'true' || (!isProduction && !process.env.SHIPROCKET_EMAIL)
+
+  // Simulation mode strictly restricted to non-production test configurations
   if (!token) {
-    console.log('[Shiprocket Simulation] Mock order booked:', orderId)
-    return {
-      success: true,
-      simulated: true,
-      shiprocketOrderId: `SR-SIM-${Date.now()}`,
-      shipmentId: `SHP-SIM-${Math.floor(100000 + Math.random() * 900000)}`,
-      awbCode: `AWB${Math.floor(1000000000 + Math.random() * 9000000000)}`,
-      courierName: 'Voltt Express Shipping',
-      trackingUrl: `https://shiprocket.co/tracking/${orderId}`,
-      status: 'NEW',
+    if (!isProduction && allowSimulation) {
+      console.warn('[Shiprocket Simulation] Mock order booked in non-production:', orderId)
+      return {
+        success: true,
+        simulated: true,
+        shiprocketOrderId: `SR-SIM-${Date.now()}`,
+        shipmentId: `SHP-SIM-${Math.floor(100000 + Math.random() * 900000)}`,
+        awbCode: `AWB${Math.floor(1000000000 + Math.random() * 9000000000)}`,
+        courierName: 'Voltt Express Shipping',
+        trackingUrl: `https://shiprocket.co/tracking/${orderId}`,
+        status: 'NEW',
+      }
     }
+    throw new Error('Shiprocket credentials are not configured or authentication failed.')
   }
 
   try {
@@ -202,17 +208,8 @@ export async function createShiprocketOrder({
       status: data.status,
     }
   } catch (error) {
-    console.error('[Shiprocket Order Creation Error]:', error.response?.data || error.message)
-    // Fallback response for seamless client experience
-    return {
-      success: true,
-      simulated: true,
-      shiprocketOrderId: `SR-${orderId}`,
-      shipmentId: `SHP-${Date.now()}`,
-      awbCode: null,
-      courierName: 'Shiprocket Logistics',
-      trackingUrl: `https://shiprocket.co/tracking/${orderId}`,
-      status: 'PROCESSING',
-    }
+    const errorDetail = error.response?.data?.message || (typeof error.response?.data === 'string' ? error.response.data : error.message)
+    console.error('[Shiprocket Order Creation Error]:', errorDetail)
+    throw new Error(`Shiprocket logistics provider booking failed: ${errorDetail}`)
   }
 }

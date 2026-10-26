@@ -4,7 +4,7 @@ import { CheckSquare, Sparkles, ShieldCheck, Heart } from 'lucide-react'
 import { useAppContext } from '../App'
 
 export default function StockUp() {
-  const { openCheckout } = useAppContext()
+  const { openCheckout, addToCart } = useAppContext()
 
   const benefits = [
     {
@@ -95,7 +95,7 @@ export default function StockUp() {
             <div className="mt-8">
               <button
                 type="button"
-                onClick={() => openCheckout({ eventSlug: 'mixed-flavours', title: 'The Voltt Mixed Box', price: 735 })}
+                onClick={() => addToCart && addToCart({ id: 4, eventSlug: 'mixed-flavours', title: 'The Voltt Mixed Box', price: 735, image: '/assets/mix.png' }, 12, 1)}
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-[#2A1646] hover:bg-[#1F0F36] text-white font-display font-bold text-xs tracking-wider uppercase transition-all duration-200 shadow-md active:scale-95 cursor-pointer"
               >
                 <span>GET THE MIXED BOX — ₹735</span>

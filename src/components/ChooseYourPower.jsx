@@ -4,7 +4,7 @@ import { useAppContext } from '../App'
 import { PRODUCTS, getProductBySlug } from '../data/products'
 
 export default function ChooseYourPower() {
-  const { openCheckout } = useAppContext()
+  const { openCheckout, addToCart } = useAppContext()
 
   const products = [
     {
@@ -104,7 +104,7 @@ export default function ChooseYourPower() {
                   type="button"
                   onClick={() => {
                     const fullProduct = getProductBySlug(product.eventSlug) || PRODUCTS[0]
-                    openCheckout(fullProduct)
+                    addToCart && addToCart(fullProduct, 6, 1)
                   }}
                   className="w-full py-4 px-4 rounded-full border-2 border-[#F95738] text-[#F95738] hover:bg-[#F95738] hover:text-white font-display font-bold text-sm tracking-widest uppercase transition-all duration-200 flex items-center justify-center active:scale-95 cursor-pointer"
                 >

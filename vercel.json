@@ -1,0 +1,37 @@
+{
+  "version": 2,
+  "rewrites": [
+    {
+      "source": "/api/pincode/check",
+      "destination": "/api/pincode/check.js"
+    },
+    {
+      "source": "/api/checkout/create-order",
+      "destination": "/api/checkout/create-order.js"
+    },
+    {
+      "source": "/api/checkout/verify-and-ship",
+      "destination": "/api/checkout/verify-and-ship.js"
+    },
+    {
+      "source": "/api/webhooks/razorpay",
+      "destination": "/api/webhooks/razorpay.js"
+    },
+    {
+      "source": "/api/admin/orders",
+      "destination": "/api/admin/orders.js"
+    },
+    {
+      "source": "/api/admin/retry-shipment",
+      "destination": "/api/admin/retry-shipment.js"
+    },
+    {
+      "source": "/api/health",
+      "destination": "/api/health.js"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
