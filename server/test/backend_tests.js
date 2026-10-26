@@ -1193,6 +1193,57 @@ runTest('Account Button: Modal open does NOT auto-redirect to #/admin on mount o
   )
 })
 
+// --- Phase 9: Vercel Serverless Packaging & Admin Orders API Tests ---
+console.log('\n--- Phase 9: Vercel Serverless Packaging & Admin Orders API Tests ---')
+
+runTest('Vercel Packaging: vercel.json includes server/** in functions includeFiles', () => {
+  const vercelJsonPath = path.join(__dirname, '..', '..', 'vercel.json')
+  const vercelJson = JSON.parse(fs.readFileSync(vercelJsonPath, 'utf8'))
+
+  assert.ok(vercelJson.functions, 'vercel.json must define functions configuration')
+  assert.ok(
+    vercelJson.functions['api/**/*.js'] || vercelJson.functions['api/**'],
+    'vercel.json must configure api functions'
+  )
+  const fnConfig = vercelJson.functions['api/**/*.js'] || vercelJson.functions['api/**']
+  assert.strictEqual(
+    fnConfig.includeFiles,
+    'server/**',
+    'functions configuration must include server/**'
+  )
+})
+
+runTest('Package Dependencies: root package.json includes dotenv in dependencies', () => {
+  const pkgPath = path.join(__dirname, '..', '..', 'package.json')
+  const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'))
+
+  assert.ok(pkg.dependencies, 'package.json must have dependencies')
+  assert.ok(pkg.dependencies.dotenv, 'package.json must include dotenv for serverless module resolution')
+})
+
+runTest('Module Resolution: api/admin/orders.js imports cleanly without ERR_MODULE_NOT_FOUND', async () => {
+  const ordersApiModule = await import('../../api/admin/orders.js')
+  assert.ok(ordersApiModule.default, 'orders.js must export default handler function')
+  assert.strictEqual(typeof ordersApiModule.default, 'function', 'handler must be a function')
+})
+
+runTest('API Guard: GET /api/admin/orders rejects unauthenticated request with 401', async () => {
+  const ordersApiModule = await import('../../api/admin/orders.js')
+  const handler = ordersApiModule.default
+
+  let statusCode = null
+  let jsonResponse = null
+  const mockReq = { method: 'GET', headers: {} }
+  const mockRes = {
+    status: (code) => { statusCode = code; return mockRes },
+    json: (data) => { jsonResponse = data; return mockRes },
+  }
+
+  await handler(mockReq, mockRes)
+  assert.strictEqual(statusCode, 401, 'Unauthenticated request must return 401')
+  assert.strictEqual(jsonResponse.success, false, 'Response success must be false')
+})
+
 console.log(`\n========================================`)
 console.log(`Test Results: ${passedTests} Passed, ${failedTests} Failed`)
 console.log(`========================================\n`)

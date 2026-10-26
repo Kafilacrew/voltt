@@ -1,8 +1,12 @@
 import Razorpay from 'razorpay'
 import crypto from 'crypto'
-import dotenv from 'dotenv'
 
-dotenv.config()
+try {
+  const { default: dotenv } = await import('dotenv')
+  dotenv?.config()
+} catch (_) {
+  // In serverless runtimes (e.g. Vercel), env vars are provided natively via process.env
+}
 
 /**
  * Initialize Razorpay Instance

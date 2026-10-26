@@ -1,7 +1,11 @@
 import { createClient } from '@supabase/supabase-js'
-import dotenv from 'dotenv'
 
-dotenv.config()
+try {
+  const { default: dotenv } = await import('dotenv')
+  dotenv?.config()
+} catch (_) {
+  // In serverless runtimes (e.g. Vercel), env vars are provided natively via process.env
+}
 
 const supabaseUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY

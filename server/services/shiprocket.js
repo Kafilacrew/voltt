@@ -1,7 +1,11 @@
 import axios from 'axios'
-import dotenv from 'dotenv'
 
-dotenv.config()
+try {
+  const { default: dotenv } = await import('dotenv')
+  dotenv?.config()
+} catch (_) {
+  // In serverless runtimes (e.g. Vercel), env vars are provided natively via process.env
+}
 
 const SHIPROCKET_BASE_URL = 'https://apiv2.shiprocket.in/v1/external'
 
