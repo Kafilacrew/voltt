@@ -14,11 +14,13 @@ import {
   LogOut,
   ChevronRight,
   ExternalLink,
+  ShieldCheck,
 } from 'lucide-react'
 import { supabase, isSupabaseConfigured } from '../lib/supabaseClient'
 
 export default function CustomerAuthModal({ isOpen, onClose }) {
   const [session, setSession] = useState(null)
+  const [isAdminUser, setIsAdminUser] = useState(false)
   const [activeTab, setActiveTab] = useState('login') // 'login' | 'register' | 'forgot' | 'orders'
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -40,23 +42,63 @@ export default function CustomerAuthModal({ isOpen, onClose }) {
   const green = '#5D8C4A'
   const muted = '#71717A'
 
+  const checkIsAdmin = async (userId) => {
+    if (!supabase || !userId) return false
+    try {
+      const { data, error } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', userId)
+        .maybeSingle()
+
+      if (!error && data?.role === 'admin') {
+        return true
+      }
+    } catch (err) {
+      console.warn('[Admin Role Check Error]:', err)
+    }
+    return false
+  }
+
+  const navigateToAdminDashboard = () => {
+    if (onClose) onClose()
+    if (window.location.hash === '#/admin') {
+      window.dispatchEvent(new HashChangeEvent('hashchange'))
+    } else {
+      window.location.hash = '#/admin'
+    }
+  }
+
   useEffect(() => {
     if (!supabase) return
 
-    supabase.auth.getSession().then(({ data: { session: currentSession } }) => {
+    supabase.auth.getSession().then(async ({ data: { session: currentSession } }) => {
       setSession(currentSession)
       if (currentSession) {
-        setActiveTab('orders')
-        fetchCustomerOrders(currentSession.user.id)
+        const adminStatus = await checkIsAdmin(currentSession.user.id)
+        setIsAdminUser(adminStatus)
+        if (!adminStatus) {
+          setActiveTab('orders')
+          fetchCustomerOrders(currentSession.user.id)
+        }
       }
     })
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, currentSession) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, currentSession) => {
       setSession(currentSession)
       if (currentSession) {
+        const adminStatus = await checkIsAdmin(currentSession.user.id)
+        setIsAdminUser(adminStatus)
+        if (adminStatus) {
+          if (isOpen) {
+            navigateToAdminDashboard()
+          }
+          return
+        }
         setActiveTab('orders')
         fetchCustomerOrders(currentSession.user.id)
       } else {
+        setIsAdminUser(false)
         setOrders([])
         setActiveTab('login')
       }
@@ -64,6 +106,25 @@ export default function CustomerAuthModal({ isOpen, onClose }) {
 
     return () => subscription.unsubscribe()
   }, [])
+
+  useEffect(() => {
+    if (!isOpen || !supabase) return
+
+    if (session && isAdminUser) {
+      navigateToAdminDashboard()
+      return
+    }
+
+    supabase.auth.getSession().then(async ({ data: { session: currentSession } }) => {
+      if (currentSession) {
+        const adminStatus = await checkIsAdmin(currentSession.user.id)
+        setIsAdminUser(adminStatus)
+        if (adminStatus) {
+          navigateToAdminDashboard()
+        }
+      }
+    })
+  }, [isOpen, session, isAdminUser])
 
   const fetchCustomerOrders = async (userId) => {
     if (!supabase || !userId) return
@@ -103,6 +164,15 @@ export default function CustomerAuthModal({ isOpen, onClose }) {
       })
 
       if (error) throw error
+
+      const adminStatus = await checkIsAdmin(data.user.id)
+      setIsAdminUser(adminStatus)
+
+      if (adminStatus) {
+        setSuccessMessage('Administrator verified. Navigating to Admin Dashboard...')
+        navigateToAdminDashboard()
+        return
+      }
 
       setSuccessMessage('Welcome back! Successfully signed in.')
       setActiveTab('orders')
@@ -183,6 +253,7 @@ export default function CustomerAuthModal({ isOpen, onClose }) {
     setLoading(true)
     await supabase.auth.signOut()
     setSession(null)
+    setIsAdminUser(false)
     setOrders([])
     setActiveTab('login')
     setLoading(false)
@@ -209,7 +280,7 @@ export default function CustomerAuthModal({ isOpen, onClose }) {
               </div>
               <div>
                 <h3 className="font-display font-extrabold text-base tracking-tight text-white">
-                  {session ? 'Customer Account & Orders' : 'Customer Sign In'}
+                  {session ? (isAdminUser ? 'Administrator Account' : 'Customer Account & Orders') : 'Customer Sign In'}
                 </h3>
                 <p className="text-[11px] text-white/60 font-medium">
                   {session ? session.user.email : 'View your Voltt order history and shipping status'}
@@ -254,15 +325,27 @@ export default function CustomerAuthModal({ isOpen, onClose }) {
                     </p>
                   </div>
 
-                  <button
-                    onClick={handleLogout}
-                    disabled={loading}
-                    className="px-3 py-1.5 rounded-lg text-xs font-bold border border-[#E6DFD3] hover:bg-white flex items-center gap-1.5 transition-colors cursor-pointer"
-                    style={{ color: navy }}
-                  >
-                    <LogOut className="w-3.5 h-3.5" />
-                    <span>Log Out</span>
-                  </button>
+                  <div className="flex items-center gap-2">
+                    {isAdminUser && (
+                      <button
+                        type="button"
+                        onClick={navigateToAdminDashboard}
+                        className="px-3 py-1.5 rounded-lg text-xs font-bold bg-[#2A1646] hover:bg-[#1F0F36] text-white flex items-center gap-1.5 transition-colors cursor-pointer"
+                      >
+                        <ShieldCheck className="w-3.5 h-3.5 text-[#D9A441]" />
+                        <span>Admin Console</span>
+                      </button>
+                    )}
+                    <button
+                      onClick={handleLogout}
+                      disabled={loading}
+                      className="px-3 py-1.5 rounded-lg text-xs font-bold border border-[#E6DFD3] hover:bg-white flex items-center gap-1.5 transition-colors cursor-pointer"
+                      style={{ color: navy }}
+                    >
+                      <LogOut className="w-3.5 h-3.5" />
+                      <span>Log Out</span>
+                    </button>
+                  </div>
                 </div>
 
                 {loadingOrders ? (

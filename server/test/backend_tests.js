@@ -1033,6 +1033,145 @@ runTest('Reels Modal: Embed iframe uses key and dynamic shortcode URL', () => {
   )
 })
 
+// --- Phase 8: Admin Login Routing & Role Verification Tests ---
+console.log('\n--- Phase 8: Admin Login Routing & Role Verification Tests ---')
+
+const mockUserRolesDatabase = {
+  'admin-uuid-1': 'admin',
+  'customer-uuid-2': 'customer',
+}
+
+async function simulateCheckIsAdmin(supabaseClientMock, userId) {
+  const { data, error } = await supabaseClientMock
+    .from('user_roles')
+    .select('role')
+    .eq('user_id', userId)
+    .maybeSingle()
+
+  if (!error && data?.role === 'admin') {
+    return true
+  }
+  return false
+}
+
+function createMockSupabase(rolesTable) {
+  return {
+    from: (table) => ({
+      select: () => ({
+        eq: (col, val) => ({
+          maybeSingle: async () => {
+            if (table === 'user_roles' && col === 'user_id') {
+              const role = rolesTable[val]
+              return role ? { data: { role }, error: null } : { data: null, error: null }
+            }
+            return { data: null, error: new Error('Table not found') }
+          },
+        }),
+      }),
+    }),
+  }
+}
+
+runTest('Role Lookup: Admin user in public.user_roles resolves to isAdmin = true', async () => {
+  const mockClient = createMockSupabase(mockUserRolesDatabase)
+  const isAdmin = await simulateCheckIsAdmin(mockClient, 'admin-uuid-1')
+  assert.strictEqual(isAdmin, true, 'User with admin role in user_roles must resolve to true')
+})
+
+runTest('Role Lookup: Normal customer in public.user_roles resolves to isAdmin = false', async () => {
+  const mockClient = createMockSupabase(mockUserRolesDatabase)
+  const isAdmin = await simulateCheckIsAdmin(mockClient, 'customer-uuid-2')
+  assert.strictEqual(isAdmin, false, 'User with customer role must resolve to false')
+})
+
+runTest('Role Lookup: Unregistered user without role record defaults to isAdmin = false', async () => {
+  const mockClient = createMockSupabase(mockUserRolesDatabase)
+  const isAdmin = await simulateCheckIsAdmin(mockClient, 'unknown-uuid-999')
+  assert.strictEqual(isAdmin, false, 'Unknown user must resolve to false')
+})
+
+runTest('Login Flow Routing: Admin user is routed to #/admin and modal is closed', async () => {
+  let modalClosed = false
+  let destinationRoute = null
+  let customerOrdersFetched = false
+
+  async function handleLoginSimulation(userId, rolesTable) {
+    const mockClient = createMockSupabase(rolesTable)
+    const isAdmin = await simulateCheckIsAdmin(mockClient, userId)
+    if (isAdmin) {
+      modalClosed = true
+      destinationRoute = '#/admin'
+      return
+    }
+    customerOrdersFetched = true
+    destinationRoute = 'orders'
+  }
+
+  await handleLoginSimulation('admin-uuid-1', mockUserRolesDatabase)
+  assert.strictEqual(modalClosed, true, 'Modal must close for admin')
+  assert.strictEqual(destinationRoute, '#/admin', 'Destination must be #/admin for admin')
+  assert.strictEqual(customerOrdersFetched, false, 'Customer orders must NOT be fetched for admin')
+})
+
+runTest('Login Flow Routing: Customer user stays on account modal orders tab', async () => {
+  let modalClosed = false
+  let destinationRoute = null
+  let customerOrdersFetched = false
+
+  async function handleLoginSimulation(userId, rolesTable) {
+    const mockClient = createMockSupabase(rolesTable)
+    const isAdmin = await simulateCheckIsAdmin(mockClient, userId)
+    if (isAdmin) {
+      modalClosed = true
+      destinationRoute = '#/admin'
+      return
+    }
+    customerOrdersFetched = true
+    destinationRoute = 'orders'
+  }
+
+  await handleLoginSimulation('customer-uuid-2', mockUserRolesDatabase)
+  assert.strictEqual(modalClosed, false, 'Modal must remain open for customer')
+  assert.strictEqual(destinationRoute, 'orders', 'Destination must be orders tab for customer')
+  assert.strictEqual(customerOrdersFetched, true, 'Customer orders must be fetched for customer')
+})
+
+runTest('Security Check: CustomerAuthModal inspects public.user_roles and does not hardcode admin credentials', () => {
+  const authModalSrc = fs.readFileSync(
+    path.join(__dirname, '..', '..', 'src', 'components', 'CustomerAuthModal.jsx'),
+    'utf8'
+  )
+
+  // Verify query against user_roles
+  assert.strictEqual(
+    authModalSrc.includes(".from('user_roles')"),
+    true,
+    "CustomerAuthModal must query user_roles table"
+  )
+  assert.strictEqual(
+    authModalSrc.includes("role === 'admin'"),
+    true,
+    "CustomerAuthModal must check for role === 'admin'"
+  )
+  assert.strictEqual(
+    authModalSrc.includes("'#/admin'"),
+    true,
+    "CustomerAuthModal must route to #/admin"
+  )
+
+  // Verify no hardcoded credentials
+  assert.strictEqual(
+    authModalSrc.includes('admin@eatvoltt.com'),
+    false,
+    'CustomerAuthModal must not hardcode admin@eatvoltt.com'
+  )
+  assert.strictEqual(
+    authModalSrc.includes('admin@voltt.in'),
+    false,
+    'CustomerAuthModal must not hardcode admin@voltt.in'
+  )
+})
+
 console.log(`\n========================================`)
 console.log(`Test Results: ${passedTests} Passed, ${failedTests} Failed`)
 console.log(`========================================\n`)
