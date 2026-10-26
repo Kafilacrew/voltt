@@ -77,10 +77,8 @@ export default function CustomerAuthModal({ isOpen, onClose }) {
       if (currentSession) {
         const adminStatus = await checkIsAdmin(currentSession.user.id)
         setIsAdminUser(adminStatus)
-        if (!adminStatus) {
-          setActiveTab('orders')
-          fetchCustomerOrders(currentSession.user.id)
-        }
+        setActiveTab('orders')
+        fetchCustomerOrders(currentSession.user.id)
       }
     })
 
@@ -89,12 +87,6 @@ export default function CustomerAuthModal({ isOpen, onClose }) {
       if (currentSession) {
         const adminStatus = await checkIsAdmin(currentSession.user.id)
         setIsAdminUser(adminStatus)
-        if (adminStatus) {
-          if (isOpen) {
-            navigateToAdminDashboard()
-          }
-          return
-        }
         setActiveTab('orders')
         fetchCustomerOrders(currentSession.user.id)
       } else {
@@ -106,25 +98,6 @@ export default function CustomerAuthModal({ isOpen, onClose }) {
 
     return () => subscription.unsubscribe()
   }, [])
-
-  useEffect(() => {
-    if (!isOpen || !supabase) return
-
-    if (session && isAdminUser) {
-      navigateToAdminDashboard()
-      return
-    }
-
-    supabase.auth.getSession().then(async ({ data: { session: currentSession } }) => {
-      if (currentSession) {
-        const adminStatus = await checkIsAdmin(currentSession.user.id)
-        setIsAdminUser(adminStatus)
-        if (adminStatus) {
-          navigateToAdminDashboard()
-        }
-      }
-    })
-  }, [isOpen, session, isAdminUser])
 
   const fetchCustomerOrders = async (userId) => {
     if (!supabase || !userId) return
@@ -280,7 +253,7 @@ export default function CustomerAuthModal({ isOpen, onClose }) {
               </div>
               <div>
                 <h3 className="font-display font-extrabold text-base tracking-tight text-white">
-                  {session ? (isAdminUser ? 'Administrator Account' : 'Customer Account & Orders') : 'Customer Sign In'}
+                  {session ? 'Customer Account & Orders' : 'Customer Sign In'}
                 </h3>
                 <p className="text-[11px] text-white/60 font-medium">
                   {session ? session.user.email : 'View your Voltt order history and shipping status'}

@@ -1172,6 +1172,27 @@ runTest('Security Check: CustomerAuthModal inspects public.user_roles and does n
   )
 })
 
+runTest('Account Button: Modal open does NOT auto-redirect to #/admin on mount or session detection', () => {
+  const authModalSrc = fs.readFileSync(
+    path.join(__dirname, '..', '..', 'src', 'components', 'CustomerAuthModal.jsx'),
+    'utf8'
+  )
+
+  // Ensure no useEffect([isOpen...]) redirect exists
+  assert.strictEqual(
+    authModalSrc.includes('[isOpen, session, isAdminUser]'),
+    false,
+    'CustomerAuthModal must NOT automatically redirect on [isOpen] change'
+  )
+
+  // Ensure onAuthStateChange does not auto-redirect when modal is open
+  assert.strictEqual(
+    authModalSrc.includes('if (isOpen) {\n            navigateToAdminDashboard()'),
+    false,
+    'onAuthStateChange must NOT automatically redirect to admin dashboard'
+  )
+})
+
 console.log(`\n========================================`)
 console.log(`Test Results: ${passedTests} Passed, ${failedTests} Failed`)
 console.log(`========================================\n`)
