@@ -33,14 +33,14 @@ export default function DiwaliBanner() {
 
   return (
     <div
-      className="relative z-50 bg-[#1A0B2E] text-white border-b border-[#D9A441]/40 py-2 px-3 sm:px-4 overflow-hidden select-none"
+      className="relative z-50 w-full max-w-full bg-[#1A0B2E] text-white border-b border-[#D9A441]/40 py-2 px-3 sm:px-4 overflow-hidden select-none"
       role="region"
       aria-label="Diwali Festive Greeting"
     >
       {/* Subtle Warm Amber Gradient Accent Underlay */}
       <div className="absolute inset-0 bg-gradient-to-r from-[#D9A441]/10 via-[#F97316]/15 to-[#D9A441]/10 pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto flex items-center justify-between gap-2 relative">
+      <div className="w-full max-w-7xl mx-auto flex items-center justify-between gap-2 relative min-w-0">
         {/* Left Diya & Marigold grouping */}
         <div className="hidden sm:flex items-center gap-2 shrink-0">
           <Diya size="xs" showGlow={false} />
@@ -48,19 +48,19 @@ export default function DiwaliBanner() {
         </div>
 
         {/* Center Festive Message */}
-        <div className="flex-1 flex items-center justify-center gap-2 text-center text-xs tracking-wide">
+        <div className="flex-1 min-w-0 flex items-center justify-center gap-2 text-center text-xs tracking-wide">
           <span className="sm:hidden shrink-0">
             <Diya size="xs" showGlow={false} />
           </span>
 
-          <span className="inline-flex items-center gap-1.5 font-display font-medium text-[#FAF8F3]">
+          <span className="inline-flex items-center gap-1.5 font-display font-medium text-[#FAF8F3] min-w-0">
             <span className="hidden md:inline font-bold text-[#FBBF24]">
               ✨ Shubh Deepavali!
             </span>
             <span className="hidden sm:inline">
               Celebrate the Festival of Lights with clean nutrition, 0 added sugar &amp; essential electrolytes.
             </span>
-            <span className="sm:hidden font-medium">
+            <span className="sm:hidden font-medium text-[11px] leading-tight">
               Celebrate Diwali with Clean Fuel &amp; 0 Added Sugar ✨
             </span>
           </span>

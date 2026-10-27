@@ -315,11 +315,11 @@ function App() {
         cartGrandTotal,
       }}
     >
-      <div className="min-h-screen bg-[#F6F3EC] text-[#1F2937] selection:bg-[#123D87] selection:text-white">
+      <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#F6F3EC] text-[#1F2937] selection:bg-[#123D87] selection:text-white">
         <DiwaliBanner />
         <Nav />
         <AnnouncementBar />
-        <main>
+        <main className="w-full max-w-full">
           {activeRouteProduct ? (
             <ProductBookingPage product={activeRouteProduct} />
           ) : (
@@ -488,18 +488,19 @@ function App() {
           )}
         </AnimatePresence>
 
-        {/* WhatsApp Chat Button */}
+        {/* WhatsApp Chat Button - compact on mobile so it never covers product controls */}
         <button
           type="button"
-          className="fixed bottom-6 right-6 z-50 inline-flex items-center gap-3 rounded-full bg-[#123D87] text-white px-5 py-3.5 shadow-xl border border-[#D9A441]/40 hover:bg-[#0E2954] hover:scale-105 active:scale-95 transition-all duration-200"
+          aria-label="Chat with us on WhatsApp"
+          className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 inline-flex items-center justify-center gap-2.5 rounded-full bg-[#123D87] text-white p-2.5 sm:px-5 sm:py-3.5 shadow-xl border border-[#D9A441]/40 hover:bg-[#0E2954] hover:scale-105 active:scale-95 transition-all duration-200"
           onClick={() => {
             const message = 'Hi, I would like to chat about Voltt protein bars.'
             const url = `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(message)}`
             window.open(url, '_blank')
           }}
         >
-          <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-[#D9A441] text-[#123D87]">
-            <MessageCircle className="w-4 h-4 fill-[#123D87]" />
+          <span className="inline-flex items-center justify-center w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-[#D9A441] text-[#123D87]">
+            <MessageCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-[#123D87]" />
           </span>
           <span className="text-xs font-bold uppercase tracking-wider hidden sm:inline">Chat with us</span>
         </button>

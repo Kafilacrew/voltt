@@ -69,36 +69,42 @@ export default function FestiveParticles({ className = '' }) {
     }
     initBokeh()
 
-    // ── 2. Scattered Tiny Floating Glowing Particles ──
-    const particleCount = 32
+    // ── 2. Scattered Tiny Floating Glowing Particles (reduced count on mobile) ──
+    const isMobile = width < 768
+    const particleCount = isMobile ? 12 : 32
     const dustParticles = Array.from({ length: particleCount }, () => ({
       x: Math.random() * width,
       y: Math.random() * height,
-      size: 1.0 + Math.random() * 2.2,
-      baseAlpha: 0.2 + Math.random() * 0.45,
+      size: (isMobile ? 0.8 : 1.0) + Math.random() * (isMobile ? 1.4 : 2.2),
+      baseAlpha: (isMobile ? 0.15 : 0.2) + Math.random() * (isMobile ? 0.3 : 0.45),
       phase: Math.random() * Math.PI * 2,
       twinkleSpeed: 0.02 + Math.random() * 0.025,
-      vy: -(0.18 + Math.random() * 0.35), // Gently drift upwards
-      vx: (Math.random() - 0.5) * 0.2,
+      vy: -(0.15 + Math.random() * 0.3), // Gently drift upwards
+      vx: (Math.random() - 0.5) * 0.15,
       color: ['#FDE047', '#FBBF24', '#F59E0B', '#FEF08A', '#FFFFFF'][Math.floor(Math.random() * 5)],
-      isStar: Math.random() > 0.4,
+      isStar: Math.random() > 0.5,
     }))
 
-    // ── 3. Elegant Outer Edge Firework Bursts ──
+    // ── 3. Elegant Outer Edge Firework Bursts (minimal & infrequent on mobile) ──
     let fireworkRings = []
     let fireworkSparks = []
     let lastFireworkTime = Date.now() - 1500 // Spawn initial burst shortly after load
 
     function spawnFirework() {
-      // Pick peripheral safe zones: away from hero title text and CTA button
-      const safeCorners = [
-        // Upper Left outer margin
-        { x: width * (0.06 + Math.random() * 0.12), y: height * (0.14 + Math.random() * 0.18) },
-        // Upper Right margin above product
-        { x: width * (0.80 + Math.random() * 0.12), y: height * (0.12 + Math.random() * 0.18) },
-        // Far Right flank
-        { x: width * (0.85 + Math.random() * 0.09), y: height * (0.55 + Math.random() * 0.22) },
-      ]
+      // Pick peripheral safe zones: strictly outer edges away from hero text, carousel, & buttons
+      const safeCorners = isMobile
+        ? [
+            // Upper Right extreme margin only on mobile
+            { x: width * 0.88, y: height * 0.08 },
+          ]
+        : [
+            // Upper Left outer margin
+            { x: width * (0.06 + Math.random() * 0.12), y: height * (0.14 + Math.random() * 0.18) },
+            // Upper Right margin above product
+            { x: width * (0.80 + Math.random() * 0.12), y: height * (0.12 + Math.random() * 0.18) },
+            // Far Right flank
+            { x: width * (0.85 + Math.random() * 0.09), y: height * (0.55 + Math.random() * 0.22) },
+          ]
       const origin = safeCorners[Math.floor(Math.random() * safeCorners.length)]
 
       const palettes = [
@@ -113,26 +119,28 @@ export default function FestiveParticles({ className = '' }) {
         x: origin.x,
         y: origin.y,
         radius: 2,
-        maxRadius: 36 + Math.random() * 24,
-        alpha: 0.7,
+        maxRadius: (isMobile ? 20 : 36) + Math.random() * (isMobile ? 12 : 24),
+        alpha: isMobile ? 0.45 : 0.7,
         color: palette[1],
       })
 
-      // Star sparks
-      const sparkCount = 26 + Math.floor(Math.random() * 14)
+      // Star sparks (fewer & smaller on mobile)
+      const sparkCount = isMobile
+        ? 10 + Math.floor(Math.random() * 6)
+        : 26 + Math.floor(Math.random() * 14)
       for (let i = 0; i < sparkCount; i++) {
         const angle = (i / sparkCount) * Math.PI * 2 + (Math.random() * 0.25 - 0.12)
-        const speed = 1.4 + Math.random() * 2.8
+        const speed = (isMobile ? 1.0 : 1.4) + Math.random() * (isMobile ? 1.6 : 2.8)
         fireworkSparks.push({
           x: origin.x,
           y: origin.y,
           vx: Math.cos(angle) * speed,
           vy: Math.sin(angle) * speed,
-          alpha: 0.95,
-          decay: 0.012 + Math.random() * 0.009,
+          alpha: isMobile ? 0.65 : 0.95,
+          decay: (isMobile ? 0.018 : 0.012) + Math.random() * 0.009,
           gravity: 0.022,
           color: palette[Math.floor(Math.random() * palette.length)],
-          size: 1.6 + Math.random() * 1.8,
+          size: (isMobile ? 1.1 : 1.6) + Math.random() * (isMobile ? 1.0 : 1.8),
         })
       }
     }
@@ -223,9 +231,10 @@ export default function FestiveParticles({ className = '' }) {
         }
       }
 
-      // ── Step C: Firework Generation (every 3.8 to 4.8 seconds) ──
+      // ── Step C: Firework Generation (infrequent on mobile: every 9s vs 3.8s on desktop) ──
       const now = Date.now()
-      if (now - lastFireworkTime > 3800) {
+      const fireworkInterval = isMobile ? 9000 : 3800
+      if (now - lastFireworkTime > fireworkInterval) {
         spawnFirework()
         lastFireworkTime = now
       }

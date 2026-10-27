@@ -16,6 +16,7 @@ export const DIWALI_CONFIG = {
 
   // Component Toggles
   showFairyLights: true,
+  showSkyLanterns: true,
   showDiyas: true,
   showMarigolds: true,
   showRangoli: true,

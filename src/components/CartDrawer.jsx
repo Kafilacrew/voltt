@@ -54,13 +54,13 @@ export default function CartDrawer({ isOpen, onClose }) {
             className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity"
           />
 
-          <div className="fixed inset-y-0 right-0 flex max-w-full pl-10">
+          <div className="fixed inset-y-0 right-0 flex max-w-full pl-6 sm:pl-10">
             <motion.div
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 28, stiffness: 300 }}
-              className="w-screen max-w-md bg-[#FAF8F3] border-l border-[#E6DFD3] shadow-2xl flex flex-col"
+              className="w-full max-w-md bg-[#FAF8F3] border-l border-[#E6DFD3] shadow-2xl flex flex-col"
             >
               {/* Header */}
               <div

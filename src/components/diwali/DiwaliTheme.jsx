@@ -7,6 +7,7 @@ import GoldenFirework from './GoldenFirework'
 import DiwaliRocket from './DiwaliRocket'
 import MarigoldFloorArrangement from './MarigoldFloorArrangement'
 import Diya from './Diya'
+import SkyLantern from './SkyLantern'
 import MarigoldAccent from './MarigoldAccent'
 import Rangoli from './Rangoli'
 import FestiveParticles from './FestiveParticles'
@@ -17,6 +18,7 @@ export {
   DiwaliBanner,
   FairyLights,
   FestiveHeaderGarland,
+  SkyLantern,
   GoldenFirework,
   DiwaliRocket,
   MarigoldFloorArrangement,

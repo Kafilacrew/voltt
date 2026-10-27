@@ -223,6 +223,46 @@
   animation: sparkle-twinkle 3.2s ease-in-out infinite;
 }
 
+/* ─── Sky Lantern Floating Animations ─── */
+@keyframes lantern-float-gentle {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(1.8deg);
+  }
+}
+
+@keyframes lantern-float-subtle {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-6px) rotate(-1.5deg);
+  }
+}
+
+@keyframes lantern-tassel-sway {
+  0%, 100% {
+    transform: rotate(-1.2deg);
+  }
+  50% {
+    transform: rotate(1.8deg);
+  }
+}
+
+.animate-lantern-float-1 {
+  animation: lantern-float-gentle 7.5s ease-in-out infinite;
+}
+
+.animate-lantern-float-2 {
+  animation: lantern-float-subtle 9s ease-in-out infinite;
+}
+
+.animate-lantern-tassel {
+  transform-origin: 50% 90px;
+  animation: lantern-tassel-sway 4.5s ease-in-out infinite;
+}
 
 /* ─── Accessibility: Reduced Motion Support ─── */
 @media (prefers-reduced-motion: reduce) {
@@ -233,7 +273,12 @@
   .fairy-bulb-3,
   .diwali-carousel-aura,
   .animate-rocket-float,
-  .animate-firework-shimmer {
+  .animate-firework-shimmer,
+  .animate-sparkle-twinkle,
+  .animate-lantern-float-1,
+  .animate-lantern-float-2,
+  .animate-lantern-tassel {
     animation: none !important;
   }
 }
+

@@ -81,7 +81,7 @@ export default function StockUp() {
               )}
             </div>
 
-            <h2 className="font-display font-black text-4xl sm:text-5xl text-[#2A1646] tracking-tight uppercase">
+            <h2 className="font-display font-black text-3xl sm:text-4xl lg:text-5xl text-[#2A1646] tracking-tight uppercase">
               THE VOLTT MIXED BOX
             </h2>
 
