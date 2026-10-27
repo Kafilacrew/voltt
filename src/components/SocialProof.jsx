@@ -9,6 +9,7 @@ import {
   VolumeX,
   Sparkles,
 } from 'lucide-react'
+import { Rangoli } from './diwali/DiwaliTheme'
 
 // Inline SVG: Instagram icon
 function InstagramIcon({ className = 'w-4 h-4' }) {
@@ -228,9 +229,14 @@ export default function SocialProof() {
   return (
     <section
       id="socials"
-      className="bg-[#F5F2EB] py-20 lg:py-28 text-[#2A1646] border-b border-[#E6DFD3]/50 overflow-x-clip"
+      className="relative diwali-section-bg py-20 lg:py-28 text-[#2A1646] border-b border-[#E6DFD3]/50 overflow-hidden"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Corner Heritage Rangoli Motif */}
+      <div className="absolute -top-16 -right-16 sm:-top-20 sm:-right-20 z-0 pointer-events-none select-none">
+        <Rangoli size={280} opacity={0.16} />
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">

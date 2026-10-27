@@ -7,7 +7,10 @@ import EmbeddedBookingWidget from './EmbeddedBookingWidget'
 
 export default function ProductBookingPage({ product }) {
   const { openNutrition, openCheckout, addToCart } = useAppContext()
+  const [selectedPackSize, setSelectedPackSize] = useState(6)
   const relatedProducts = PRODUCTS.filter((item) => item.eventSlug !== product.eventSlug)
+
+  const packPrice = (product.price || 68) * selectedPackSize
 
   return (
     <section className="min-h-screen bg-[#F7F4EC] text-[#1F2937] py-10 md:py-16">
@@ -61,15 +64,50 @@ export default function ProductBookingPage({ product }) {
                   {product.title}
                 </h1>
 
-                <div className="mt-4 inline-flex items-baseline gap-2 px-4 py-2 rounded-xl bg-[#F7F4EC] border border-[#E8E3D5]">
-                  <span className="text-xs font-bold uppercase text-[#6B7280]">Price</span>
-                  <span className="font-display text-3xl font-black text-[#153B75]">₹{product.price}</span>
-                  <span className="text-xs text-[#6B7280]">/ bar</span>
+                <div className="mt-4 flex flex-wrap items-baseline gap-3">
+                  <div className="inline-flex items-baseline gap-2 px-4 py-2 rounded-xl bg-[#F7F4EC] border border-[#E8E3D5]">
+                    <span className="text-xs font-bold uppercase text-[#6B7280]">Pack Total</span>
+                    <span className="font-display text-3xl font-black text-[#153B75]">₹{packPrice}</span>
+                    <span className="text-xs text-[#6B7280]">/ Pack of {selectedPackSize}</span>
+                  </div>
+                  <span className="text-xs font-bold text-[#6B7280]">
+                    (₹{product.price || 68} per bar)
+                  </span>
                 </div>
 
                 <p className="mt-5 text-sm leading-relaxed text-[#6B7280]">
                   {product.summary}
                 </p>
+
+                {/* Pack Configuration Selector */}
+                <div className="mt-6 pt-4 border-t border-[#E8E3D5] space-y-2">
+                  <div className="flex items-center justify-between text-xs font-semibold text-[#153B75]">
+                    <span className="uppercase tracking-wider font-bold">Select Pack Size:</span>
+                    <span className="font-mono">{selectedPackSize} bars = ₹{packPrice}</span>
+                  </div>
+                  <div className="grid grid-cols-3 gap-2">
+                    {[6, 12, 24].map((size) => {
+                      const isSelected = selectedPackSize === size
+                      return (
+                        <button
+                          key={size}
+                          type="button"
+                          onClick={() => setSelectedPackSize(size)}
+                          className={`py-2 px-2 rounded-xl text-center text-xs font-bold transition-all border cursor-pointer ${
+                            isSelected
+                              ? 'bg-[#153B75] text-white border-[#153B75] shadow-sm'
+                              : 'bg-[#F7F4EC] text-[#153B75] border-[#E8E3D5] hover:bg-white'
+                          }`}
+                        >
+                          <div>Pack of {size}</div>
+                          <div className={`font-mono text-[10px] ${isSelected ? 'text-[#D8A24A]' : 'text-gray-500'}`}>
+                            ₹{(product.price || 68) * size}
+                          </div>
+                        </button>
+                      )
+                    })}
+                  </div>
+                </div>
 
                 <div className="mt-6 space-y-2.5">
                   <button
@@ -82,10 +120,10 @@ export default function ProductBookingPage({ product }) {
                   </button>
                   <button
                     type="button"
-                    onClick={() => addToCart && addToCart(product, 6, 1)}
+                    onClick={() => addToCart && addToCart(product, selectedPackSize, 1)}
                     className="w-full py-3 rounded-xl border-2 border-[#153B75] text-[#153B75] hover:bg-[#153B75] hover:text-white font-display font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center cursor-pointer"
                   >
-                    Add to Cart (Pack of 6)
+                    Add to Cart — Pack of {selectedPackSize} (₹{packPrice})
                   </button>
                   <p className="mt-2 text-center text-[11px] text-[#6B7280]">
                     ⚡ Express Shipping Available Across India

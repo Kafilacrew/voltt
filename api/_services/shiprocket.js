@@ -426,7 +426,7 @@ export async function createShiprocketOrder({
     length: 15,
     breadth: 10,
     height: 5,
-    weight: 0.5,
+    weight: Math.max(0.3, Math.round((orderItems.reduce((acc, i) => acc + (i.units || 1), 0) * 0.04 + 0.1) * 10) / 10),
   }
 
   const isProduction = process.env.NODE_ENV === 'production'

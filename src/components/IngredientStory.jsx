@@ -1,6 +1,7 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { Leaf } from 'lucide-react'
+import { Rangoli } from './diwali/DiwaliTheme'
 
 export default function IngredientStory() {
   const ingredients = [
@@ -13,8 +14,13 @@ export default function IngredientStory() {
   ]
 
   return (
-    <section id="nutrition" className="bg-[#F5F2EB] py-20 lg:py-28 text-[#2A1646] border-b border-[#E6DFD3]/50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="nutrition" className="relative diwali-section-bg py-20 lg:py-28 text-[#2A1646] border-b border-[#E6DFD3]/50 overflow-hidden">
+      {/* Corner Heritage Rangoli Motif */}
+      <div className="absolute -bottom-16 -right-16 sm:-bottom-20 sm:-right-20 z-0 pointer-events-none select-none">
+        <Rangoli size={280} opacity={0.16} />
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* 2-Column Layout matching reference screenshot #4 */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">

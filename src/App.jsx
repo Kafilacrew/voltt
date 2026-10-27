@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { X, MessageCircle, Zap } from 'lucide-react'
 import AnnouncementBar from './components/AnnouncementBar'
 import Nav from './components/Nav'
+import { DiwaliBanner } from './components/diwali/DiwaliTheme'
 import Hero from './components/Hero'
 import ChooseYourPower from './components/ChooseYourPower'
 import StockUp from './components/StockUp'
@@ -179,12 +180,17 @@ function App() {
         return nextCart
       }
 
+      const rawBarPrice = resolvedProduct.id === 4 ? 735 : (resolvedProduct.price || 68)
+      const packUnitPrice = resolvedProduct.id === 4 ? 735 : rawBarPrice * size
+
       const newItem = {
         id: cartItemId,
         productId: resolvedProduct.id,
+        flavour: resolvedProduct.title,
         title: resolvedProduct.title,
         image: resolvedProduct.image,
-        price: resolvedProduct.id === 4 ? 735 : (resolvedProduct.price || 68),
+        price: rawBarPrice,
+        unitPrice: packUnitPrice,
         packSize: size,
         quantity: qty,
       }
@@ -192,6 +198,44 @@ function App() {
     })
 
     showToast(`${resolvedProduct.title} (${size === 12 && resolvedProduct.id === 4 ? '12-Pack Mixed Box' : `Pack of ${size}`})`)
+  }
+
+  const updateCartPackSize = (itemId, newPackSize) => {
+    const size = Number(newPackSize)
+    if (![6, 12, 24].includes(size)) return
+
+    setCart((prevCart) => {
+      const itemIndex = prevCart.findIndex((item) => item.id === itemId)
+      if (itemIndex === -1) return prevCart
+
+      const currentItem = prevCart[itemIndex]
+      if (Number(currentItem.productId) === 4) return prevCart // Mixed Box is fixed 12 bars
+
+      const targetId = `${currentItem.productId}-${size}`
+      const existingTargetIndex = prevCart.findIndex((item) => item.id === targetId)
+
+      if (existingTargetIndex > -1 && existingTargetIndex !== itemIndex) {
+        // Merge quantities into the target variant
+        const nextCart = prevCart.filter((_, idx) => idx !== itemIndex)
+        const targetItem = nextCart.find((item) => item.id === targetId)
+        if (targetItem) {
+          targetItem.quantity = Math.min(50, targetItem.quantity + currentItem.quantity)
+        }
+        return nextCart
+      }
+
+      // Update pack size of current variant
+      return prevCart.map((item, idx) => {
+        if (idx !== itemIndex) return item
+        const perBarPrice = item.price || 68
+        return {
+          ...item,
+          id: targetId,
+          packSize: size,
+          unitPrice: perBarPrice * size,
+        }
+      })
+    })
   }
 
   const updateCartQuantity = (itemId, newQty) => {
@@ -259,6 +303,7 @@ function App() {
         cart,
         addToCart,
         updateCartQuantity,
+        updateCartPackSize,
         removeFromCart,
         clearCart,
         isCartOpen,
@@ -271,6 +316,7 @@ function App() {
       }}
     >
       <div className="min-h-screen bg-[#F6F3EC] text-[#1F2937] selection:bg-[#123D87] selection:text-white">
+        <DiwaliBanner />
         <Nav />
         <AnnouncementBar />
         <main>

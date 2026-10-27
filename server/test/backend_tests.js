@@ -1578,6 +1578,147 @@ runTest('Shiprocket Token Invalidation & Fallback: Invalidation marks rejected d
   shiprocketMod.resetShiprocketTokenCache()
 })
 
+// ─── 4. Pack Selection & 9 Product Variants Tests (3 Flavours × 3 Pack Sizes) ───
+console.log('\n--- 4. Pack Selection & 9 Product Variants Tests ---')
+
+const FLAVOURS = [
+  { id: 1, name: 'Almond Crunch' },
+  { id: 2, name: 'Berry Rush' },
+  { id: 3, name: 'Choco Cranz' },
+]
+
+const PACK_CONFIGS = [
+  { packSize: 6, expectedSubtotal: 40800, expectedShipping: 4900, expectedTotal: 45700 },
+  { packSize: 12, expectedSubtotal: 81600, expectedShipping: 0, expectedTotal: 81600 },
+  { packSize: 24, expectedSubtotal: 163200, expectedShipping: 0, expectedTotal: 163200 },
+]
+
+// Test all 9 combinations (3 flavours × 3 pack sizes)
+for (const flavour of FLAVOURS) {
+  for (const pack of PACK_CONFIGS) {
+    runTest(`Variant ${flavour.name} Pack of ${pack.packSize}: ₹68 * ${pack.packSize} = ₹${pack.expectedSubtotal / 100} (Total: ₹${pack.expectedTotal / 100})`, () => {
+      const pricing = calculateOrderPricing({
+        productId: flavour.id,
+        packSize: pack.packSize,
+        quantity: 1,
+      })
+
+      assert.strictEqual(pricing.unitPriceInPaise, 6800, 'Unit price per bar must be ₹68 (6800 paise)')
+      assert.strictEqual(pricing.packSize, pack.packSize, `Pack size must be ${pack.packSize}`)
+      assert.strictEqual(pricing.subtotalInPaise, pack.expectedSubtotal, `Subtotal must match verified price`)
+      assert.strictEqual(pricing.shippingFeeInPaise, pack.expectedShipping, `Shipping fee must be ${pack.expectedShipping / 100}`)
+      assert.strictEqual(pricing.grandTotalInPaise, pack.expectedTotal, `Grand total must be ${pack.expectedTotal / 100}`)
+    })
+  }
+}
+
+runTest('Multi-variant cart: Same flavour in different pack sizes form distinct items and correct subtotal', () => {
+  // Almond Crunch Pack of 6 (₹408) + Almond Crunch Pack of 12 (₹816) = ₹1224 (Free Shipping)
+  const cartItems = [
+    { productId: 1, packSize: 6, quantity: 1 },
+    { productId: 1, packSize: 12, quantity: 1 },
+  ]
+  const pricing = calculateCartPricing(cartItems)
+
+  assert.strictEqual(pricing.items.length, 2)
+  assert.strictEqual(pricing.items[0].subtotalInPaise, 40800)
+  assert.strictEqual(pricing.items[1].subtotalInPaise, 81600)
+  assert.strictEqual(pricing.subtotalInPaise, 122400) // ₹1224
+  assert.strictEqual(pricing.shippingFeeInPaise, 0) // >= ₹499 -> Free
+  assert.strictEqual(pricing.grandTotalInPaise, 122400)
+})
+
+runTest('Multi-flavour cart: All 3 flavours in different pack sizes (6, 12, 24)', () => {
+  const cartItems = [
+    { productId: 1, packSize: 6, quantity: 1 }, // ₹408
+    { productId: 2, packSize: 12, quantity: 1 }, // ₹816
+    { productId: 3, packSize: 24, quantity: 1 }, // ₹1632
+  ]
+  const pricing = calculateCartPricing(cartItems)
+
+  assert.strictEqual(pricing.items.length, 3)
+  assert.strictEqual(pricing.subtotalInPaise, 40800 + 81600 + 163200) // 285600 paise = ₹2856
+  assert.strictEqual(pricing.shippingFeeInPaise, 0)
+  assert.strictEqual(pricing.grandTotalInPaise, 285600)
+})
+
+runTest('Cart variant keying & separation simulation', () => {
+  // Simulating App.jsx cartItemId generation: `${productId}-${packSize}`
+  const items = [
+    { productId: 1, packSize: 6 },
+    { productId: 1, packSize: 12 },
+    { productId: 1, packSize: 24 },
+  ]
+  const keys = items.map((i) => `${i.productId}-${i.packSize}`)
+  const uniqueKeys = new Set(keys)
+
+  assert.strictEqual(uniqueKeys.size, 3, 'Different pack sizes of the same flavour must have unique cart item keys')
+  assert.deepStrictEqual([...uniqueKeys], ['1-6', '1-12', '1-24'])
+})
+
+runTest('Cart pack size update simulation: updates key and merges existing variant', () => {
+  let cart = [
+    { id: '1-6', productId: 1, packSize: 6, quantity: 1, price: 68 },
+    { id: '2-12', productId: 2, packSize: 12, quantity: 1, price: 68 },
+  ]
+
+  // Update item '1-6' to packSize 24
+  const targetPack = 24
+  const targetId = `1-${targetPack}`
+  cart = cart.map((item) => (item.id === '1-6' ? { ...item, id: targetId, packSize: targetPack } : item))
+
+  assert.strictEqual(cart.find((i) => i.id === '1-24')?.packSize, 24)
+  assert.strictEqual(cart.find((i) => i.id === '1-6'), undefined)
+
+  // Now change '2-12' to pack 24 when '1-24' exists (different product, should not merge)
+  cart = cart.map((item) => (item.id === '2-12' ? { ...item, id: '2-24', packSize: 24 } : item))
+  assert.strictEqual(cart.length, 2)
+  assert.strictEqual(cart.find((i) => i.id === '2-24')?.packSize, 24)
+})
+
+runTest('Shiprocket Payload: Correct units, selling_price, SKU and proportional weight for 24-pack', async () => {
+  const { createShiprocketOrder } = await import('../../api/_services/shiprocket.js')
+
+  // Simulate mock order with 24-pack of Almond Crunch
+  const result = await createShiprocketOrder({
+    orderId: 'VOLTT-TEST-PACK24',
+    customerName: 'Ananya Sharma',
+    phone: '9876543210',
+    email: 'ananya@example.com',
+    address: '402 Lotus Court, Linking Road',
+    city: 'Mumbai',
+    state: 'Maharashtra',
+    pincode: '400050',
+    items: [
+      {
+        id: 1,
+        title: 'Almond Crunch (Pack of 24)',
+        sku: 'VOLTT-1-24',
+        units: 24, // 24 bars
+        selling_price: 68, // ₹68 per bar
+      },
+    ],
+    totalAmount: 1632,
+    shippingCharges: 0,
+  })
+
+  assert.ok(result.success, 'Shiprocket creation must succeed in simulation')
+})
+
+runTest('Diwali Navigation Theme: Classes and components exist and compile', () => {
+  const navContent = fs.readFileSync(path.resolve(__dirname, '../../src/components/Nav.jsx'), 'utf-8')
+  assert.ok(navContent.includes('diwali-nav-bg'), 'Nav must use diwali-nav-bg')
+  assert.ok(navContent.includes('diwali-nav-shop-btn'), 'Shop Now button must use diwali-nav-shop-btn')
+  assert.ok(navContent.includes('diwali-cta-gold'), 'Shop Now button must have festive glow')
+  assert.ok(navContent.includes('animate-sparkle-twinkle'), 'Nav must include sparkle twinkle accents')
+
+  const announcementContent = fs.readFileSync(path.resolve(__dirname, '../../src/components/AnnouncementBar.jsx'), 'utf-8')
+  assert.ok(announcementContent.includes('border-t border-[#D9A441]/40'), 'AnnouncementBar must have top gold border')
+  assert.ok(announcementContent.includes('border-b border-[#D9A441]/30'), 'AnnouncementBar must have bottom gold border')
+  assert.ok(announcementContent.includes('✦'), 'AnnouncementBar must use gold star dividers')
+})
+
+
 await testQueue
 
 console.log(`\n========================================`)

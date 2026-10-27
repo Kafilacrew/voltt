@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Zap, Phone, Mail } from 'lucide-react'
+import { Diya, DIWALI_CONFIG, Rangoli, MarigoldAccent } from './diwali/DiwaliTheme'
 
 export default function Footer() {
   const year = new Date().getFullYear()
@@ -42,9 +43,14 @@ export default function Footer() {
   return (
     <footer
       id="contact"
-      className="bg-[#0F0F12] text-white/70 pt-14 pb-10 font-sans"
+      className="relative bg-[#0F0F12] text-white/70 pt-14 pb-10 font-sans overflow-hidden"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Corner Heritage Rangoli Motif */}
+      <div className="absolute -bottom-16 -right-16 z-0 pointer-events-none select-none">
+        <Rangoli size={260} opacity={0.08} />
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
         {/* Main grid: brand (wide) + 3 link columns */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-10 pb-12 border-b border-white/10">
@@ -117,7 +123,15 @@ export default function Footer() {
 
         {/* Bottom copyright bar */}
         <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-white/40 font-sans">
-          <p>© {year} Voltt Protein Co. All rights reserved.</p>
+          <div className="flex items-center gap-2">
+            <p>© {year} Voltt Protein Co. All rights reserved.</p>
+            {DIWALI_CONFIG.enabled && DIWALI_CONFIG.showFooterGreeting && (
+              <span className="hidden sm:inline-flex items-center gap-1.5 text-[#D9A441] pl-2 border-l border-white/10 font-medium">
+                <Diya size="xs" showGlow={false} />
+                Happy Diwali ✨
+              </span>
+            )}
+          </div>
           <div className="flex items-center gap-5">
             <button
               type="button"

@@ -1,6 +1,7 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { Star } from 'lucide-react'
+import { Rangoli, Diya } from './diwali/DiwaliTheme'
 
 const testimonials = [
   {
@@ -22,11 +23,22 @@ const testimonials = [
 
 export default function TrustedBy() {
   return (
-    <section id="trusted" className="bg-[#F5F2EB] py-20 lg:py-28 text-[#2A1646] border-b border-[#E6DFD3]/50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="trusted" className="relative diwali-section-bg py-20 lg:py-28 text-[#2A1646] border-b border-[#E6DFD3]/50 overflow-hidden">
+      {/* Corner Heritage Rangoli Motif */}
+      <div className="absolute -top-16 -left-16 sm:-top-20 sm:-left-20 z-0 pointer-events-none select-none">
+        <Rangoli size={280} opacity={0.16} />
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
+          <div className="flex items-center justify-center gap-1.5 mb-2.5">
+            <Diya size="xs" showGlow={false} />
+            <span className="font-mono text-[10px] font-bold tracking-widest text-[#B45309] uppercase">
+              REAL VERIFIED REVIEWS
+            </span>
+          </div>
           <h2 className="font-display font-black text-4xl sm:text-5xl text-[#2A1646] tracking-tight uppercase">
             WHAT PEOPLE ARE SAYING
           </h2>
@@ -41,13 +53,13 @@ export default function TrustedBy() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: idx * 0.1 }}
-              className="bg-white rounded-[28px] border border-[#E6DFD3]/60 p-8 shadow-xs hover:shadow-card transition-all duration-300 flex flex-col justify-between"
+              className="bg-white rounded-[28px] border border-[#E6DFD3]/60 p-8 shadow-xs diwali-card-glow transition-all duration-300 flex flex-col justify-between"
             >
               <div>
-                {/* 5-Star Row matching reference screenshot #5 */}
-                <div className="flex text-[#2A1646] gap-1 mb-5">
+                {/* 5-Star Row in Warm Festive Gold */}
+                <div className="flex text-[#D9A441] gap-1 mb-5">
                   {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 text-[#2A1646]" />
+                    <Star key={i} className="w-4 h-4 fill-[#D9A441] text-[#D9A441]" />
                   ))}
                 </div>
 

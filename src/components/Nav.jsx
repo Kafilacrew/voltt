@@ -40,21 +40,54 @@ export default function Nav() {
   return (
     <>
       <header
-        className={`sticky top-0 z-50 transition-all duration-300 ${
+        className={`sticky top-0 z-50 transition-all duration-300 relative ${
           scrolled
-            ? 'bg-[#F5F2EB]/95 backdrop-blur-md border-b border-[#E6DFD3] shadow-subtle py-3'
-            : 'bg-[#F5F2EB] py-5 border-b border-[#E6DFD3]/40'
+            ? 'diwali-nav-scrolled py-3 border-b border-[#D9A441]/35'
+            : 'diwali-nav-bg py-5 border-b border-[#D9A441]/25'
         }`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+        {/* Subtle Decorative Golden Corner Motifs (Rangoli Inspired) */}
+        <div className="absolute left-0 top-0 bottom-0 w-24 pointer-events-none select-none overflow-hidden opacity-20 hidden md:block">
+          <svg className="h-full w-auto text-[#D9A441]" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="1.2">
+            <circle cx="0" cy="50" r="40" strokeDasharray="3 3" />
+            <circle cx="0" cy="50" r="28" />
+            <circle cx="0" cy="50" r="16" />
+            <path d="M 0 10 L 0 90 M -40 50 L 40 50 M 0 25 L 25 50 L 0 75" />
+          </svg>
+        </div>
+
+        <div className="absolute right-0 top-0 bottom-0 w-24 pointer-events-none select-none overflow-hidden opacity-20 hidden md:block">
+          <svg className="h-full w-auto text-[#D9A441] ml-auto" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="1.2">
+            <circle cx="100" cy="50" r="40" strokeDasharray="3 3" />
+            <circle cx="100" cy="50" r="28" />
+            <circle cx="100" cy="50" r="16" />
+            <path d="M 100 10 L 100 90 M 60 50 L 140 50 M 100 25 L 75 50 L 100 75" />
+          </svg>
+        </div>
+
+        {/* Tiny Floating Gold Sparkle Stars */}
+        <div className="absolute left-6 top-3 pointer-events-none select-none hidden lg:block">
+          <svg className="w-3.5 h-3.5 text-[#D9A441] animate-sparkle-twinkle" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0L14.5 9.5L24 12L14.5 14.5L12 24L9.5 14.5L0 12L9.5 9.5L12 0Z" />
+          </svg>
+        </div>
+        <div className="absolute right-8 bottom-3 pointer-events-none select-none hidden lg:block" style={{ animationDelay: '1.5s' }}>
+          <svg className="w-3 h-3 text-[#D9A441] animate-sparkle-twinkle" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0L14.5 9.5L24 12L14.5 14.5L12 24L9.5 14.5L0 12L9.5 9.5L12 0Z" />
+          </svg>
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between relative z-10">
           
           {/* Logo Left */}
-          <a href="#" className="flex items-center group" aria-label="Voltt Homepage">
+          <a href="#" className="flex items-center gap-2 group" aria-label="Voltt Homepage">
             <img
               src="/assets/volt-logo-dark.png"
               alt="Voltt Logo"
               className="h-8 sm:h-9 w-auto object-contain transition-transform duration-200 group-hover:scale-105"
             />
+            {/* Delicate festive flourish dot */}
+            <span className="hidden sm:inline-block w-1.5 h-1.5 rounded-full bg-[#D9A441] shadow-[0_0_6px_#D9A441]" title="Festive Edition" />
           </a>
 
           {/* Desktop Nav Links Center */}
@@ -66,8 +99,10 @@ export default function Nav() {
                 <a
                   key={label}
                   href={href}
-                  className={`text-sm font-bold tracking-tight transition-colors duration-200 ${
-                    isActive ? 'text-[#2A1646]' : 'text-[#2A1646]/80 hover:text-[#F95738]'
+                  className={`text-sm font-bold tracking-tight transition-all duration-200 ${
+                    isActive
+                      ? 'text-[#2A1646] border-b-2 border-[#D9A441] pb-0.5'
+                      : 'text-[#2A1646]/80 hover:text-[#B45309]'
                   }`}
                 >
                   {label}
@@ -83,9 +118,9 @@ export default function Nav() {
               type="button"
               onClick={() => openAuth && openAuth()}
               aria-label="Customer Account & Order History"
-              className="flex items-center gap-1.5 text-xs font-bold text-[#2A1646] hover:text-[#F95738] transition-colors cursor-pointer py-1.5 px-2.5 rounded-lg hover:bg-black/5"
+              className="flex items-center gap-1.5 text-xs font-bold text-[#2A1646] hover:text-[#B45309] transition-colors cursor-pointer py-1.5 px-2.5 rounded-lg hover:bg-[#D9A441]/10 border border-transparent hover:border-[#D9A441]/30"
             >
-              <User className="w-4 h-4" />
+              <User className="w-4 h-4 text-[#D9A441]" />
               <span className="hidden sm:inline">Account</span>
             </button>
 
@@ -94,12 +129,12 @@ export default function Nav() {
               type="button"
               onClick={() => openCart && openCart()}
               aria-label={`View cart (${cartTotalCount || 0} items)`}
-              className="flex items-center gap-1.5 text-xs font-bold text-[#2A1646] hover:text-[#F95738] transition-colors cursor-pointer py-1.5 px-2 rounded-lg hover:bg-black/5"
+              className="flex items-center gap-1.5 text-xs font-bold text-[#2A1646] hover:text-[#B45309] transition-colors cursor-pointer py-1.5 px-2.5 rounded-lg hover:bg-[#D9A441]/10 border border-transparent hover:border-[#D9A441]/30"
             >
               <div className="relative flex items-center justify-center">
-                <ShoppingBag className="w-4 h-4" />
+                <ShoppingBag className="w-4 h-4 text-[#2A1646]" />
                 {cartTotalCount > 0 && (
-                  <span className="absolute -top-1.5 -right-2 min-w-[15px] h-3.5 px-1 rounded-full bg-[#F95738] text-white text-[9px] font-black flex items-center justify-center leading-none">
+                  <span className="absolute -top-1.5 -right-2 min-w-[15px] h-3.5 px-1 rounded-full bg-[#F95738] text-white text-[9px] font-black flex items-center justify-center leading-none shadow-[0_0_8px_rgba(249,87,56,0.6)]">
                     {cartTotalCount}
                   </span>
                 )}
@@ -107,9 +142,10 @@ export default function Nav() {
               <span className="hidden sm:inline">({cartTotalCount || 0})</span>
             </button>
 
+            {/* Glowing Festive Shop Now Button */}
             <a
               href="#shop"
-              className="inline-flex items-center justify-center px-5 sm:px-6 py-2.5 rounded-full bg-[#F95738] hover:bg-[#E04729] text-white font-display font-bold text-xs tracking-wider uppercase transition-all duration-200 shadow-md active:scale-95"
+              className="inline-flex items-center justify-center px-5 sm:px-6 py-2.5 rounded-full bg-[#F95738] hover:bg-[#E04729] text-white font-display font-bold text-xs tracking-wider uppercase transition-all duration-200 diwali-nav-shop-btn diwali-cta-gold active:scale-95 cursor-pointer"
             >
               SHOP NOW
             </a>
@@ -134,7 +170,7 @@ export default function Nav() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2 }}
-            className="fixed top-[68px] left-0 right-0 z-40 bg-[#F5F2EB] border-b border-[#E6DFD3] px-6 py-6 lg:hidden shadow-xl"
+            className="fixed top-[68px] left-0 right-0 z-40 bg-[#FAF7F0] border-b border-[#D9A441]/35 px-6 py-6 lg:hidden shadow-2xl backdrop-blur-md"
           >
             <div className="flex flex-col gap-3">
               {links.map(({ label, href }) => (
@@ -142,7 +178,7 @@ export default function Nav() {
                   key={label}
                   href={href}
                   onClick={() => setMobileOpen(false)}
-                  className="text-sm font-bold tracking-tight text-[#2A1646] hover:text-[#F95738] py-2 border-b border-[#E6DFD3]/50"
+                  className="text-sm font-bold tracking-tight text-[#2A1646] hover:text-[#B45309] py-2 border-b border-[#D9A441]/20"
                 >
                   {label}
                 </a>
@@ -154,7 +190,7 @@ export default function Nav() {
                   setMobileOpen(false)
                   if (openCart) openCart()
                 }}
-                className="flex items-center justify-between text-sm font-bold tracking-tight text-[#2A1646] hover:text-[#F95738] py-2 border-b border-[#E6DFD3]/50 text-left cursor-pointer"
+                className="flex items-center justify-between text-sm font-bold tracking-tight text-[#2A1646] hover:text-[#B45309] py-2 border-b border-[#D9A441]/20 text-left cursor-pointer"
               >
                 <div className="flex items-center gap-2">
                   <ShoppingBag className="w-4 h-4 text-[#F95738]" />
@@ -171,7 +207,7 @@ export default function Nav() {
                   setMobileOpen(false)
                   if (openAuth) openAuth()
                 }}
-                className="flex items-center gap-2 text-sm font-bold tracking-tight text-[#2A1646] hover:text-[#F95738] py-2 border-b border-[#E6DFD3]/50 text-left cursor-pointer"
+                className="flex items-center gap-2 text-sm font-bold tracking-tight text-[#2A1646] hover:text-[#B45309] py-2 border-b border-[#D9A441]/20 text-left cursor-pointer"
               >
                 <User className="w-4 h-4 text-[#D9A441]" />
                 <span>My Account &amp; Order History</span>
@@ -180,7 +216,7 @@ export default function Nav() {
               <a
                 href="#shop"
                 onClick={() => setMobileOpen(false)}
-                className="mt-2 flex items-center justify-center gap-2 w-full py-3.5 rounded-full bg-[#F95738] text-white text-xs font-bold tracking-wider uppercase shadow-md"
+                className="mt-2 flex items-center justify-center gap-2 w-full py-3.5 rounded-full bg-[#F95738] hover:bg-[#E04729] text-white text-xs font-bold tracking-wider uppercase diwali-nav-shop-btn diwali-cta-gold"
               >
                 <span>SHOP NOW</span>
               </a>

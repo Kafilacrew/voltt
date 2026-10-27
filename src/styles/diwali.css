@@ -1,0 +1,239 @@
+/**
+ * Voltt Diwali Festive Stylesheet
+ * Self-contained, lightweight CSS for Diwali lighting, diyas, sparkles, and gold accents.
+ * Easily removable after the festival by unlinking this file or setting DIWALI_CONFIG.enabled = false.
+ */
+
+/* ─── Hero Multi-layered Festive Background (Ivory, Champagne & Gold) ─── */
+.diwali-hero-bg {
+  background-color: #F8F4EC;
+  background-image: 
+    radial-gradient(ellipse 75% 60% at 88% 18%, rgba(254, 240, 138, 0.45) 0%, rgba(251, 191, 36, 0.20) 40%, transparent 75%),
+    radial-gradient(ellipse 65% 50% at 8% 85%, rgba(245, 158, 11, 0.26) 0%, rgba(249, 115, 22, 0.12) 40%, transparent 70%),
+    radial-gradient(circle 480px at 50% 25%, rgba(255, 255, 255, 0.8) 0%, transparent 75%),
+    linear-gradient(180deg, #FCFAF4 0%, #F8F3E8 50%, #F4ECE0 100%);
+}
+
+/* ─── Section Background Tint ─── */
+.diwali-section-bg {
+  background-color: #F6F2E9;
+  background-image: 
+    radial-gradient(circle 600px at 95% 10%, rgba(254, 240, 138, 0.18) 0%, transparent 70%),
+    radial-gradient(circle 500px at 5% 90%, rgba(245, 158, 11, 0.12) 0%, transparent 60%);
+}
+
+/* ─── Product Carousel Ambient Lighting Aura ─── */
+@keyframes carousel-aura-pulse {
+  0%, 100% {
+    opacity: 0.70;
+    transform: scale(0.98);
+  }
+  50% {
+    opacity: 0.98;
+    transform: scale(1.03);
+  }
+}
+
+.diwali-carousel-aura {
+  animation: carousel-aura-pulse 4.8s ease-in-out infinite;
+}
+
+/* ─── Rocket Floating Hover Animation ─── */
+@keyframes rocket-float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(-1.5deg);
+  }
+}
+
+.animate-rocket-float {
+  animation: rocket-float 4s ease-in-out infinite;
+}
+
+/* ─── Firework Shimmer Radiance ─── */
+@keyframes firework-shimmer {
+  0%, 100% {
+    opacity: 0.75;
+    transform: scale(0.98);
+  }
+  50% {
+    opacity: 0.96;
+    transform: scale(1.02);
+  }
+}
+
+.animate-firework-shimmer {
+  animation: firework-shimmer 3.6s ease-in-out infinite;
+}
+
+/* ─── Diya Flame Flicker ─── */
+@keyframes diya-flame {
+  0%, 100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 0.95;
+    filter: drop-shadow(0 0 6px #F59E0B) drop-shadow(0 0 14px rgba(249, 115, 22, 0.7));
+  }
+  25% {
+    transform: scale(1.06, 0.94) rotate(-1.5deg);
+    opacity: 1;
+    filter: drop-shadow(0 0 9px #FBBF24) drop-shadow(0 0 18px rgba(249, 115, 22, 0.85));
+  }
+  50% {
+    transform: scale(0.95, 1.05) rotate(1deg);
+    opacity: 0.92;
+    filter: drop-shadow(0 0 6px #F59E0B) drop-shadow(0 0 12px rgba(249, 115, 22, 0.6));
+  }
+  75% {
+    transform: scale(1.04, 0.97) rotate(-0.5deg);
+    opacity: 0.98;
+    filter: drop-shadow(0 0 8px #FBBF24) drop-shadow(0 0 16px rgba(249, 115, 22, 0.75));
+  }
+}
+
+@keyframes diya-aura {
+  0%, 100% {
+    opacity: 0.50;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(1.15);
+  }
+}
+
+/* ─── Fairy Lights Glow (Rich Warm Luminance) ─── */
+@keyframes fairy-glow-1 {
+  0%, 100% {
+    opacity: 0.82;
+    filter: drop-shadow(0 0 6px #FBBF24) drop-shadow(0 0 14px rgba(251, 191, 36, 0.75));
+    transform: scale(0.97);
+  }
+  50% {
+    opacity: 1;
+    filter: drop-shadow(0 0 12px #FDE047) drop-shadow(0 0 24px rgba(245, 158, 11, 0.95));
+    transform: scale(1.05);
+  }
+}
+
+@keyframes fairy-glow-2 {
+  0%, 100% {
+    opacity: 1;
+    filter: drop-shadow(0 0 10px #F97316) drop-shadow(0 0 20px rgba(249, 115, 22, 0.9));
+    transform: scale(1.04);
+  }
+  50% {
+    opacity: 0.75;
+    filter: drop-shadow(0 0 5px #F97316) drop-shadow(0 0 12px rgba(249, 115, 22, 0.65));
+    transform: scale(0.95);
+  }
+}
+
+@keyframes fairy-glow-3 {
+  0%, 100% {
+    opacity: 0.85;
+    filter: drop-shadow(0 0 7px #F59E0B) drop-shadow(0 0 16px rgba(245, 158, 11, 0.8));
+  }
+  50% {
+    opacity: 1;
+    filter: drop-shadow(0 0 13px #FEF08A) drop-shadow(0 0 26px rgba(217, 164, 65, 0.98));
+  }
+}
+
+/* ─── Class Utilities ─── */
+.animate-diya-flame {
+  transform-origin: center bottom;
+  animation: diya-flame 2.2s ease-in-out infinite;
+}
+
+.animate-diya-aura {
+  transform-origin: center;
+  animation: diya-aura 3s ease-in-out infinite;
+}
+
+.fairy-bulb-1 {
+  animation: fairy-glow-1 2.6s ease-in-out infinite;
+}
+
+.fairy-bulb-2 {
+  animation: fairy-glow-2 2.2s ease-in-out infinite;
+}
+
+.fairy-bulb-3 {
+  animation: fairy-glow-3 3.0s ease-in-out infinite;
+}
+
+/* ─── Product Card & Button Festive Accents ─── */
+.diwali-card-glow {
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.diwali-card-glow:hover {
+  border-color: rgba(217, 164, 65, 0.65) !important;
+  box-shadow: 0 14px 34px -10px rgba(217, 164, 65, 0.22), 0 2px 8px rgba(249, 115, 22, 0.08) !important;
+}
+
+.diwali-gold-border {
+  border-color: rgba(217, 164, 65, 0.5);
+}
+
+.diwali-badge-glow {
+  box-shadow: 0 0 12px rgba(217, 164, 65, 0.35);
+}
+
+.diwali-cta-gold:hover {
+  box-shadow: 0 0 22px rgba(217, 164, 65, 0.45), 0 4px 14px rgba(249, 87, 56, 0.35) !important;
+}
+
+/* ─── Navigation Bar Diwali Theme ─── */
+.diwali-nav-bg {
+  background: linear-gradient(180deg, rgba(253, 251, 247, 0.98) 0%, rgba(250, 246, 238, 0.95) 100%);
+  box-shadow: 0 4px 20px -2px rgba(217, 164, 65, 0.12), 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+.diwali-nav-scrolled {
+  background: rgba(253, 250, 245, 0.96);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 6px 24px -3px rgba(217, 164, 65, 0.18), 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.diwali-nav-shop-btn {
+  box-shadow: 0 0 16px rgba(249, 87, 56, 0.40), 0 0 10px rgba(217, 164, 65, 0.35);
+}
+
+.diwali-nav-shop-btn:hover {
+  box-shadow: 0 0 24px rgba(249, 87, 56, 0.60), 0 0 14px rgba(217, 164, 65, 0.65);
+}
+
+/* ─── Micro Sparkle Twinkle ─── */
+@keyframes sparkle-twinkle {
+  0%, 100% {
+    opacity: 0.25;
+    transform: scale(0.8) rotate(0deg);
+  }
+  50% {
+    opacity: 0.95;
+    transform: scale(1.15) rotate(15deg);
+  }
+}
+
+.animate-sparkle-twinkle {
+  animation: sparkle-twinkle 3.2s ease-in-out infinite;
+}
+
+
+/* ─── Accessibility: Reduced Motion Support ─── */
+@media (prefers-reduced-motion: reduce) {
+  .animate-diya-flame,
+  .animate-diya-aura,
+  .fairy-bulb-1,
+  .fairy-bulb-2,
+  .fairy-bulb-3,
+  .diwali-carousel-aura,
+  .animate-rocket-float,
+  .animate-firework-shimmer {
+    animation: none !important;
+  }
+}

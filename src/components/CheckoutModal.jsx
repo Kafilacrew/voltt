@@ -390,19 +390,26 @@ export default function CheckoutModal({
             items: isCartMode
               ? cartItems.map((item) => {
                   const isMixed12 = Number(item.productId || item.id) === 4 && Number(item.packSize) === 12
+                  const currentPackSize = Number(item.packSize) || (isMixed12 ? 12 : 6)
                   return {
                     id: Number(item.productId || item.id),
-                    title: item.title,
-                    quantity: Number(item.quantity) * Number(item.packSize),
+                    title: `${item.title} (${isMixed12 ? '12-Pack Mixed Box' : `Pack of ${currentPackSize}`})`,
+                    pack_size: currentPackSize,
+                    quantity: Number(item.quantity) * currentPackSize,
+                    units: Number(item.quantity) * currentPackSize,
                     price: isMixed12 ? Math.round(735 / 12) : (item.price || 68),
+                    sku: `VOLTT-${item.productId || item.id}-${currentPackSize}`,
                   }
                 })
               : [
                   {
                     id: selectedProduct.id,
-                    title: selectedProduct.title,
+                    title: `${selectedProduct.title} (Pack of ${packSize})`,
+                    pack_size: packSize,
                     quantity: quantity * packSize,
-                    price: selectedProduct.price || 68,
+                    units: quantity * packSize,
+                    price: selectedProduct.id === 4 && packSize === 12 ? Math.round(735 / 12) : (selectedProduct.price || 68),
+                    sku: `VOLTT-${selectedProduct.id}-${packSize}`,
                   },
                 ],
             totalAmount: amount / 100,
@@ -507,30 +514,39 @@ export default function CheckoutModal({
                       <div className="space-y-2.5 max-h-60 overflow-y-auto pr-1">
                         {cartItems.map((item) => {
                           const isMixed12 = Number(item.productId || item.id) === 4 && Number(item.packSize) === 12
-                          const itemUnit = isMixed12 ? 735 : (item.price || 68) * item.packSize
-                          const itemTotal = itemUnit * item.quantity
+                          const currentPackSize = Number(item.packSize) || (isMixed12 ? 12 : 6)
+                          const totalBars = currentPackSize * Number(item.quantity)
+                          const perBarPrice = isMixed12 ? Math.round(735 / 12) : (item.price || 68)
+                          const itemUnit = isMixed12 ? 735 : (item.price || 68) * currentPackSize
+                          const itemTotal = itemUnit * Number(item.quantity)
+
                           return (
                             <div
                               key={item.id}
-                              className="flex items-center justify-between p-3 rounded-xl gap-3"
+                              className="flex items-center justify-between p-3.5 rounded-xl gap-3"
                               style={{ background: creamCard, border: `1px solid ${border}` }}
                             >
                               <img
                                 src={item.image || '/assets/almond-crunch.png'}
                                 alt={item.title}
-                                className="w-11 h-11 object-contain rounded-lg p-0.5 bg-white border border-[#E6DFD3]"
+                                className="w-12 h-12 object-contain rounded-lg p-0.5 bg-white border border-[#E6DFD3] shrink-0"
                               />
                               <div className="flex-1 min-w-0">
                                 <p className="font-display font-bold text-xs truncate" style={{ color: navy }}>
                                   {item.title}
                                 </p>
-                                <p className="text-[11px]" style={{ color: muted }}>
-                                  {isMixed12 ? '12-Pack Mixed Box' : `Pack of ${item.packSize}`} × {item.quantity}
+                                <p className="text-[11px] font-medium" style={{ color: muted }}>
+                                  {isMixed12 ? '12-Pack Mixed Box' : `Pack of ${currentPackSize}`} • <strong className="text-[#2A1646]">{totalBars} bars total</strong>
+                                </p>
+                                <p className="text-[10px] text-gray-500 font-mono mt-0.5">
+                                  ₹{itemUnit}/pack (₹{perBarPrice}/bar) × {item.quantity}
                                 </p>
                               </div>
-                              <span className="font-mono text-xs font-bold shrink-0" style={{ color: navy }}>
-                                ₹{itemTotal}
-                              </span>
+                              <div className="text-right shrink-0">
+                                <span className="font-mono text-xs font-black block" style={{ color: navy }}>
+                                  ₹{itemTotal.toLocaleString('en-IN')}
+                                </span>
+                              </div>
                             </div>
                           )
                         })}
@@ -622,6 +638,26 @@ export default function CheckoutModal({
                                 +
                               </button>
                             </div>
+                          </div>
+                        </div>
+
+                        {/* Line Item Detailed Calculation Box */}
+                        <div className="mt-3 p-3.5 rounded-xl bg-[#FAF8F3] border border-[#E6DFD3] text-xs space-y-1.5">
+                          <div className="flex items-center justify-between font-bold" style={{ color: navy }}>
+                            <span className="font-display">
+                              {selectedProduct.title} ({selectedProduct.id === 4 && packSize === 12 ? '12-Pack Mixed Box' : `Pack of ${packSize}`})
+                            </span>
+                            <span className="font-mono text-sm">
+                              ₹{subtotal.toLocaleString('en-IN')}
+                            </span>
+                          </div>
+                          <div className="flex items-center justify-between text-[11px] text-gray-600 font-mono">
+                            <span>
+                              {packSize * quantity} bars total ({quantity} × {packSize} bars)
+                            </span>
+                            <span>
+                              Unit: ₹{selectedProduct.id === 4 && packSize === 12 ? '735' : (selectedProduct.price || 68) * packSize}/pack (₹{selectedProduct.id === 4 && packSize === 12 ? Math.round(735 / 12) : (selectedProduct.price || 68)}/bar)
+                            </span>
                           </div>
                         </div>
                       </>

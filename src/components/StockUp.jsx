@@ -2,6 +2,7 @@ import React from 'react'
 import { motion } from 'framer-motion'
 import { CheckSquare, Sparkles, ShieldCheck, Heart } from 'lucide-react'
 import { useAppContext } from '../App'
+import { Diya, DIWALI_CONFIG, Rangoli } from './diwali/DiwaliTheme'
 
 export default function StockUp() {
   const { openCheckout, addToCart } = useAppContext()
@@ -29,8 +30,13 @@ export default function StockUp() {
   ]
 
   return (
-    <section id="stock-up" className="bg-[#F5F2EB] py-20 lg:py-28 text-[#2A1646] border-b border-[#E6DFD3]/50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="stock-up" className="relative diwali-section-bg py-20 lg:py-28 text-[#2A1646] border-b border-[#E6DFD3]/50 overflow-hidden">
+      {/* Corner Heritage Rangoli Motif */}
+      <div className="absolute -bottom-16 -left-16 sm:-bottom-20 sm:-left-20 z-0 pointer-events-none select-none">
+        <Rangoli size={280} opacity={0.18} />
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Mixed Box Section matching reference screenshot #3 */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center mb-24">
@@ -63,8 +69,16 @@ export default function StockUp() {
             transition={{ duration: 0.5 }}
             className="lg:col-span-6 flex flex-col justify-center"
           >
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#2A1646]/10 text-[#2A1646] font-mono text-[10px] font-bold tracking-widest uppercase mb-4 w-max">
-              <span>BEST SELLER</span>
+            <div className="flex flex-wrap items-center gap-2 mb-4">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#2A1646]/10 text-[#2A1646] font-mono text-[10px] font-bold tracking-widest uppercase w-max">
+                <span>BEST SELLER</span>
+              </div>
+              {DIWALI_CONFIG.enabled && (
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#D9A441]/15 text-[#92400E] border border-[#D9A441]/40 font-mono text-[10px] font-bold tracking-widest uppercase">
+                  <Diya size="xs" showGlow={false} />
+                  <span>DIWALI GIFTING CHOICE</span>
+                </div>
+              )}
             </div>
 
             <h2 className="font-display font-black text-4xl sm:text-5xl text-[#2A1646] tracking-tight uppercase">

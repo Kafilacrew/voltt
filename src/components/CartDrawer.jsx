@@ -16,6 +16,7 @@ export default function CartDrawer({ isOpen, onClose }) {
   const {
     cart,
     updateCartQuantity,
+    updateCartPackSize,
     removeFromCart,
     cartSubtotal,
     cartShippingFee,
@@ -171,9 +172,34 @@ export default function CartDrawer({ isOpen, onClose }) {
                                 <Trash2 className="w-3.5 h-3.5" />
                               </button>
                             </div>
-                            <span className="inline-block px-2 py-0.5 rounded-md bg-[#2A1646]/5 text-[#2A1646] font-mono text-[10px] font-bold mt-1">
-                              {isMixed12 ? '12-Pack Mixed Box' : `Pack of ${item.packSize}`}
-                            </span>
+
+                            {/* Pack Size Display & Selector */}
+                            <div className="flex flex-wrap items-center gap-2 mt-1.5">
+                              {isMixed12 ? (
+                                <span className="inline-block px-2 py-0.5 rounded-md bg-[#2A1646]/5 text-[#2A1646] font-mono text-[10px] font-bold">
+                                  12-Pack Mixed Box
+                                </span>
+                              ) : (
+                                <div className="flex items-center gap-1.5">
+                                  <label htmlFor={`pack-select-${item.id}`} className="text-[10px] font-bold text-gray-400 uppercase">
+                                    Pack:
+                                  </label>
+                                  <select
+                                    id={`pack-select-${item.id}`}
+                                    value={item.packSize}
+                                    onChange={(e) => updateCartPackSize && updateCartPackSize(item.id, Number(e.target.value))}
+                                    className="text-[11px] font-bold font-mono bg-[#FAF8F3] border border-[#E6DFD3] rounded-md px-1.5 py-0.5 text-[#2A1646] cursor-pointer focus:outline-none focus:border-[#2A1646]"
+                                  >
+                                    <option value={6}>Pack of 6 (₹408)</option>
+                                    <option value={12}>Pack of 12 (₹816)</option>
+                                    <option value={24}>Pack of 24 (₹1,632)</option>
+                                  </select>
+                                </div>
+                              )}
+                              <span className="text-[10px] text-gray-500 font-mono">
+                                • {item.packSize * item.quantity} bars total
+                              </span>
+                            </div>
                           </div>
 
                           <div className="flex items-center justify-between mt-3 pt-2 border-t border-gray-100">
@@ -204,6 +230,9 @@ export default function CartDrawer({ isOpen, onClose }) {
                             <div className="text-right">
                               <span className="font-mono font-black text-sm text-[#2A1646]">
                                 ₹{itemLineTotal.toLocaleString('en-IN')}
+                              </span>
+                              <span className="block text-[10px] text-gray-400 font-mono">
+                                ₹{itemUnitTotal}/pack
                               </span>
                             </div>
                           </div>

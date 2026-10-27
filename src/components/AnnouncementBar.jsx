@@ -27,8 +27,11 @@ export default function AnnouncementBar() {
   ]
 
   return (
-    <div className="bg-[#0F2C59] text-white py-2.5 px-4 overflow-hidden border-b border-white/10 select-none">
-      <div className="max-w-7xl mx-auto flex items-center justify-center">
+    <div className="relative bg-gradient-to-r from-[#0C1E3C] via-[#0F2C59] to-[#0C1E3C] text-white py-2 px-4 overflow-hidden border-t border-[#D9A441]/40 border-b border-[#D9A441]/30 select-none shadow-[0_2px_10px_rgba(217,164,65,0.08)]">
+      {/* Subtle Warm Amber / Gold Shimmer Accent Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-r from-[#D9A441]/8 via-[#F97316]/10 to-[#D9A441]/8 pointer-events-none" />
+
+      <div className="max-w-7xl mx-auto flex items-center justify-center relative z-10">
         
         {/* Subtle Marquee Ticker */}
         <div className="flex items-center gap-8 overflow-hidden">
@@ -40,10 +43,10 @@ export default function AnnouncementBar() {
             {[...items, ...items].map((item, idx) => {
               const IconComp = item.icon
               return (
-                <div key={idx} className="flex items-center gap-2 text-xs font-bold tracking-widest text-[#F7F4EC]">
-                  <IconComp className="w-3.5 h-3.5 text-[#D8A24A] shrink-0" />
+                <div key={idx} className="flex items-center gap-2 text-xs font-bold tracking-widest text-[#FAF8F3]">
+                  <IconComp className="w-3.5 h-3.5 text-[#FBBF24] shrink-0 drop-shadow-[0_0_6px_rgba(251,191,36,0.5)]" />
                   <div>{item.content}</div>
-                  <span className="text-[#D8A24A]/40 mx-2">•</span>
+                  <span className="text-[#D9A441]/70 mx-3">✦</span>
                 </div>
               )
             })}
