@@ -1482,6 +1482,102 @@ runTest('Shiprocket Payload Math: Items subtotal matches sum of units * selling_
   assert.ok(result.shiprocketOrderId)
 })
 
+runTest('Shiprocket Token Sanitization: cleanToken strips quotes, whitespace, and leading Bearer prefix', async () => {
+  const { cleanToken } = await import('../../api/_services/shiprocket.js')
+  assert.strictEqual(cleanToken('  "Bearer eyJhbGciOi..."  '), 'eyJhbGciOi...')
+  assert.strictEqual(cleanToken("'Bearer eyJhbGciOi...'"), 'eyJhbGciOi...')
+  assert.strictEqual(cleanToken('bearer my-custom-token'), 'my-custom-token')
+  assert.strictEqual(cleanToken('my-clean-token'), 'my-clean-token')
+  assert.strictEqual(cleanToken(null), '')
+})
+
+runTest('Shiprocket Safe Diagnostics: sanitizeUpstreamResponse redacts secrets, passwords, tokens, and PII', async () => {
+  const { sanitizeUpstreamResponse } = await import('../../api/_services/shiprocket.js')
+  const dirtyResponse = {
+    status_code: 403,
+    message: 'Access forbidden',
+    token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+    jwt_secret: 'super_secret_value',
+    password: 'merchant_password_123',
+    email: 'admin@eatvoltt.com',
+    phone: '9876543210',
+    address: '123 Test Street, Bandra West',
+    customer_name: 'Rahul Sharma',
+    nested: {
+      auth_token: 'secret_nested_token',
+      api_key: 'key_xyz',
+      error_code: 'ACCESS_DENIED',
+    },
+  }
+
+  const clean = sanitizeUpstreamResponse(dirtyResponse)
+  assert.strictEqual(clean.status_code, 403)
+  assert.strictEqual(clean.message, 'Access forbidden')
+  assert.strictEqual(clean.token, '[REDACTED]')
+  assert.strictEqual(clean.jwt_secret, '[REDACTED]')
+  assert.strictEqual(clean.password, '[REDACTED]')
+  assert.strictEqual(clean.nested.auth_token, '[REDACTED]')
+  assert.strictEqual(clean.nested.api_key, '[REDACTED]')
+  assert.strictEqual(clean.nested.error_code, 'ACCESS_DENIED')
+  assert.notStrictEqual(clean.email, 'admin@eatvoltt.com')
+  assert.notStrictEqual(clean.phone, '9876543210')
+  assert.notStrictEqual(clean.customer_name, 'Rahul Sharma')
+})
+
+runTest('Shiprocket 403 Access Forbidden Guidance: Formats clear diagnostic when API user credentials or direct token required', async () => {
+  const shiprocketMod = await import('../../api/_services/shiprocket.js')
+  const prevEnv = process.env.NODE_ENV
+  process.env.NODE_ENV = 'production'
+  process.env.SHIPROCKET_EMAIL = 'admin@eatvoltt.com'
+  process.env.SHIPROCKET_PASSWORD = 'some_password'
+  delete process.env.SHIPROCKET_TOKEN
+  shiprocketMod.resetShiprocketTokenCache()
+
+  let errorCaught = null
+  try {
+    await shiprocketMod.createShiprocketOrder({
+      orderId: 'VOLTT-DIAG-TEST',
+      customerName: 'Test Customer',
+      phone: '9876543210',
+      pincode: '400001',
+      items: [],
+      totalAmount: 408,
+    })
+  } catch (err) {
+    errorCaught = err
+  }
+
+  process.env.NODE_ENV = prevEnv
+  delete process.env.SHIPROCKET_EMAIL
+  delete process.env.SHIPROCKET_PASSWORD
+  shiprocketMod.resetShiprocketTokenCache()
+
+  assert.ok(errorCaught, 'Must catch authentication error')
+  // Should provide diagnostic guidance on API User vs master account or direct token
+  assert.match(errorCaught.message, /Access forbidden|Settings > API|SHIPROCKET_TOKEN|dedicated API User/i)
+})
+
+runTest('Shiprocket Token Invalidation & Fallback: Invalidation marks rejected direct token and allows fallback', async () => {
+  const shiprocketMod = await import('../../api/_services/shiprocket.js')
+  shiprocketMod.resetShiprocketTokenCache()
+
+  process.env.SHIPROCKET_TOKEN = 'Bearer test_direct_token_123'
+  let token1 = await shiprocketMod.getShiprocketToken()
+  assert.strictEqual(token1, 'test_direct_token_123')
+
+  // Invalidate on 401/403
+  shiprocketMod.invalidateShiprocketToken(token1)
+
+  // With direct token rejected and no credentials configured, should return null
+  delete process.env.SHIPROCKET_EMAIL
+  delete process.env.SHIPROCKET_PASSWORD
+  let token2 = await shiprocketMod.getShiprocketToken()
+  assert.strictEqual(token2, null)
+
+  delete process.env.SHIPROCKET_TOKEN
+  shiprocketMod.resetShiprocketTokenCache()
+})
+
 await testQueue
 
 console.log(`\n========================================`)

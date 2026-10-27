@@ -9,36 +9,116 @@ try {
 
 const SHIPROCKET_BASE_URL = 'https://apiv2.shiprocket.in/v1/external'
 
+export const SHIPROCKET_HEADERS = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 (Voltt Logistics)',
+}
+
 let cachedToken = null
 let tokenExpiresAt = null
 let lastAuthErrorDetail = null
+let lastFailedDirectToken = null
 
 function cleanEnv(val) {
   if (!val || typeof val !== 'string') return ''
   return val.trim().replace(/^["']|["']$/g, '')
 }
 
+export function cleanToken(val) {
+  if (!val || typeof val !== 'string') return ''
+  return val
+    .trim()
+    .replace(/^["']|["']$/g, '')
+    .replace(/^Bearer\s+/i, '')
+    .trim()
+}
+
 /**
- * Invalidate cached token on 401 or token refresh
+ * Invalidate cached token on 401/403 or token refresh
  */
-export function invalidateShiprocketToken() {
+export function invalidateShiprocketToken(failedToken = null) {
   cachedToken = null
   tokenExpiresAt = null
+  if (failedToken) {
+    lastFailedDirectToken = cleanToken(failedToken)
+  }
+}
+
+export function resetShiprocketTokenCache() {
+  cachedToken = null
+  tokenExpiresAt = null
+  lastFailedDirectToken = null
+  lastAuthErrorDetail = null
+}
+
+/**
+ * Safely sanitize upstream API responses to remove tokens, credentials, and customer PII
+ */
+export function sanitizeUpstreamResponse(data) {
+  if (!data) return null
+  if (typeof data === 'string') {
+    const cleanStr = data.trim()
+    return cleanStr.length > 300 ? `${cleanStr.slice(0, 300)}... [truncated]` : cleanStr
+  }
+  if (typeof data !== 'object') return data
+
+  const sanitized = {}
+  for (const [key, val] of Object.entries(data)) {
+    if (/token|auth|secret|password|key|otp|credential|jwt/i.test(key)) {
+      sanitized[key] = '[REDACTED]'
+    } else if (/email|phone|contact|address|name/i.test(key)) {
+      sanitized[key] = typeof val === 'string' && val.length > 3 ? `${val.slice(0, 2)}***` : '[REDACTED]'
+    } else if (val && typeof val === 'object' && !Array.isArray(val)) {
+      sanitized[key] = sanitizeUpstreamResponse(val)
+    } else if (Array.isArray(val)) {
+      sanitized[key] = val.map((item) => (typeof item === 'object' ? sanitizeUpstreamResponse(item) : item))
+    } else {
+      sanitized[key] = val
+    }
+  }
+  return sanitized
+}
+
+/**
+ * Safe diagnostic logging for upstream HTTP responses (never logs secrets or PII)
+ */
+export function logSafeUpstreamDiagnostic(operation, error) {
+  const status = error.response?.status || 'NO_STATUS'
+  const statusText = error.response?.statusText || ''
+  const sanitizedBody = sanitizeUpstreamResponse(error.response?.data)
+  const cfRay = error.response?.headers?.['cf-ray'] || null
+  const contentType = error.response?.headers?.['content-type'] || null
+
+  console.error(`[Shiprocket Diagnostic - ${operation}]`, {
+    status,
+    statusText,
+    cfRay,
+    contentType,
+    sanitizedBody,
+    errorMessage: error.message,
+  })
 }
 
 /**
  * Get Shiprocket JWT Authentication Token with caching, alias support, and sanitization
  */
 export async function getShiprocketToken() {
-  // 1. Check for pre-generated / direct Bearer token in environment variables
-  const directToken = cleanEnv(
+  // 1. Check for pre-generated / direct Bearer token in environment variables (unless previously failed)
+  const rawDirectToken =
     process.env.SHIPROCKET_TOKEN ||
     process.env.SHIPROCKET_API_TOKEN ||
     process.env.SHIPROCKET_BEARER_TOKEN ||
     process.env.SHIPROCKET_AUTH_TOKEN
-  )
 
-  if (directToken && directToken !== 'your-token-here' && !directToken.includes('your_')) {
+  const directToken = cleanToken(rawDirectToken)
+
+  if (
+    directToken &&
+    directToken !== 'your-token-here' &&
+    !directToken.includes('your_') &&
+    directToken !== lastFailedDirectToken
+  ) {
     lastAuthErrorDetail = null
     return directToken
   }
@@ -76,9 +156,7 @@ export async function getShiprocketToken() {
       `${SHIPROCKET_BASE_URL}/auth/login`,
       { email, password },
       {
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: SHIPROCKET_HEADERS,
         timeout: 15000,
       }
     )
@@ -95,11 +173,27 @@ export async function getShiprocketToken() {
       return null
     }
   } catch (error) {
-    const errorMsg =
+    logSafeUpstreamDiagnostic('auth/login', error)
+
+    const status = error.response?.status
+    const rawMsg =
       error.response?.data?.message ||
       (typeof error.response?.data === 'string' ? error.response.data : error.message)
-    lastAuthErrorDetail = errorMsg
-    console.error('[Shiprocket Auth Error]:', errorMsg)
+
+    if (status === 403 && /access forbidden/i.test(rawMsg)) {
+      lastAuthErrorDetail =
+        'Access forbidden (403): Shiprocket rejected login. External API requires a dedicated API User created under Shiprocket Settings > API > Add New API User (with Orders/Shipments modules enabled), NOT primary dashboard login credentials. Alternatively, configure a direct SHIPROCKET_TOKEN in Vercel.'
+    } else if (status === 403 && /invalid email and password/i.test(rawMsg)) {
+      lastAuthErrorDetail =
+        'Invalid credentials (403): Email and password combination not recognized by Shiprocket. Ensure you are using credentials for a dedicated API User created in Shiprocket Settings > API (not your primary dashboard login), or configure a direct SHIPROCKET_TOKEN in Vercel.'
+    } else if (status === 403 && /blocked/i.test(rawMsg)) {
+      lastAuthErrorDetail = `Access forbidden (403): ${rawMsg}. Check IP restrictions in Shiprocket Settings > API.`
+    } else if (status === 401) {
+      lastAuthErrorDetail = `Unauthorized (401): ${rawMsg || 'Invalid credentials or inactive API user.'}`
+    } else {
+      lastAuthErrorDetail = `${status ? `HTTP ${status}: ` : ''}${rawMsg}`
+    }
+
     return null
   }
 }
@@ -112,6 +206,7 @@ export async function getShiprocketPickupLocations(token) {
   try {
     const response = await axios.get(`${SHIPROCKET_BASE_URL}/settings/company/pickup`, {
       headers: {
+        ...SHIPROCKET_HEADERS,
         Authorization: `Bearer ${token}`,
       },
       timeout: 10000,
@@ -119,7 +214,7 @@ export async function getShiprocketPickupLocations(token) {
     const addresses = response.data?.data?.shipping_address || []
     return addresses.map((addr) => addr.pickup_location).filter(Boolean)
   } catch (err) {
-    console.warn('[Shiprocket Pickup Locations Warning]:', err.response?.data?.message || err.message)
+    logSafeUpstreamDiagnostic('settings/company/pickup', err)
     return []
   }
 }
@@ -154,6 +249,7 @@ export async function checkPincodeServiceability({ deliveryPincode, pickupPincod
   try {
     const response = await axios.get(`${SHIPROCKET_BASE_URL}/courier/serviceability`, {
       headers: {
+        ...SHIPROCKET_HEADERS,
         Authorization: `Bearer ${token}`,
       },
       params: {
@@ -180,7 +276,10 @@ export async function checkPincodeServiceability({ deliveryPincode, pickupPincod
         : 'Delivery is currently not available to this pincode.',
     }
   } catch (error) {
-    console.error('[Shiprocket Pincode Error]:', error.response?.data || error.message)
+    logSafeUpstreamDiagnostic('courier/serviceability', error)
+    if (error.response?.status === 401 || error.response?.status === 403) {
+      invalidateShiprocketToken()
+    }
     const isValid = /^\d{6}$/.test(deliveryPincode)
     return {
       success: true,
@@ -357,8 +456,8 @@ export async function createShiprocketOrder({
     payload.order_id = targetOrderId
     const res = await axios.post(`${SHIPROCKET_BASE_URL}/orders/create/adhoc`, payload, {
       headers: {
+        ...SHIPROCKET_HEADERS,
         Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
       },
       timeout: 20000,
     })
@@ -407,8 +506,9 @@ export async function createShiprocketOrder({
       status: data.status,
     }
   } catch (error) {
-    if (error.response?.status === 401) {
-      invalidateShiprocketToken()
+    logSafeUpstreamDiagnostic('orders/create/adhoc', error)
+    if (error.response?.status === 401 || error.response?.status === 403) {
+      invalidateShiprocketToken(token)
     }
     const errorDetail = extractErrorDetail(error)
     console.error('[Shiprocket Order Creation Error]:', errorDetail)
