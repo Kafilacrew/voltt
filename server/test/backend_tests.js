@@ -13,17 +13,21 @@ console.log('🧪 Starting Voltt Backend & Checkout Integration Test Suite...\n'
 
 let passedTests = 0
 let failedTests = 0
+let testQueue = Promise.resolve()
 
 function runTest(name, fn) {
-  try {
-    fn()
-    console.log(`✅ [PASS] ${name}`)
-    passedTests++
-  } catch (err) {
-    console.error(`❌ [FAIL] ${name}`)
-    console.error(`   Error: ${err.message}`)
-    failedTests++
-  }
+  testQueue = testQueue.then(async () => {
+    try {
+      await fn()
+      console.log(`✅ [PASS] ${name}`)
+      passedTests++
+    } catch (err) {
+      console.error(`❌ [FAIL] ${name}`)
+      console.error(`   Error: ${err.message}`)
+      failedTests++
+    }
+  })
+  return testQueue
 }
 
 // 1. Pricing Engine Tests
@@ -1329,6 +1333,156 @@ runTest('Admin Dashboard Token Lifecycle: AdminDashboard has getValidAdminToken 
   assert.ok(code.includes('onAuthStateChange'), 'AdminDashboard must subscribe to auth state changes')
   assert.ok(code.includes('isRetry'), 'AdminDashboard must support retry on 401')
 })
+
+// Phase 12: Shiprocket Integration & Resilience Tests
+console.log('\n--- Phase 12: Shiprocket Integration & Resilience Tests ---')
+
+runTest('Shiprocket Token: Accepts direct SHIPROCKET_TOKEN without requiring login endpoint', async () => {
+  const shiprocketMod = await import('../../api/_services/shiprocket.js')
+  const prevToken = process.env.SHIPROCKET_TOKEN
+  process.env.SHIPROCKET_TOKEN = 'test_direct_jwt_token_12345'
+  shiprocketMod.invalidateShiprocketToken()
+
+  const token = await shiprocketMod.getShiprocketToken()
+  assert.strictEqual(token, 'test_direct_jwt_token_12345')
+
+  if (prevToken) process.env.SHIPROCKET_TOKEN = prevToken
+  else delete process.env.SHIPROCKET_TOKEN
+  shiprocketMod.invalidateShiprocketToken()
+})
+
+runTest('Shiprocket Token: Accepts direct SHIPROCKET_API_TOKEN alias', async () => {
+  const shiprocketMod = await import('../../api/_services/shiprocket.js')
+  delete process.env.SHIPROCKET_TOKEN
+  process.env.SHIPROCKET_API_TOKEN = 'test_api_token_67890'
+  shiprocketMod.invalidateShiprocketToken()
+
+  const token = await shiprocketMod.getShiprocketToken()
+  assert.strictEqual(token, 'test_api_token_67890')
+
+  delete process.env.SHIPROCKET_API_TOKEN
+  shiprocketMod.invalidateShiprocketToken()
+})
+
+runTest('Shiprocket Credentials: Trims whitespace and removes wrapping quotes from env vars', async () => {
+  const shiprocketMod = await import('../../api/_services/shiprocket.js')
+  process.env.SHIPROCKET_TOKEN = '  "test_quoted_token_abc"  '
+  shiprocketMod.invalidateShiprocketToken()
+
+  const token = await shiprocketMod.getShiprocketToken()
+  assert.strictEqual(token, 'test_quoted_token_abc')
+
+  delete process.env.SHIPROCKET_TOKEN
+  shiprocketMod.invalidateShiprocketToken()
+})
+
+runTest('Shiprocket Invalidation: invalidateShiprocketToken resets memory cache', async () => {
+  const shiprocketMod = await import('../../api/_services/shiprocket.js')
+  process.env.SHIPROCKET_TOKEN = 'token_v1'
+  let token = await shiprocketMod.getShiprocketToken()
+  assert.strictEqual(token, 'token_v1')
+
+  shiprocketMod.invalidateShiprocketToken()
+  process.env.SHIPROCKET_TOKEN = 'token_v2'
+  token = await shiprocketMod.getShiprocketToken()
+  assert.strictEqual(token, 'token_v2')
+
+  delete process.env.SHIPROCKET_TOKEN
+  shiprocketMod.invalidateShiprocketToken()
+})
+
+runTest('Shiprocket Missing Credentials: Throws explicit error in production when credentials missing', async () => {
+  const shiprocketMod = await import('../../api/_services/shiprocket.js')
+  const prevEnv = process.env.NODE_ENV
+  process.env.NODE_ENV = 'production'
+  delete process.env.SHIPROCKET_TOKEN
+  delete process.env.SHIPROCKET_API_TOKEN
+  delete process.env.SHIPROCKET_EMAIL
+  delete process.env.SHIPROCKET_PASSWORD
+  delete process.env.ALLOW_SHIPROCKET_SIMULATION
+  shiprocketMod.invalidateShiprocketToken()
+
+  let errorCaught = null
+  try {
+    await shiprocketMod.createShiprocketOrder({
+      orderId: 'VOLTT-PROD-TEST',
+      customerName: 'Test Customer',
+      phone: '9876543210',
+      pincode: '560034',
+      items: [],
+      totalAmount: 408,
+    })
+  } catch (err) {
+    errorCaught = err
+  }
+
+  process.env.NODE_ENV = prevEnv
+  assert.ok(errorCaught, 'Must throw error when credentials missing in production')
+  assert.match(errorCaught.message, /Shiprocket credentials are not configured or authentication failed/i)
+  assert.match(errorCaught.message, /SHIPROCKET_EMAIL/i)
+})
+
+runTest('Shiprocket Payload Normalization: Non-production simulation returns valid mock tracking and AWB', async () => {
+  const shiprocketMod = await import('../../api/_services/shiprocket.js')
+  const prevEnv = process.env.NODE_ENV
+  process.env.NODE_ENV = 'development'
+  process.env.ALLOW_SHIPROCKET_SIMULATION = 'true'
+  delete process.env.SHIPROCKET_TOKEN
+  delete process.env.SHIPROCKET_EMAIL
+  shiprocketMod.invalidateShiprocketToken()
+
+  const result = await shiprocketMod.createShiprocketOrder({
+    orderId: 'VOLTT-SIM-PAYLOAD-TEST',
+    customerName: 'Rahul Verma',
+    phone: '+91-98765-43210',
+    pincode: '560 034',
+    items: [],
+    totalAmount: 408,
+  })
+
+  process.env.NODE_ENV = prevEnv
+  delete process.env.ALLOW_SHIPROCKET_SIMULATION
+
+  assert.strictEqual(result.success, true)
+  assert.strictEqual(result.simulated, true)
+  assert.ok(result.shiprocketOrderId)
+  assert.ok(result.shipmentId)
+  assert.ok(result.awbCode)
+  assert.ok(result.trackingUrl.includes('VOLTT-SIM-PAYLOAD-TEST'))
+})
+
+runTest('Shiprocket Payload Math: Items subtotal matches sum of units * selling_price with shipping separated', async () => {
+  const shiprocketMod = await import('../../api/_services/shiprocket.js')
+  const prevEnv = process.env.NODE_ENV
+  process.env.NODE_ENV = 'development'
+  process.env.ALLOW_SHIPROCKET_SIMULATION = 'true'
+  delete process.env.SHIPROCKET_TOKEN
+  delete process.env.SHIPROCKET_EMAIL
+  shiprocketMod.invalidateShiprocketToken()
+
+  // Simulate an order with 2 items (12 bars total = ₹735, shipping = ₹49, total = ₹784)
+  const items = [
+    { title: 'The Voltt Mixed Box', sku: 'VOLTT-4-12', units: 12, selling_price: 61.25 },
+  ]
+
+  const result = await shiprocketMod.createShiprocketOrder({
+    orderId: 'VOLTT-MATH-TEST-1',
+    customerName: 'Aarav Patel',
+    phone: '9876543210',
+    pincode: '400001',
+    items,
+    totalAmount: 784,
+    shippingCharges: 49,
+  })
+
+  process.env.NODE_ENV = prevEnv
+  delete process.env.ALLOW_SHIPROCKET_SIMULATION
+
+  assert.strictEqual(result.success, true)
+  assert.ok(result.shiprocketOrderId)
+})
+
+await testQueue
 
 console.log(`\n========================================`)
 console.log(`Test Results: ${passedTests} Passed, ${failedTests} Failed`)

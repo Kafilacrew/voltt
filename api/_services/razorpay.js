@@ -163,11 +163,17 @@ export function verifyRazorpayWebhookSignature({ rawBody, signature, secret }) {
 /**
  * Fetch Payment Status directly from Razorpay API
  */
-export async function fetchRazorpayPayment(paymentId) {
+export async function fetchRazorpayPayment(paymentId, expectedAmount = null) {
   const instance = getRazorpayInstance()
   if (!instance) {
     if (paymentId.startsWith('pay_sim_')) {
-      return { id: paymentId, status: 'captured', amount: 40800, currency: 'INR' }
+      return {
+        id: paymentId,
+        status: 'captured',
+        amount: expectedAmount !== null ? expectedAmount : 40800,
+        currency: 'INR',
+        simulated: true,
+      }
     }
     return null
   }

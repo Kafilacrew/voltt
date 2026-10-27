@@ -50,7 +50,7 @@ export default async function handler(req, res) {
     let existingPayment = null
 
     if (supabase) {
-      let query = supabase.from('orders').select('*')
+      let query = supabase.from('orders').select('*, order_items(*)')
       if (orderId) {
         query = query.eq('id', orderId)
       } else if (orderNumber) {
@@ -98,7 +98,7 @@ export default async function handler(req, res) {
     }
 
     // 3. Fetch & Validate Payment from Razorpay API
-    const paymentRecord = await fetchRazorpayPayment(razorpayPaymentId)
+    const paymentRecord = await fetchRazorpayPayment(razorpayPaymentId, trustedOrderTotalInPaise)
     if (paymentRecord) {
       if (paymentRecord.status !== 'captured' && paymentRecord.status !== 'authorized') {
         return res.status(400).json({
@@ -133,6 +133,8 @@ export default async function handler(req, res) {
       }
     }
 
+    const internalOrderId = orderId || existingOrder?.id
+
     // 4. Database Idempotency & Status Transition Lock
     if (supabase && existingOrder) {
       // If already marked PAID and fulfillment has already started, prevent duplicate shipments
@@ -164,32 +166,62 @@ export default async function handler(req, res) {
         .eq('order_id', existingOrder.id)
     }
 
-    // 4. Book Shipment via Shiprocket (Only if not already fulfilled)
+    // 5. Book Shipment via Shiprocket (Only if not already fulfilled)
     let shipmentResult = null
 
     if (!alreadyFulfilled) {
       const shippingAmount = trustedOrderTotalInPaise / 100
 
+      // Fallback customer details from existingOrder if missing in body
+      const resolvedCustomerName = customerDetails.name || existingOrder?.customer_name
+      const resolvedEmail = customerDetails.email || existingOrder?.customer_email
+      const resolvedPhone = customerDetails.phone || existingOrder?.customer_phone
+      const resolvedAddress = customerDetails.address || existingOrder?.shipping_address
+      const resolvedCity = customerDetails.city || existingOrder?.shipping_city
+      const resolvedState = customerDetails.state || existingOrder?.shipping_state
+      const resolvedPincode = customerDetails.pincode || existingOrder?.shipping_pincode
+
+      let shipmentItems = Array.isArray(items) && items.length > 0 ? items : []
+      if (shipmentItems.length === 0 && existingOrder?.order_items && existingOrder.order_items.length > 0) {
+        shipmentItems = existingOrder.order_items.map((oi) => {
+          const units = Math.max(1, (oi.quantity || 1) * (oi.pack_size || 1))
+          const lineTotalInPaise = oi.total_price_in_paise || (oi.unit_price_in_paise ? oi.unit_price_in_paise * units : 40800)
+          const sellingPrice = Math.max(1, Math.round((lineTotalInPaise / 100 / units) * 100) / 100)
+          return {
+            id: oi.product_id,
+            title: oi.product_title,
+            sku: `VOLTT-${oi.product_id || 'BAR'}-${oi.pack_size || 6}`,
+            units,
+            selling_price: sellingPrice,
+          }
+        })
+      }
+
+      const shippingCharges = existingOrder?.shipping_fee_in_paise
+        ? existingOrder.shipping_fee_in_paise / 100
+        : (shippingAmount > 408 ? 49 : 0)
+
       try {
         shipmentResult = await createShiprocketOrder({
           orderId: effectiveOrderNumber,
-          customerName: customerDetails.name,
-          email: customerDetails.email,
-          phone: customerDetails.phone,
-          address: customerDetails.address,
-          city: customerDetails.city,
-          state: customerDetails.state,
-          pincode: customerDetails.pincode,
-          items,
+          customerName: resolvedCustomerName,
+          email: resolvedEmail,
+          phone: resolvedPhone,
+          address: resolvedAddress,
+          city: resolvedCity,
+          state: resolvedState,
+          pincode: resolvedPincode,
+          items: shipmentItems,
           totalAmount: shippingAmount,
+          shippingCharges,
         })
 
         // Persist Shipment Record in Supabase
-        if (supabase && orderId) {
+        if (supabase && internalOrderId) {
           await supabase
             .from('shipments')
             .insert({
-              order_id: orderId,
+              order_id: internalOrderId,
               shiprocket_order_id: shipmentResult.shiprocketOrderId,
               shipment_id: shipmentResult.shipmentId,
               awb_code: shipmentResult.awbCode,
@@ -205,16 +237,16 @@ export default async function handler(req, res) {
               fulfillment_status: shipmentResult.awbCode ? 'SHIPPED' : 'PROCESSING',
               updated_at: new Date().toISOString(),
             })
-            .eq('id', orderId)
+            .eq('id', internalOrderId)
         }
       } catch (shipError) {
-        console.error('[Shiprocket Booking Error - Order marked PENDING_SHIPMENT]:', shipError.message)
+        console.error('[Shiprocket Booking Error - Order marked SHIPMENT_FAILED]:', shipError.message)
 
-        if (supabase && orderId) {
+        if (supabase && internalOrderId) {
           await supabase
             .from('shipments')
             .insert({
-              order_id: orderId,
+              order_id: internalOrderId,
               status: 'FAILED',
               raw_response: { error: shipError.message },
             })
@@ -225,7 +257,7 @@ export default async function handler(req, res) {
               fulfillment_status: 'SHIPMENT_FAILED',
               updated_at: new Date().toISOString(),
             })
-            .eq('id', orderId)
+            .eq('id', internalOrderId)
         }
 
         // Return payment success with queued fulfillment status (don't fail the paid customer)

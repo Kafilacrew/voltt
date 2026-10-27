@@ -65,12 +65,21 @@ export default async function handler(req, res) {
       .eq('id', order.id)
 
     // 6. Format Items and Dispatch to Shiprocket
-    const items = (order.order_items || []).map((item) => ({
-      id: item.product_id,
-      title: item.product_title,
-      quantity: item.quantity * (item.pack_size || 1),
-      price: (item.unit_price_in_paise || 6800) / 100,
-    }))
+    const items = (order.order_items || []).map((item) => {
+      const units = Math.max(1, (item.quantity || 1) * (item.pack_size || 1))
+      const lineTotalInPaise = item.total_price_in_paise || (item.unit_price_in_paise ? item.unit_price_in_paise * units : 40800)
+      const sellingPrice = Math.max(1, Math.round((lineTotalInPaise / 100 / units) * 100) / 100)
+      return {
+        id: item.product_id,
+        title: item.product_title,
+        sku: `VOLTT-${item.product_id || 'BAR'}-${item.pack_size || 6}`,
+        units,
+        selling_price: sellingPrice,
+      }
+    })
+
+    const grandTotalInRupees = (order.grand_total_in_paise || 40800) / 100
+    const shippingFeeInRupees = (order.shipping_fee_in_paise || 0) / 100
 
     let shipmentResult = null
     try {
@@ -84,7 +93,8 @@ export default async function handler(req, res) {
         state: order.shipping_state,
         pincode: order.shipping_pincode,
         items,
-        totalAmount: (order.grand_total_in_paise || 40800) / 100,
+        totalAmount: grandTotalInRupees,
+        shippingCharges: shippingFeeInRupees,
       })
 
       // Insert shipment record
